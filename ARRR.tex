@@ -1,0 +1,134 @@
+\documentclass[10pt]{article}
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{relsize}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{natbib}
+%\usepackage{breqn}
+\lstset{language=Python,
+    frame=single,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+%%\usepackage[margin=2cm]{geometry}
+%%\floatstyle{boxed}
+\restylefloat{figure}
+\newcommand{\Prop}{\textbf{Proposition: }}
+\newcommand{\Prob}{\textbf{Problem: }}
+\newcommand{\Prf}{\textbf{Proof: }}
+\newcommand{\Sol}{\textbf{Solution: }}
+\newcommand{\grad}{\nabla}
+\newcommand{\Nats}{\mathbb{N}}
+\newcommand{\Ints}{\mathbb{Z}}
+\newcommand{\Rats}{\mathbb{Q}}
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\Comps}{\mathbb{C}}
+\newcommand{\Prb}[1]{P\left( #1 \right)}
+\newcommand{\PT}[1]{P\left( \text{#1} \right)}
+\newcommand{\PCon}[2]{P\left( #1 \mid #2 \right)}
+\newcommand{\PConT}[2]{P\left( \text{#1} \mid \text{#2} \right)}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\tr}{\textbf{tr}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\newcommand{\thus}{\quad\mathlarger{\mathlarger{\mathlarger{\Rightarrow}}}\quad} 
+\newcommand{\wght}{\mathbf{w}}
+\newcommand{\im}{\text{im }}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,nohead]{geometry}
+%%\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+\setlength\parindent{0pt}
+\parskip = \baselineskip
+\begin{document} 
+\title{Transfer and interactions between different types of knowledge}
+\author{Andrew Lampinen}
+\date{}
+\maketitle
+\section{Reading notes/literature to incorporate(?)}
+\subsection{Machine learning}
+\begin{itemize}
+\item RL$^2$: Fast reinforcement learning via slow reinforcement learning -- The standard deep-learning meta-learning tricks applied to RL. Instead of running an RL algorithm on a single task, train an RL algorithm such that it does well at choosing the next action on *any* given MDP from the sequence of previous states it has seen in that MDP, much as a human might learn to perform quite well on a videogame based on their previous experiences in it. The network does this in the most obvious way: just slap some recurrence in your policy network which maps from (S, A, R, S) tuples to actions and let gradient descent sort the rest out. Works pretty well on some toy non-toy tasks (relatively simple tasks dressed up with high-dimensional input and action spaces).
+\end{itemize}
+
+\subsection{Cognitive Science}
+\begin{itemize}
+\item Generalization, similarity, and Bayesian Inference -- Bayesian models of category formation and generalization can capture aspects of these phenomena that classical models of Shepherd and others cannot; Priors which assume active sampling of positive examples yield effects like narrowing of CIs (cognitively) around observed exemplars as N increases. \citep{Tenenbaum2001}
+\item Two modes of transfer in artificial grammar learning -- Different types of transition features seem to be learned by different processes, or at least processes which are dissociable in terms of how noise affects transfer to novel domains. In particular, repetition is a feature that lends itself to creating abstract ``analogy''-like features which can transfer despite noise (where the transition doesn't always occur even if the first item does), but longer distance pairwise dependencies are very sensitive to noise in co-occurence probabilities. \cite{Tunney2001}
+\end{itemize}
+
+\section{Transfer}
+It has been frequently noted that human learning is efficient, \citep[e.g.]{Gentner2003}, and in particular that it is much more data-efficient and flexible than current deep learning systems \citep{Lake2016}. Why might this be? \par
+One possible answer is to say that there are architectural and algorithmic differences between humans and neural networks, so deep learning is simply not a good model of human learning. However, there are also a number of differences between the \emph{situations} in which we evaluate human learning and deep learning. One potentially crucial difference is that humans come to tasks with a vast amount of prior experience. Often this prior experience is related in some way to the new tasks we are learning, both through generic structures like language and more specific ones like mathematical or game-playing expertise \citep{Hansen2017}. Thus, humans rarely learn a task from a ``blank slate.'' \par
+This is important from the perspective of transfer as ``preparation for future learning'' \citep{Bransford1999}. This perspective suggests that we should think about not just how transfer impacts immediate performance on a new task, but how it impacts the ability to \emph{learn} that task. It is possible that the effects of relevant prior experience will not be apparent immediately on introduction to a new domain, but instead will emerge as the subject comes to understand (either implicitly or explicitly) how that prior knowledge is relevant. \par 
+Unfortunately, much of the cognitive work on transfer has ignored this perspective \citep{Bransford1999}. This may have resulted in some of the negative claims about transfer, for example the following quote from \citet{Detterman1993}: 
+\begin{quote}
+``Significant transfer is probably rare and accounts for very little human behavior. Studies that claim transfer often tell subjects to transfer, or use a `trick' to call the subjects' attention to the similarity of the two problems. Such studies cannot be taken as evidence for transfer. We generally do what we have learned to do and no more.''
+\end{quote}
+The studies that have demonstrated transfer without using the ``tricks'' that Detterman refers to have generally demonstrated it with quite simple tasks such as grammaticality judgements in toy artificial grammars \citep[e.g.]{Tunney2001} or learning of a simple property of a simple physical system \citep{Day2011}. However, humans learn extremely complicated systems of knowledge that share structure with one another. For example, category theory lays out deep analogies between whole fields of mathematics, which nevertheless could be (and were/are) studied independently. Thus, my first goal for my dissertation is to explore the effects of transfer on learning in tasks which are somewhat closer to the complexity of the tasks that humans actually learn. \par
+\section{Different types of knowledge}
+Another aspect of human learning is that we often learn many different related tasks within the same domain, either at the same time or sequentially. For example, memorizing multiplication tables and studying number theory are two tasks which in some sense deal with the same domain (integers), but which differ in many ways. How does knowledge interact across these tasks? \par
+This can be viewed as a type of transfer which is both nearer (in some superficial details) and yet farther (the tasks are very much non-isomorphic, even if some underlying structure is shared\footnote{The problem of how to quantify to what extent two tasks have shared structure is salient but actually quite difficult. For example, consider the functions \(f: \Ints^2 \rightarrow \Ints^2\) and \(g: \Reals \rightarrow \Reals\) such that \(f((x,y)) = (y, x)\) and \(g(z) = 1/z\). These two functions may seem quite different, they have different domains and ranges, etc. However, if you interpret \((x,y) \in \Ints^2\) as \(x/y \in \Rats\), then it becomes clear that these are actually the same abstract function of multiplicative inversion. The relationship between these functions can be expressed by a commutative diagram, but this requires identifying the mappings between the domains and ranges, which could be quite difficult \emph{a priori}.\par
+For an even more difficult example, consider the tasks of a) playing chess, and b) identifying pinned pieces on a chess board. While these tasks clearly share some structure, there is no hope that one of them factors through the other -- at best one might serve as a tiny piece of a factorization of the other (i.e. as a useful but not sufficient feature extractor). How can we decide that two functions are related, and how can we mathematically express this relationship?}) than the type of transfer tasks discussed in the previous section. How does this impact learning? Furthermore, how is this impacted by isomorphic tasks from other domains -- does learning about one category (e.g. sets) make one's reasoning more abstract when learning about another category (e.g. groups)? \par 
+A final over-arching type of knowledge we can possess is explicit awareness of a relationship between two tasks. In previous work \citep{Lampinen2017a}, I used neural network simulations to suggest that when performing two analogous tasks, the analogies will naturally be reflected in the representations formed. Thus representational similarities could be used as a heuristic when searching for an explicit analogy. \par
+My second goal for my dissertation is to understand how different types of knowledge interact. Ideally, I would like to explore both within domain interactions of different types of knowledge, how within-domain knowledge is impacted by transfer across domains, and how explicit knowledge about relationships across domains emerges. \par 
+\section{Sketch of my experimental paradigm \& preliminary results}
+\begin{figure}[p]
+\centering
+\begin{subfigure}{0.33\textwidth}
+\includegraphics[width=\textwidth]{figures/hexagon_bi.png}
+\caption{Flipping structure}
+\end{subfigure}
+\hspace{3em}
+\begin{subfigure}{0.33\textwidth}
+\includegraphics[width=\textwidth]{figures/hexagon_tri.png}
+\caption{Cycling structure}
+\end{subfigure}
+\caption{Graph structures used in our experiment. Red and blue arrows correspond to the two different actions participants can take.}
+\label{hexagon_diagrams}
+\end{figure}
+\begin{figure}[p]
+\centering
+\begin{subfigure}{0.33\textwidth}
+\includegraphics[width=\textwidth]{figures/door_example.png}
+\caption{Navigation task}
+\end{subfigure}
+\hspace{3em}
+\begin{subfigure}{0.33\textwidth}
+\includegraphics[width=\textwidth]{figures/fractal_example.png}
+\caption{Fractal mutation task}
+\end{subfigure}
+\caption{Superficial tasks used in our experiment}
+\label{tasks}
+\end{figure}
+\begin{figure}[p]
+\centering
+\begin{subfigure}{0.45\textwidth}
+\includegraphics[width=\textwidth]{figures/ns_more_basic_plot_fractal.png}
+\caption{Subjects in the isomorphic condition find more efficient paths.}
+\label{results_ns}
+\end{subfigure}
+\hspace{3em}
+\begin{subfigure}{0.45\textwidth}
+\includegraphics[width=\textwidth]{figures/ds_by_iso.png}
+\caption{Subjects in the isomorphic condition may do better at identifying their fractal-task structure.}
+\label{results_ds}
+\end{subfigure}
+\caption{Isomorphisms between the graphs improved performance on the fractal task, and may improve the ability to explicitly identify the graph structure underlying the fractal task.}
+\label{results}
+\end{figure}
+I have run a preliminary experiment in that captures many of these issues; in this section I briefly describe this experiment and a few results. \par
+The experiment consists of two superficially dissimilar tasks that participants perform across multiple experimental sessions. Abstractly, both tasks consist of learning to navigate around a directed graph using two different actions which correspond to two different edge types; see Fig. \ref{hexagon_diagrams} for the structures we used. The crucial experimental manipulation is whether the graph structures are the same or different in the two tasks. \par
+The superficially-different cover stories we used for these tasks were 1) learning to navigate around a house by going through one of two doors in the rooms of the house, and 2) mutating fractals into one another by using one of two mutagens (see Fig. \ref{tasks}). \par 
+We evaluated the number of steps it took participants to solve fractal task trials if they had an isomorphic door task vs. a non-isomorphic one, and found that they took significantly fewer steps if the tasks were isomorphic, see Fig. \ref{results_ns}. Furthermore, having an isomorphic task seemed to potentially increase subjects within-task knowledge, for example increasing the probablility that they could correctly identify the graph structure that their fractal task was based upon, see Fig. \ref{results_ds}. Furthermore, participants in the isomorphic condition were above chance at identifying the mapping between the two tasks. Intriguigingly, explicit realization of the analogy between the tasks did not seem to be sufficient or necessary for the transfer results, although they seemed to be somewhat positively correlated.\par
+Overall, isomorphisms between the tasks appear to have effects, but there is a superficial aspect of the graph structures which could explain most of the results we saw here (I will explain further in the meeting). We are about to run a follow-up experiment that should address this concern, as well as a few others; I will describe the changes in more detail during the meeting. 
+\section{What's next}
+First, I need to review the literature on cognitive transfer and abstraction and multi-task learning more thoroughly, in order to understand better the present state of thinking in the field. Second, there is much more experimental work to be done. We need to verify these results and explore their robustness to changes of graph structure, cover task, etc. I'd also like to explore whether the knowledge transfer is occurring implicitly or explicitly or whether it is different for individual subjects, and whether different degrees of explicitness result in different patterns of transfer. Finally, I'd like to try to model both the procedural transfer of knowledge between tasks and the relationship between procedural and explicit knowledge. \par 
+
+\bibliographystyle{apalike}
+\bibliography{arrr}
+\end{document}
