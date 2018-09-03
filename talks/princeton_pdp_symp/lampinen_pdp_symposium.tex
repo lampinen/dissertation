@@ -1,0 +1,308 @@
+\documentclass{beamer}
+\usepackage{pgfpages}
+%\setbeameroption{show notes on second screen=left} %enable for notes
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+%\usepackage{transparent}
+\usepackage{hyperref}
+\lstset{language=python,frame=single}
+\usepackage{verbatim}
+%\usepackage{apacite}
+\usepackage[longnamesfirst]{natbib}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{relsize}
+\usepackage{appendixnumberbeamer}
+\usepackage{xparse}
+\usepackage{multimedia}
+\usepackage{xcolor}
+\usepackage[normalem]{ulem}
+\usepackage{tikz}
+\usetikzlibrary{matrix,backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} 
+}}
+
+\tikzstyle{block} = [rectangle, draw, fill=red!20!blue!10, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{netnode} = [circle, draw, very thick, inner sep=0pt, minimum size=0.5cm] 
+\tikzstyle{relunode} = [rectangle, draw, very thick, inner sep=0pt, minimum size=0.5cm] 
+    
+\tikzstyle{line} = [draw, line width=1.5pt, -latex']
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+\pgfdeclarelayer{myback}
+\pgfsetlayers{myback,background,main}
+
+\usetheme[numbering=fraction]{metropolis}
+\newcommand{\semitransp}[2][35]{\color{fg!#1}#2}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+\renewcommand*\footnoterule{}
+%%\AtBeginSection[]
+%%{
+%%  \begin{frame}
+%%    \frametitle{Table of Contents}
+%%    \tableofcontents[currentsection]
+%%  \end{frame}
+%%}
+
+\begin{document}
+
+\title{Multi-task learning, meta-learning, \& transfer}
+\author{Andrew Lampinen}
+\date{}
+\frame{\titlepage}
+
+\begin{frame}[standout]
+Connectionist modeling has too often focuesed on single tasks.\par
+\end{frame}
+
+\begin{frame}[fragile]{Multi-task learning in ML}
+\begin{figure}
+\centering
+\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
+\node [anchor=center, draw, fill=white, minimum width=2cm, minimum height= 1 cm] at (current page.center) (brain) {\Large RNN};
+\node<2-> [anchor=center, below left = 1cm and 0.25cm of brain] (input1) {``Ceci n'est pas une pipe.''};
+\node<2-> [anchor=center, above left = 1cm and 0.25cm of brain] (output1) {``This is not a pipe.''};
+
+\node<3-> [anchor=center, below right = 0.45cm and 0.25cm of brain] (input2) {\includegraphics[width=0.25\textwidth]{figures/un_pipe.jpg}};
+\node<3-> [anchor=center, above right = 1cm and 0.25cm of brain] (output2) {``This is a pipe.''};
+
+\begin{pgfonlayer}{background}
+\path<2-> [line] (input1.east) to [out=45, in=-45] (output1.east);
+\path<3-> [line] (input2.west) to [out=135, in=-135] (output2.west);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{figure}
+\vspace{2em}
+\blfootnote{\uncover<3->{\citep*{Luong2016}}}
+\end{frame}
+
+\begin{frame}{Transfer across domains}
+\begin{figure}
+\centering
+\begin{subfigure}{0.4\textwidth}
+\includegraphics[width=\textwidth]{figures/chess_cropped.jpg}
+\end{subfigure}%
+\begin{subfigure}{0.4\textwidth}
+\includegraphics[width=\textwidth]{figures/go.jpg}
+\end{subfigure}\\
+\uncover<2>{
+\begin{subfigure}{0.4\textwidth}
+\includegraphics[width=\textwidth]{figures/math.jpg}
+\end{subfigure}%
+\begin{subfigure}{0.4\textwidth}
+\includegraphics[width=\textwidth]{figures/piano.jpg}
+\end{subfigure}%
+}
+\end{figure}
+\scriptsize
+\citep{Lampinen2017a, Hansen2017}
+\note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.\par
+Of particular interest to me is deep isomorphisms between mathematical domains, and this is actually one of the things that inspired Gick \& Holyoak.}
+\end{frame}
+
+\begin{frame}[fragile]{Some theoretical understanding of multi-task benefits}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{figures/analytic_paper_title.png}
+\end{figure}
+\vspace{2em}
+\blfootnote{\uncover<3->{\citep*{Lampinen2018}}}
+\end{frame}
+
+\begin{frame}[standout]
+Our models should reflect the fact that human intelligence is multi-purpose.\par
+\end{frame}
+
+%%
+%%\begin{frame}{Background}
+%%\begin{itemize}
+%%\item Not a new idea: transfer has been called a central component of ``why we're so smart'' \citep{Gentner2003}, and an important source of new ideas \citep{Gick1980}.
+%%\item<2->
+%%However, this perspective has been criticized!\par
+%%\begin{itemize}
+%%\item<3-> ``Significant transfer is probably rare and accounts for very little human behavior. ... We generally do what we have learned to do and no more.'' \citep{Detterman1993}
+%%\end{itemize}
+%%\item<4-> How can we reconcile these different viewpoints?
+%%\end{itemize}
+%%\note{Detterman: ``We generally do what we have learned to do and no more.'' Experimental manipulations in transfer experiments ``have the subtlety of a baseball bat.''\par
+%%Observation from FriSem last year: there is a correlation between the speed of transfer being sought and how important they think it is.}
+%%\end{frame}
+%%
+%%\begin{frame}{Transfer speed}
+%%\vspace{1.5em}
+%%I think there's a neglected variable: speed of transfer.\par
+%%\uncover<2->{
+%%\begin{center}
+%%\begin{table}
+%%\begin{tabular}{|c|c|}
+%%\hline
+%%Fast & Slow \\
+%%\hline
+%%\parbox{0.45\textwidth}{
+%%    \begin{itemize}
+%%    \item<2-> one (or a few) examples explicitly shown
+%%    \item<3-> transfer requires explicit awareness of analogy
+%%    \end{itemize}
+%%}
+%%&
+%%\parbox{0.45\textwidth}{
+%%    \begin{itemize}
+%%    \item<2-> learning gradually through many interactions
+%%    \item<3-> {transfer may or may not be explicit}%
+%%               %%\only<4>{\color{red}transfer may or may not be explicit}}
+%%    \end{itemize}
+%%}\\ \hline
+%%\end{tabular}
+%%\end{table}
+%%}
+%%\vspace{1.5em}
+%%\note{E.g. being told about the rules of chess and then seeing if that helps you play go, vs. playing many games of chess and go and seeing if one helps the other}
+%%\end{center}
+%%{
+%%\scriptsize
+%%\citep{Lampinen2017a}
+%%}
+%%\end{frame}
+%%
+%%\begin{frame}{Transfer speed and outcomes}
+%%For example, imagine you are about to teach someone to play guitar. Who do you think would likely perform better:
+%%\begin{itemize}
+%%\item a person who has just taken their first piano lesson 
+%%\item a person who has been playing piano for years
+%%\end{itemize}
+%%\begin{figure}
+%%\centering
+%%\begin{subfigure}{0.4\textwidth}
+%%\includegraphics[width=\textwidth]{figures/piano.jpg}
+%%\end{subfigure}~%
+%%\begin{subfigure}{0.4\textwidth}
+%%\includegraphics[width=\textwidth]{figures/guitar.jpg}
+%%\end{subfigure}%
+%%\end{figure}
+%%\note{So transfer may require slow learning in the original domain to set up sufficiently high-quality representations to see an effect}
+%%\end{frame}
+%%
+%%\begin{frame}{Transfer speed and opinions}
+%%Transfer speed helps reconcile why some people think transfer is important, while others don't. 
+%%\begin{figure}
+%%\centering
+%%\includegraphics[width=0.5\textwidth]{figures/perspectives_on_transfer.png}
+%%\end{figure}
+%%\end{frame}
+%%
+%%
+%%\begin{frame}[standout]
+%%Slow transfer between tasks is important.
+%%\end{frame}
+%%
+%%\begin{frame}{Abstraction and transfer}
+%%We often progress from procedural to more explicit, abstract, or formal knowledge: \vspace{-0.2em}
+%%\begin{figure}
+%%\centering
+%%\begin{tikzpicture}
+%%\node (img1) {\includegraphics[width=0.33\textwidth]{figures/multiplication_procedural_smaller.png}};
+%%\uncover<2->{
+%%\node (img2) at ([yshift=-2em]img1.east) {\includegraphics[width=0.33\textwidth]{figures/factoring_polynomial_worksheet.png}};
+%%}
+%%\uncover<3->{
+%%\node (img3) at ([yshift=-3em]img2.east) {\includegraphics[width=0.5\textwidth]{figures/prime_ideals.png}};
+%%}
+%%\end{tikzpicture}
+%%\end{figure}\vspace{-0.2em}
+%%\uncover<4>{These are related tasks that share some structure! Is it useful to think about this from the perspective of transfer?}
+%%\note{worksheetfun.com\par
+%%Less abstract and more abstract reasoning can be seen as partially distinct tasks that share some common structure. There are different ways that procedural knowledge could support more formal, setting up representations and intuitions, having examples to reason over, ...}
+%%\end{frame}
+%%
+%%\begin{frame}{Is abstraction transfer?}
+%%Yet there are also times when procedural and formal knowledge seem partially dissociable:
+%%\begin{figure}
+%%\centering
+%%\begin{subfigure}{0.4\textwidth}
+%%\includegraphics[width=\textwidth]{figures/piano.jpg}
+%%\end{subfigure}~%
+%%\begin{subfigure}{0.5\textwidth}
+%%\includegraphics[width=\textwidth]{figures/mixolydian.png}
+%%\end{subfigure}%
+%%\end{figure}
+%%\note{}
+%%\end{frame}
+%%
+%%\begin{frame}[standout]
+%%When and how do procedural and more explicit, abstract, or formal knowledge influence each other?
+%%\end{frame}
+%%
+%%\begin{frame}<-8>[label=phenomena]
+%%\frametitle<-9>{A diagram of potential phenomena of interest}
+%%\frametitle<10>{What explicit knowledge?}
+%%\vspace{-1em}
+%%\begin{figure}
+%%\centering
+%%\begin{tikzpicture}[auto] %% TODO? highlighting
+%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (A) at (-4, 0) {Task A}; 
+%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (B) at (4, 0) {Task B}; 
+%%\path [line, dashed, <->, onslide={<10>,{opacity=0.2}}] (A.east) to node[text width=2cm] (underlying) {Underlying relationship} (B.west); 
+%%
+%%\uncover<2->{
+%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (Aproc) at (-4, 2) {Ability to perform  A}; 
+%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (Bproc) at (4, 2) {Ability to perform B}; 
+%%\path [line, ->, dashed, onslide={<10>,{opacity=0.2}}] (A.north) to  node (Atrans) {}(Aproc.south); 
+%%\path [line, ->, dashed, onslide={<10>,{opacity=0.2}}] (B.north) to node (Btrans) {} (Bproc.south); 
+%%}
+%%
+%%\uncover<3->{
+%%\path [line, ->, onslide={<10>,{opacity=0.2}}] (Aproc.east) to node (proctrans) {transfer?} (Bproc.west); 
+%%}
+%%
+%%\uncover<4->{
+%%\node [rectangle, draw, thick, text width=2cm, align=center] (Aabs) at (-4, 4.5) {Explicit knowledge about A}; 
+%%\node [rectangle, draw, thick, text width=2cm, align=center] (Babs) at (4, 4.5) {Explicit knowledge about B}; 
+%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Aproc.north) to  node (Atrans) {}(Aabs.south); 
+%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Bproc.north) to node (Btrans) {} (Babs.south); 
+%%}
+%%\uncover<5->{
+%%\path [line, ->, onslide={<10>,{opacity=0.2}}] (Aabs.east) to node (abstrans) {transfer?} (Babs.west); 
+%%}
+%%\uncover<6->{
+%%\node [rectangle, draw, thick, text width=3.5cm, align=center] (ABabs) at (0, 6.5) {Explicit knowledge about relationship between A and B}; 
+%%}
+%%\uncover<7->{
+%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Aabs.north) to  (ABabs.west); 
+%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Babs.north) to  (ABabs.east); 
+%%\path [line, <->, onslide={<10>,{opacity=0.2}}] ([yshift=-0.5em]abstrans.north) to(ABabs.south); 
+%%\path [line, <->, bend right=40, onslide={<10>,{opacity=0.2}}] ([xshift=-0.5em, yshift=-0.25em]proctrans.north east) to([xshift=0.5em]ABabs.south); 
+%%}
+%%\uncover<8->{
+%%\node (abs0) at (6, 1.5) {};
+%%\node (abs1) at (6, 7) {};
+%%\path [line, ->, opacity=0.5] (abs0) to node [xshift=0.5em, yshift=3em, opacity=0.5, rotate=90] {abstractness} (abs1); 
+%%}
+%%
+%%\end{tikzpicture}
+%%\end{figure}
+%%
+%%\end{frame}
+%%
+\begin{frame}[allowframebreaks]
+\bibliographystyle{plainnat}
+\blfootnote{\bibliography{transfer}}
+\end{frame}
+
+\end{document}
+
+
