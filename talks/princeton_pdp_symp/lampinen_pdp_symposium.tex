@@ -71,24 +71,56 @@ Connectionist modeling has too often focused on single tasks.\par
 \end{frame}
 
 \begin{frame}[fragile]{Multi-task learning in ML}
+\uncover<2->{
 \begin{figure}
 \centering
 \begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
 \node [anchor=center, draw, fill=white, minimum width=2cm, minimum height= 1 cm] at (current page.center) (brain) {\Large RNN};
+\only<-3>{
 \node [anchor=center, below left = 1cm and 0.25cm of brain] (input1) {``Ceci n'est pas une pipe.''};
 \node [anchor=center, above left = 1cm and 0.25cm of brain] (output1) {``This is not a pipe.''};
+}
 
-\node<2-> [anchor=center, below right = 0.45cm and 0.25cm of brain] (input2) {\includegraphics[width=0.25\textwidth]{figures/un_pipe.jpg}};
-\node<2-> [anchor=center, above right = 1cm and 0.25cm of brain] (output2) {``This is a pipe.''};
+\only<-3>{
+\node<3> [anchor=center, below right = 0.45cm and 0.25cm of brain] (input2) {\includegraphics[width=0.25\textwidth]{figures/un_pipe.jpg}};
+\node<3> [anchor=center, above right = 1cm and 0.25cm of brain] (output2) {``This is a pipe.''};
+}
+
+\only<4->{
+\node [anchor=center, below left = 1.25cm and 1cm of brain] (mi1) {French};
+\node [anchor=center, above left = 1.25cm and 1cm of brain] (mo1) {Chinese};
+\node [anchor=center, below left = 2cm and -0.25cm of brain] (mi2) {Swahili};
+\node [anchor=center, above left = 2cm and -0.25cm of brain] (mo2) {German};
+
+\node [anchor=center, below right = 1.25cm and 1cm of brain] (mi4) {English};
+\node [anchor=center, above right = 1.25cm and 1cm of brain] (mo4) {Italian};
+\node [anchor=center, below right = 2cm and -0.25cm of brain] (mi3) {Spanish};
+\node [anchor=center, above right = 2cm and -0.25cm of brain] (mo3) {Korean};
+}
 
 \begin{pgfonlayer}{background}
+\only<-3>{
 \path [line] (input1.east) to [out=45, in=-45] (output1.east);
-\path<2-> [line] (input2.west) to [out=135, in=-135] (output2.west);
+\path<3> [line] (input2.west) to [out=135, in=-135] (output2.west);
+}
+\only<4->{
+\path [line] (mi1.east) to [out=10, in=-10] (mo1.east);
+\path [line] (mi2.north east) to [out=70, in=-70] (mo2.south east);
+\path [line] (mi4.west) to [out=170, in=-170] (mo4.west);
+\path [line] (mi3.north west) to [out=110, in=-110] (mo3.south west);
+}
 \end{pgfonlayer}
+\only<5->{
+\path [line, line width=3 pt, red, dashed] (mi4.west) to node [anchor=center, xshift=3cm] {No training needed!} (mo1.east);
+}
 \end{tikzpicture}
 \end{figure}
 \vspace{2em}
-\blfootnote{\uncover<3->{\citep*{Luong2016}}}
+\blfootnote{\uncover<3->{
+    \only<-3>{\citep*{Luong2016}}
+    \only<4->{\citep*{Johnson2016a}}
+}}
+}
 \end{frame}
 
 \begin{frame}{Humans face many related tasks}
@@ -143,9 +175,19 @@ Connectionist modeling has too often focused on single tasks.\par
 \only<2>{
 \vspace{3em}
 \includegraphics[width=0.8\textwidth]{figures/transfer_pros_cons.png}
+\vspace{1.25em}
 }
 \only<3>{
 \vspace{2em}
+%\begin{subfigure}{0.3\textwidth}
+%\includegraphics[width=\textwidth]{figures/fig_5a.png}
+%\end{subfigure}~
+%\begin{subfigure}{0.3\textwidth}
+%\includegraphics[width=\textwidth]{figures/transfer_by_alignment.png}
+%\end{subfigure}~
+%\begin{subfigure}{0.4\textwidth}
+%\includegraphics[width=\textwidth]{figures/fig_5c.png}
+%\end{subfigure}
 \includegraphics[width=0.5\textwidth]{figures/transfer_by_alignment.png}
 }
 \end{figure}
@@ -178,7 +220,7 @@ Connectionist modeling has too often focused on single tasks.\par
 \end{subfigure}%
 \begin{subfigure}{0.4\textwidth}
 \includegraphics[width=\textwidth]{figures/go2.jpg}
-\end{subfigure}\\
+\end{subfigure}
 \end{figure}
 \uncover<2->{
 \begin{exampleblock}{}
