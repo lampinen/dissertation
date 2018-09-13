@@ -116,15 +116,41 @@ Connectionist modeling has too often focused on single tasks.\par
 \note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
 \end{frame}
 
-%% TODO: insert FYP slide here
-
-\begin{frame}{Some theoretical understanding of multi-task benefits}
+\begin{frame}{Multi-task learning in math cognition}
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{figures/analytic_paper_title.png}
+\begin{subfigure}{0.3\textwidth}
+\includegraphics[width=\textwidth]{figures/hexagon_arrow.png}
+\end{subfigure}~
+\begin{subfigure}{0.6\textwidth}
+\includegraphics[width=\textwidth]{figures/fyp_1_modular_text.png}
+\end{subfigure}
 \end{figure}
+{
+\scriptsize
+\citep{Lampinen2017b}
+}
+\note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
+\end{frame}
+
+\begin{frame}{Theoretical understanding of multi-task benefits (and costs)}
+\begin{figure}
+\centering
+\only<1>{
+\vspace{3em}
+\includegraphics[width=\textwidth]{figures/analytic_paper_title.png}
+}
+\only<2>{
+\vspace{3em}
+\includegraphics[width=0.8\textwidth]{figures/transfer_pros_cons.png}
+}
+\only<3>{
 \vspace{2em}
-\blfootnote{\uncover<3->{\citep*{Lampinen2018}}}
+\includegraphics[width=0.5\textwidth]{figures/transfer_by_alignment.png}
+}
+\end{figure}
+\vspace{1em}
+\blfootnote{\uncover<2->{\citep*{Lampinen2018}}}
 \end{frame}
 
 \begin{frame}[fragile]{Meta-learning in ML}
