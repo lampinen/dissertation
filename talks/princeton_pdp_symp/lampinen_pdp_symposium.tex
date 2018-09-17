@@ -61,7 +61,7 @@
 
 \begin{document}
 
-\title{Multi-task learning, meta-learning, \& transfer}
+\title{Multi-task learning \& generalization}
 \author{Andrew Lampinen}
 \date{}
 \frame{\titlepage}
@@ -76,17 +76,17 @@ Connectionist modeling has too often focused on single tasks.\par
 \centering
 \begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
 \node [anchor=center, draw, fill=white, minimum width=2cm, minimum height= 1 cm] at (current page.center) (brain) {\Large RNN};
-\only<-3>{
+\only<-4>{
 \node [anchor=center, below left = 1cm and 0.25cm of brain] (input1) {``Ceci n'est pas une pipe.''};
 \node [anchor=center, above left = 1cm and 0.25cm of brain] (output1) {``This is not a pipe.''};
 }
 
-\only<-3>{
-\node<3> [anchor=center, below right = 0.45cm and 0.25cm of brain] (input2) {\includegraphics[width=0.25\textwidth]{figures/un_pipe.jpg}};
-\node<3> [anchor=center, above right = 1cm and 0.25cm of brain] (output2) {``This is a pipe.''};
+\only<-4>{
+\node<3-4> [anchor=center, below right = 0.45cm and 0.25cm of brain] (input2) {\includegraphics[width=0.25\textwidth]{figures/un_pipe.jpg}};
+\node<3-4> [anchor=center, above right = 1cm and 0.25cm of brain] (output2) {``This is a pipe.''};
 }
 
-\only<4->{
+\only<5->{
 \node [anchor=center, below left = 1.25cm and 1cm of brain] (mi1) {French};
 \node [anchor=center, above left = 1.25cm and 1cm of brain] (mo1) {Chinese};
 \node [anchor=center, below left = 2cm and -0.25cm of brain] (mi2) {Swahili};
@@ -99,28 +99,35 @@ Connectionist modeling has too often focused on single tasks.\par
 }
 
 \begin{pgfonlayer}{background}
-\only<-3>{
+\only<-4>{
 \path [line] (input1.east) to [out=45, in=-45] (output1.east);
-\path<3> [line] (input2.west) to [out=135, in=-135] (output2.west);
+\path<3-4> [line] (input2.west) to [out=135, in=-135] (output2.west);
 }
-\only<4->{
+\only<5->{
 \path [line] (mi1.east) to [out=10, in=-10] (mo1.east);
 \path [line] (mi2.north east) to [out=70, in=-70] (mo2.south east);
 \path [line] (mi4.west) to [out=170, in=-170] (mo4.west);
 \path [line] (mi3.north west) to [out=110, in=-110] (mo3.south west);
 }
 \end{pgfonlayer}
-\only<5->{
+\only<4>{
+\path [line, line width=3 pt, red, dashed] ([xshift=0.44cm]input1.north) to node [anchor=center, text width=2.5cm, align=center, xshift=-1.5cm] {Better generalization!} (output1.south);
+}
+\only<6->{
 \path [line, line width=3 pt, red, dashed] (mi4.west) to node [anchor=center, xshift=3cm] {No training needed!} (mo1.east);
 }
 \end{tikzpicture}
 \end{figure}
 \vspace{2em}
-\blfootnote{\uncover<3->{
-    \only<2-3>{\citep*{Luong2016}}
-    \only<1,4->{\citep{Johnson2016a}}
+\blfootnote{\uncover<4->{
+    \only<i
+    \only<1,5->{\citep{Johnson2016a}}
 }}
 }
+\end{frame}
+
+\begin{frame}[standout]
+Recent machine learning work shows that multi-task learning can substantially improve generalization.\par
 \end{frame}
 
 \begin{frame}{Humans face many related tasks}
@@ -162,7 +169,10 @@ Connectionist modeling has too often focused on single tasks.\par
 \scriptsize
 \citep{Lampinen2017b}
 }
-\note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
+\end{frame}
+
+\begin{frame}[standout]
+Our models should reflect the fact that human intelligence is multi-purpose.\par
 \end{frame}
 
 \begin{frame}{Theoretical understanding of multi-task benefits (and costs)}
@@ -179,60 +189,82 @@ Connectionist modeling has too often focused on single tasks.\par
 }
 \only<3>{
 \vspace{2em}
-%\begin{subfigure}{0.3\textwidth}
-%\includegraphics[width=\textwidth]{figures/fig_5a.png}
-%\end{subfigure}~
-%\begin{subfigure}{0.3\textwidth}
-%\includegraphics[width=\textwidth]{figures/transfer_by_alignment.png}
-%\end{subfigure}~
-%\begin{subfigure}{0.4\textwidth}
-%\includegraphics[width=\textwidth]{figures/fig_5c.png}
-%\end{subfigure}
-\includegraphics[width=0.5\textwidth]{figures/transfer_by_alignment.png}
+\begin{subfigure}{0.3\textwidth}
+\includegraphics[width=\textwidth]{figures/fig_5a.png}
+\end{subfigure}~
+\begin{subfigure}{0.3\textwidth}
+\includegraphics[width=\textwidth]{figures/transfer_by_alignment.png}
+\end{subfigure}~
+\begin{subfigure}{0.4\textwidth}
+\includegraphics[width=\textwidth]{figures/fig_5c.png}
+\end{subfigure}
+%%\includegraphics[width=0.5\textwidth]{figures/transfer_by_alignment.png}
 }
 \end{figure}
 \vspace{1em}
 \blfootnote{\uncover<2->{\citep*{Lampinen2018}}}
 \end{frame}
 
-\begin{frame}[fragile]{Meta-learning in ML}
-\begin{figure}
-\centering
-\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
-\node [anchor=center, draw, fill=white, minimum width=3cm, minimum height= 1 cm] at ([yshift=-2cm]current page.center) (brain) {\Large RL network};
-\node [anchor=center, above = 1cm of brain] (output1) {
-\only<1>{\includegraphics[height=3.5cm]{figures/slot_machine.jpeg}}
-\only<2>{\includegraphics[height=4cm]{figures/casino.jpg}}
-};
 
-\path [line] (brain.north) to (output1.south);
-\end{tikzpicture}
-\end{figure}
-\vspace{1em}
-\blfootnote{\uncover<2->{\citep{Duan2016, Wang2016a}}}
+\begin{frame}[standout]
+When the target task is noisy or auxiliary tasks are well aligned, transfer is very beneficial.
 \end{frame}
 
-\begin{frame}{Humans face many related tasks (again)}
+\begin{frame}[fragile]{Limitations of deep learning, or of tasks?}
 \begin{figure}
+\vspace{-2em}
 \centering
-\begin{subfigure}{0.4\textwidth}
-\includegraphics[width=\textwidth]{figures/chess_cropped.jpg}
-\end{subfigure}%
-\begin{subfigure}{0.4\textwidth}
-\includegraphics[width=\textwidth]{figures/go2.jpg}
-\end{subfigure}
+\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
+\node [anchor=center, align=center,] at (-1, 0) (c0) {\includegraphics[width=7cm]{figures/critique0.png}};
+\node [anchor=center, align=center,] at (0, 0) (c1) {\includegraphics[width=7cm]{figures/critique1.png}};
+\node [anchor=center, align=center,] at (1, -2) (c2) {\includegraphics[width=7cm]{figures/critique2.png}};
+\end{tikzpicture}
 \end{figure}
-\uncover<2->{
-\begin{exampleblock}{}
-Meta learning matches the perspective of educational researchers who describe education as ``Preparation for Future Learning'' \citep{Bransford1999}.
-\end{exampleblock}
-}
-\note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
+\vspace{2em}
 \end{frame}
 
 \begin{frame}[standout]
-Our models should reflect the fact that human intelligence is multi-purpose.\par
+Data-hunger and failures to generalize may be due to ``poverty of the [training] stimulus'' -- humans do many more tasks than our models.\par
 \end{frame}
+
+%%\begin{frame}[fragile]{Meta-learning in ML}
+%%\begin{figure}
+%%\centering
+%%\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
+%%\node [anchor=center, draw, fill=white, minimum width=3cm, minimum height= 1 cm] at ([yshift=-2cm]current page.center) (brain) {\Large RL network};
+%%\node [anchor=center, above = 1cm of brain] (output1) {
+%%\only<1>{\includegraphics[height=3.5cm]{figures/slot_machine.jpeg}}
+%%\only<2>{\includegraphics[height=4cm]{figures/casino.jpg}}
+%%};
+%%
+%%\path [line] (brain.north) to (output1.south);
+%%\end{tikzpicture}
+%%\end{figure}
+%%\vspace{1em}
+%%\blfootnote{\uncover<2->{\citep{Duan2016, Wang2016a}}}
+%%\end{frame}
+%%
+%%\begin{frame}{Humans face many related tasks (again)}
+%%\begin{figure}
+%%\centering
+%%\begin{subfigure}{0.4\textwidth}
+%%\includegraphics[width=\textwidth]{figures/chess_cropped.jpg}
+%%\end{subfigure}%
+%%\begin{subfigure}{0.4\textwidth}
+%%\includegraphics[width=\textwidth]{figures/go2.jpg}
+%%\end{subfigure}
+%%\end{figure}
+%%\uncover<2->{
+%%\begin{exampleblock}{}
+%%Meta learning matches the perspective of educational researchers who describe education as ``Preparation for Future Learning'' \citep{Bransford1999}.
+%%\end{exampleblock}
+%%}
+%%\note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
+%%\end{frame}
+
+
+
+
 
 %%
 %%\begin{frame}{Background}
