@@ -120,7 +120,7 @@ Connectionist modeling has too often focused on single tasks.\par
 \end{figure}
 \vspace{2em}
 \blfootnote{\uncover<4->{
-    \only<i
+    \only<2-4>{\citep*{Luong2016}}
     \only<1,5->{\citep{Johnson2016a}}
 }}
 }
@@ -128,6 +128,21 @@ Connectionist modeling has too often focused on single tasks.\par
 
 \begin{frame}[standout]
 Multi-task learning can substantially improve generalization in neural networks.\par
+\end{frame}
+
+
+\begin{frame}<2->{Multi-task learning in humans}
+\begin{itemize}
+\item The idea that transfer is beneficial to humans isn't new.
+\item<3-> However, previous transfer research mostly focused on subjects rapidly finding explicit analogies in toy domains, with limited success.
+\item<4-> The ML research suggests instead that transfer might be more useful over \textbf{slower timescales} in \textbf{more complex tasks}, and possibly \textbf{without explicit awareness}.
+\end{itemize}
+\vspace{2em}
+\blfootnote{
+    \only<1-3>{\citep{Gentner2003, Day2011}}
+    \only<1,4->{\citep{Lampinen2017a, Bransford1999}}
+}
+
 \end{frame}
 
 \begin{frame}{Humans face many related tasks}
@@ -156,9 +171,8 @@ Multi-task learning can substantially improve generalization in neural networks.
 \note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
 \end{frame}
 
-\begin{frame}{Multi-task learning is also beneficial on smaller scales}
+\begin{frame}{Multi-task learning can also be beneficial on smaller scales}
 \begin{figure}
-\vspace{2em}
 \centering
 \begin{subfigure}{0.3\textwidth}
 \includegraphics[width=\textwidth]{figures/hexagon_arrow.png}
@@ -166,8 +180,12 @@ Multi-task learning can substantially improve generalization in neural networks.
 \begin{subfigure}{0.65\textwidth}
 \includegraphics[width=\textwidth]{figures/fyp_1_modular_text.png}
 \end{subfigure}
-\vspace{2em}
 \end{figure}
+\vspace{2em}
+\begin{itemize}
+\item<2-> Importantly, the benefit of seeing both only emerged \textbf{slowly}, after subjects had worked with the materials for a while.
+\end{itemize}
+\vspace{2em}
 {
 \scriptsize
 \citep{Lampinen2017b}
@@ -227,7 +245,7 @@ When the target task is noisy or auxiliary tasks are well aligned, transfer is v
 \end{frame}
 
 \begin{frame}[standout]
-Data-hunger and failures to generalize may be due to ``poverty of the [training] stimulus'' -- humans do many more tasks than our models.\par
+Data-hunger and failures to generalize may be due to ``poverty of the tasks'' -- we do many more tasks than our models.\par
 \end{frame}
 
 \begin{frame}{Acknowledgements}
