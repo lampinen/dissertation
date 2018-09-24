@@ -61,7 +61,7 @@
 
 \begin{document}
 
-\title{Multi-task learning \& generalization}
+\title{Multi-task learning, generalization, and abstraction}
 \author{Andrew Lampinen}
 \date{}
 \frame{\titlepage}
@@ -70,7 +70,24 @@
 Connectionist modeling has too often focused on single tasks.\par
 \end{frame}
 
-\begin{frame}[fragile]{Multi-task learning in ML}
+\begin{frame}{Prior work on multiple tasks in neural networks}
+\begin{figure}
+\centering
+\only<1> {
+\includegraphics[height=0.75\textheight]{figures/rm_sem_task.png}
+} \only<2> {
+\includegraphics[height=0.75\textheight]{figures/rm_sem_reps.png}
+} \only<3> {
+\includegraphics[height=0.75\textheight]{figures/dag_transf.png}
+}
+\end{figure}
+\blfootnote{
+    \only<1-2>{\citep{Hinton1986, Rogers2008}}
+    \only<3->{\citep{Dienes1999}}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Recently: Multi-task learning improves generalization}
 \uncover<2->{
 \begin{figure}
 \centering
@@ -135,7 +152,7 @@ Multi-task learning can substantially improve generalization in neural networks.
 \begin{itemize}
 \item The idea that transfer is beneficial to humans isn't new.
 \item<3-> However, previous transfer research mostly focused on subjects rapidly finding explicit analogies in toy domains, with limited success.
-\item<4-> The ML research suggests instead that transfer might be more useful over \textbf{slower timescales} in \textbf{more complex tasks}, and possibly \textbf{without explicit awareness}.
+\item<4-> The neural network research suggests instead that transfer might be more useful over \textbf{slower timescales} in \textbf{more complex tasks}, and possibly \textbf{without explicit awareness}.
 \end{itemize}
 \vspace{2em}
 \blfootnote{
@@ -165,7 +182,6 @@ Multi-task learning can substantially improve generalization in neural networks.
 \end{figure}
 \uncover<2->{
 \scriptsize
-\only<1>{\vspace{-1.3em}}
 \citep{Lampinen2017a, Hansen2017}
 }
 \note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
@@ -232,21 +248,58 @@ When the target task is noisy or auxiliary tasks are well aligned, transfer is v
 \end{frame}
 
 \begin{frame}[fragile]{Limitations of deep learning, or of tasks?}
-\begin{figure}
-\vspace{-2em}
-\centering
-\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
-\node [anchor=center, align=center,] at (-1, 0) (c0) {\includegraphics[width=7cm]{figures/critique0.png}};
-\node [anchor=center, align=center,] at (0, 0) (c1) {\includegraphics[width=7cm]{figures/critique1.png}};
-\node [anchor=center, align=center,] at (1, -2) (c2) {\includegraphics[width=7cm]{figures/critique2.png}};
-\end{tikzpicture}
-\end{figure}
-\vspace{2em}
+Neural networks are often criticized for needing more data than humans to learn a task. \uncover<2->{But:}
+\begin{itemize}
+\item<2-> Small amount of data $=$ small SNR.
+\item<3-> Most tasks humans learn are related to other things they've done. 
+\end{itemize}
+\uncover<4->{ So this is the domain where transfer can be most beneficial! (A noisy task with aligned auxiliary tasks.)}
+%\begin{figure}
+%\vspace{-2em}
+%\centering
+%\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
+%\node [anchor=center, align=center,] at (-1, 0) (c0) {\includegraphics[width=7cm]{figures/critique0.png}};
+%\node [anchor=center, align=center,] at (0, 0) (c1) {\includegraphics[width=7cm]{figures/critique1.png}};
+%\node [anchor=center, align=center,] at (1, -2) (c2) {\includegraphics[width=7cm]{figures/critique2.png}};
+%\end{tikzpicture}
+%\end{figure}
+%\vspace{2em}
 \end{frame}
 
 \begin{frame}[standout]
 Data-hunger and failures to generalize may be due to ``poverty of the tasks'' -- we do many more tasks than our models.\par
 \end{frame}
+
+\begin{frame}{Abstraction \& transfer}
+\begin{itemize}
+\item In math (and other domains) we often do related tasks at different levels of abstraction. 
+\item <2->Do more basic tasks help set up representations for more abstract ones?
+\end{itemize}
+\begin{figure}
+\centering
+\only<-2>{\vspace{0.5\textheight}}
+\only<3>{
+\includegraphics[height=0.5\textheight]{figures/man_woman.jpg}
+}
+\only<4>{
+\vspace{0.75em}
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=\textwidth]{figures/group_14_1.png}
+\end{subfigure}~
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=\textwidth]{figures/group_14_2.png}
+\end{subfigure}
+}
+\only<5>{
+\includegraphics[height=0.5\textheight]{figures/integer_highlighted.png}
+}
+\end{figure}
+\end{frame}
+
+\begin{frame}[standout]
+Do the features that emerge in network representations when learning basic concepts support learning more abstract ones? 
+\end{frame}
+
 
 \begin{frame}{Acknowledgements}
 \vspace{1em}
@@ -263,215 +316,6 @@ Data-hunger and failures to generalize may be due to ``poverty of the tasks'' --
 \end{figure}
 \end{frame}
 
-%%\begin{frame}[fragile]{Meta-learning in ML}
-%%\begin{figure}
-%%\centering
-%%\begin{tikzpicture}[remember picture, overlay, every node/.style={inner sep=0,outer sep=0}]
-%%\node [anchor=center, draw, fill=white, minimum width=3cm, minimum height= 1 cm] at ([yshift=-2cm]current page.center) (brain) {\Large RL network};
-%%\node [anchor=center, above = 1cm of brain] (output1) {
-%%\only<1>{\includegraphics[height=3.5cm]{figures/slot_machine.jpeg}}
-%%\only<2>{\includegraphics[height=4cm]{figures/casino.jpg}}
-%%};
-%%
-%%\path [line] (brain.north) to (output1.south);
-%%\end{tikzpicture}
-%%\end{figure}
-%%\vspace{1em}
-%%\blfootnote{\uncover<2->{\citep{Duan2016, Wang2016a}}}
-%%\end{frame}
-%%
-%%\begin{frame}{Humans face many related tasks (again)}
-%%\begin{figure}
-%%\centering
-%%\begin{subfigure}{0.4\textwidth}
-%%\includegraphics[width=\textwidth]{figures/chess_cropped.jpg}
-%%\end{subfigure}%
-%%\begin{subfigure}{0.4\textwidth}
-%%\includegraphics[width=\textwidth]{figures/go2.jpg}
-%%\end{subfigure}
-%%\end{figure}
-%%\uncover<2->{
-%%\begin{exampleblock}{}
-%%Meta learning matches the perspective of educational researchers who describe education as ``Preparation for Future Learning'' \citep{Bransford1999}.
-%%\end{exampleblock}
-%%}
-%%\note{There are deep relationships among the tasks we do -- some are superficially obvious, like Go and Chess, and some are less so, like the mathematical structures underlying music or the fact that we use language to talk about all these domains.}
-%%\end{frame}
-
-
-
-
-
-%%
-%%\begin{frame}{Background}
-%%\begin{itemize}
-%%\item Not a new idea: transfer has been called a central component of ``why we're so smart'' \citep{Gentner2003}, and an important source of new ideas \citep{Gick1980}.
-%%\item<2->
-%%However, this perspective has been criticized!\par
-%%\begin{itemize}
-%%\item<3-> ``Significant transfer is probably rare and accounts for very little human behavior. ... We generally do what we have learned to do and no more.'' \citep{Detterman1993}
-%%\end{itemize}
-%%\item<4-> How can we reconcile these different viewpoints?
-%%\end{itemize}
-%%\note{Detterman: ``We generally do what we have learned to do and no more.'' Experimental manipulations in transfer experiments ``have the subtlety of a baseball bat.''\par
-%%Observation from FriSem last year: there is a correlation between the speed of transfer being sought and how important they think it is.}
-%%\end{frame}
-%%
-%%\begin{frame}{Transfer speed}
-%%\vspace{1.5em}
-%%I think there's a neglected variable: speed of transfer.\par
-%%\uncover<2->{
-%%\begin{center}
-%%\begin{table}
-%%\begin{tabular}{|c|c|}
-%%\hline
-%%Fast & Slow \\
-%%\hline
-%%\parbox{0.45\textwidth}{
-%%    \begin{itemize}
-%%    \item<2-> one (or a few) examples explicitly shown
-%%    \item<3-> transfer requires explicit awareness of analogy
-%%    \end{itemize}
-%%}
-%%&
-%%\parbox{0.45\textwidth}{
-%%    \begin{itemize}
-%%    \item<2-> learning gradually through many interactions
-%%    \item<3-> {transfer may or may not be explicit}%
-%%               %%\only<4>{\color{red}transfer may or may not be explicit}}
-%%    \end{itemize}
-%%}\\ \hline
-%%\end{tabular}
-%%\end{table}
-%%}
-%%\vspace{1.5em}
-%%\note{E.g. being told about the rules of chess and then seeing if that helps you play go, vs. playing many games of chess and go and seeing if one helps the other}
-%%\end{center}
-%%{
-%%\scriptsize
-%%\citep{Lampinen2017a}
-%%}
-%%\end{frame}
-%%
-%%\begin{frame}{Transfer speed and outcomes}
-%%For example, imagine you are about to teach someone to play guitar. Who do you think would likely perform better:
-%%\begin{itemize}
-%%\item a person who has just taken their first piano lesson 
-%%\item a person who has been playing piano for years
-%%\end{itemize}
-%%\begin{figure}
-%%\centering
-%%\begin{subfigure}{0.4\textwidth}
-%%\includegraphics[width=\textwidth]{figures/piano.jpg}
-%%\end{subfigure}~%
-%%\begin{subfigure}{0.4\textwidth}
-%%\includegraphics[width=\textwidth]{figures/guitar.jpg}
-%%\end{subfigure}%
-%%\end{figure}
-%%\note{So transfer may require slow learning in the original domain to set up sufficiently high-quality representations to see an effect}
-%%\end{frame}
-%%
-%%\begin{frame}{Transfer speed and opinions}
-%%Transfer speed helps reconcile why some people think transfer is important, while others don't. 
-%%\begin{figure}
-%%\centering
-%%\includegraphics[width=0.5\textwidth]{figures/perspectives_on_transfer.png}
-%%\end{figure}
-%%\end{frame}
-%%
-%%
-%%\begin{frame}[standout]
-%%Slow transfer between tasks is important.
-%%\end{frame}
-%%
-%%\begin{frame}{Abstraction and transfer}
-%%We often progress from procedural to more explicit, abstract, or formal knowledge: \vspace{-0.2em}
-%%\begin{figure}
-%%\centering
-%%\begin{tikzpicture}
-%%\node (img1) {\includegraphics[width=0.33\textwidth]{figures/multiplication_procedural_smaller.png}};
-%%\uncover<2->{
-%%\node (img2) at ([yshift=-2em]img1.east) {\includegraphics[width=0.33\textwidth]{figures/factoring_polynomial_worksheet.png}};
-%%}
-%%\uncover<3->{
-%%\node (img3) at ([yshift=-3em]img2.east) {\includegraphics[width=0.5\textwidth]{figures/prime_ideals.png}};
-%%}
-%%\end{tikzpicture}
-%%\end{figure}\vspace{-0.2em}
-%%\uncover<4>{These are related tasks that share some structure! Is it useful to think about this from the perspective of transfer?}
-%%\note{worksheetfun.com\par
-%%Less abstract and more abstract reasoning can be seen as partially distinct tasks that share some common structure. There are different ways that procedural knowledge could support more formal, setting up representations and intuitions, having examples to reason over, ...}
-%%\end{frame}
-%%
-%%\begin{frame}{Is abstraction transfer?}
-%%Yet there are also times when procedural and formal knowledge seem partially dissociable:
-%%\begin{figure}
-%%\centering
-%%\begin{subfigure}{0.4\textwidth}
-%%\includegraphics[width=\textwidth]{figures/piano.jpg}
-%%\end{subfigure}~%
-%%\begin{subfigure}{0.5\textwidth}
-%%\includegraphics[width=\textwidth]{figures/mixolydian.png}
-%%\end{subfigure}%
-%%\end{figure}
-%%\note{}
-%%\end{frame}
-%%
-%%\begin{frame}[standout]
-%%When and how do procedural and more explicit, abstract, or formal knowledge influence each other?
-%%\end{frame}
-%%
-%%\begin{frame}<-8>[label=phenomena]
-%%\frametitle<-9>{A diagram of potential phenomena of interest}
-%%\frametitle<10>{What explicit knowledge?}
-%%\vspace{-1em}
-%%\begin{figure}
-%%\centering
-%%\begin{tikzpicture}[auto] %% TODO? highlighting
-%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (A) at (-4, 0) {Task A}; 
-%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (B) at (4, 0) {Task B}; 
-%%\path [line, dashed, <->, onslide={<10>,{opacity=0.2}}] (A.east) to node[text width=2cm] (underlying) {Underlying relationship} (B.west); 
-%%
-%%\uncover<2->{
-%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (Aproc) at (-4, 2) {Ability to perform  A}; 
-%%\node [rectangle, draw, thick, text width=2cm, align=center, onslide={<10>,{opacity=0.2}}] (Bproc) at (4, 2) {Ability to perform B}; 
-%%\path [line, ->, dashed, onslide={<10>,{opacity=0.2}}] (A.north) to  node (Atrans) {}(Aproc.south); 
-%%\path [line, ->, dashed, onslide={<10>,{opacity=0.2}}] (B.north) to node (Btrans) {} (Bproc.south); 
-%%}
-%%
-%%\uncover<3->{
-%%\path [line, ->, onslide={<10>,{opacity=0.2}}] (Aproc.east) to node (proctrans) {transfer?} (Bproc.west); 
-%%}
-%%
-%%\uncover<4->{
-%%\node [rectangle, draw, thick, text width=2cm, align=center] (Aabs) at (-4, 4.5) {Explicit knowledge about A}; 
-%%\node [rectangle, draw, thick, text width=2cm, align=center] (Babs) at (4, 4.5) {Explicit knowledge about B}; 
-%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Aproc.north) to  node (Atrans) {}(Aabs.south); 
-%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Bproc.north) to node (Btrans) {} (Babs.south); 
-%%}
-%%\uncover<5->{
-%%\path [line, ->, onslide={<10>,{opacity=0.2}}] (Aabs.east) to node (abstrans) {transfer?} (Babs.west); 
-%%}
-%%\uncover<6->{
-%%\node [rectangle, draw, thick, text width=3.5cm, align=center] (ABabs) at (0, 6.5) {Explicit knowledge about relationship between A and B}; 
-%%}
-%%\uncover<7->{
-%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Aabs.north) to  (ABabs.west); 
-%%\path [line, <->, onslide={<10>,{opacity=0.2}}] (Babs.north) to  (ABabs.east); 
-%%\path [line, <->, onslide={<10>,{opacity=0.2}}] ([yshift=-0.5em]abstrans.north) to(ABabs.south); 
-%%\path [line, <->, bend right=40, onslide={<10>,{opacity=0.2}}] ([xshift=-0.5em, yshift=-0.25em]proctrans.north east) to([xshift=0.5em]ABabs.south); 
-%%}
-%%\uncover<8->{
-%%\node (abs0) at (6, 1.5) {};
-%%\node (abs1) at (6, 7) {};
-%%\path [line, ->, opacity=0.5] (abs0) to node [xshift=0.5em, yshift=3em, opacity=0.5, rotate=90] {abstractness} (abs1); 
-%%}
-%%
-%%\end{tikzpicture}
-%%\end{figure}
-%%
-%%\end{frame}
-%%
 \begin{frame}[allowframebreaks]
 \bibliographystyle{plainnat}
 {\bibliography{transfer}}
