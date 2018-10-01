@@ -62,7 +62,9 @@
 \begin{document}
 
 \title{Multi-task learning, generalization, and abstraction}
-\author{Andrew Lampinen}
+\author{Andrew Lampinen\\
+PhD Candidate, Psychology\\
+Stanford University}
 \date{}
 \frame{\titlepage}
 
@@ -73,17 +75,17 @@ Connectionist modeling has too often focused on single tasks.\par
 \begin{frame}{Prior work on multiple tasks in neural networks}
 \begin{figure}
 \centering
-\only<1> {
+\only<2> {
 \includegraphics[height=0.75\textheight]{figures/rm_sem_task.png}
-} \only<2> {
-\includegraphics[height=0.75\textheight]{figures/rm_sem_reps.png}
 } \only<3> {
+\includegraphics[height=0.75\textheight]{figures/rm_sem_reps.png}
+} \only<4> {
 \includegraphics[height=0.75\textheight]{figures/dag_transf.png}
 }
 \end{figure}
 \blfootnote{
-    \only<1-2>{\citep{Hinton1986, Rogers2008}}
-    \only<3->{\citep{Dienes1999}}
+    \only<2-3>{\citep{Hinton1986, Rogers2008}}
+    \only<4->{\citep{Dienes1999}}
 }
 \end{frame}
 
@@ -150,14 +152,15 @@ Multi-task learning can substantially improve generalization in neural networks.
 
 \begin{frame}<2->{Multi-task learning in humans}
 \begin{itemize}
-\item The idea that transfer is beneficial to humans isn't new.
-\item<3-> However, previous transfer research mostly focused on subjects rapidly finding explicit analogies in toy domains, with limited success.
-\item<4-> The neural network research suggests instead that transfer might be more useful over \textbf{slower timescales} in \textbf{more complex tasks}, and possibly \textbf{without explicit awareness}.
+\item Humans do many related tasks!
+\item<3-> The idea that transfer is beneficial to humans isn't new.
+\item<4-> However, previous transfer research mostly focused on subjects rapidly finding explicit analogies in toy domains, with limited success.
+\item<5-> The neural network research suggests instead that transfer might be more useful over \textbf{slower timescales} in \textbf{more complex tasks}, and possibly \textbf{without explicit awareness}.
 \end{itemize}
 \vspace{2em}
 \blfootnote{
-    \only<1-3>{\citep{Gentner2003, Day2011}}
-    \only<1,4->{\citep{Lampinen2017a, Bransford1999}}
+    \only<1-4>{\citep{Gentner2003, Day2011}}
+    \only<1,5->{\citep{Lampinen2017a, Bransford1999}}
 }
 
 \end{frame}
@@ -191,17 +194,22 @@ Multi-task learning can substantially improve generalization in neural networks.
 \begin{figure}
 \centering
 \begin{subfigure}{0.3\textwidth}
+\uncover<2->{
 \includegraphics[width=\textwidth]{figures/hexagon_arrow.png}
+}
 \end{subfigure}~
 \begin{subfigure}{0.65\textwidth}
+\uncover<3->{
 \includegraphics[width=\textwidth]{figures/fyp_1_modular_text.png}
+}
 \end{subfigure}
 \end{figure}
-\vspace{2em}
+\vspace{1.5em}
 \begin{itemize}
-\item<2-> Importantly, the benefit of seeing both only emerged \textbf{slowly}, after subjects had worked with the materials for a while.
+\item<4-> Participants who saw hybrid of both performed better!
+\item<5-> Importantly, the benefit of seeing both only emerged \textbf{slowly}, after subjects had worked with the materials for a while.
 \end{itemize}
-\vspace{2em}
+\vspace{1.5em}
 {
 \scriptsize
 \citep{Lampinen2017b}
@@ -215,16 +223,16 @@ Our models should reflect the fact that human intelligence is multi-purpose.\par
 \begin{frame}{Multi-task benefits (and costs)}
 \begin{figure}
 \centering
-\only<1>{
+\only<2>{
 \vspace{3em}
 \includegraphics[width=\textwidth]{figures/analytic_paper_title.png}
 }
-\only<2>{
+\only<3>{
 \vspace{3em}
 \includegraphics[width=0.8\textwidth]{figures/transfer_pros_cons.png}
 \vspace{1.25em}
 }
-\only<3>{
+\only<4>{
 \vspace{2em}
 \begin{subfigure}{0.3\textwidth}
 \includegraphics[width=\textwidth]{figures/fig_5a.png}
@@ -238,8 +246,6 @@ Our models should reflect the fact that human intelligence is multi-purpose.\par
 %%\includegraphics[width=0.5\textwidth]{figures/transfer_by_alignment.png}
 }
 \end{figure}
-\vspace{1em}
-\blfootnote{\uncover<2->{\citep*{Lampinen2018}}}
 \end{frame}
 
 
@@ -250,10 +256,10 @@ When the target task is noisy or auxiliary tasks are well aligned, transfer is v
 \begin{frame}[fragile]{Limitations of deep learning, or of tasks?}
 Neural networks are often criticized for needing more data than humans to learn a task. \uncover<2->{But:}
 \begin{itemize}
-\item<2-> Small amount of data $=$ small SNR.
-\item<3-> Most tasks humans learn are related to other things they've done. 
+\item<2-> Not enough data $=$ small SNR.
+\item<3-> Most tasks humans learn are related to other things we do. 
 \end{itemize}
-\uncover<4->{ So this is the domain where transfer can be most beneficial! (A noisy task with aligned auxiliary tasks.)}
+\uncover<4->{ So this is the domain where transfer can be most beneficial! (Noisy tasks with aligned auxiliary tasks.)}
 %\begin{figure}
 %\vspace{-2em}
 %\centering
@@ -272,19 +278,21 @@ Data-hunger and failures to generalize may be due to ``poverty of the tasks'' --
 
 \begin{frame}{Abstraction \& transfer}
 \begin{itemize}
-\item In math (and other domains) we often do related tasks at different levels of abstraction. 
-\item <2->Do more basic tasks help set up representations for more abstract ones?
+\item ``Transfer'' usually considered between similar tasks.
+\item <2->In math (and other domains) we often do tasks that are related by abstraction. 
+\item <3->Work on grounding, e.g. in gesture \cite{Wakefield2018}.
+\item <4->Do more basic tasks help set up representations for more abstract ones?
 \end{itemize}
 \begin{figure}
 \centering
-\only<-2>{\vspace{0.5\textheight}}
-\only<3> {
+\only<-4>{\vspace{0.5\textheight}}
+\only<5> {
 \includegraphics[height=0.5\textheight]{figures/rm_sem_reps.png}
 }
-\only<4>{
+\only<6>{
 \includegraphics[height=0.5\textheight]{figures/man_woman.jpg}
 }
-\only<5>{
+\only<7>{
 \vspace{0.75em}
 \begin{subfigure}{0.5\textwidth}
 \includegraphics[width=\textwidth]{figures/group_14_1.png}
@@ -293,28 +301,24 @@ Data-hunger and failures to generalize may be due to ``poverty of the tasks'' --
 \includegraphics[width=\textwidth]{figures/group_14_2.png}
 \end{subfigure}
 }
-\only<6>{
-\includegraphics[height=0.5\textheight]{figures/integer_highlighted.png}
-}
 \end{figure}
 \end{frame}
 
 \begin{frame}[standout]
-Do the features that emerge in network representations when learning basic concepts support learning more abstract ones? 
+Does the structure that emerges in our representations when learning basic tasks prepare us for abstraction?
 \end{frame}
 
 
-\begin{frame}{Acknowledgements}
+\begin{frame}[fragile]{Acknowledgements}
 \vspace{1em}
 \begin{figure}
 \centering
-\begin{tikzpicture}[auto]
-\node at (0, 0) {\includegraphics[width=2cm]{figures/people/jay.jpg}};
-\node at (4, 0) {\includegraphics[width=2cm]{figures/people/surya.jpg}};
+\begin{tikzpicture}[remember picture, overlay]
+\node at (-2, 1.5) {\includegraphics[width=2cm]{figures/people/jay.jpg}};
+\node<2-> at (2, 1.5) {\includegraphics[width=2cm]{figures/people/surya.jpg}};
 
-\node at (-2, -3) {\includegraphics[width=2cm]{figures/people/arianna.jpg}};
-\node at (2, -3) {\includegraphics[width=2cm]{figures/people/katherine.jpg}};
-\node at (6, -3) {\includegraphics[width=2cm]{figures/nsf.jpeg}};
+\node<3-> at (-4, -1.5) {\includegraphics[width=2cm]{figures/people/arianna.jpg}};
+\node<3-> at (0, -1.5) {\includegraphics[width=2cm]{figures/people/katherine.jpg}};
 \end{tikzpicture}
 \end{figure}
 \end{frame}
