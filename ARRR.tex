@@ -58,9 +58,33 @@ Deep learning models are data-hungry, while humans can frequently learn from rel
 
 Furthermore, even if they are given a large amount of data, these systems may not be able to generalize well outside the data distribution they trained on. Once knowledge is learned in the weights of a deep learning model, it is difficult to flexibly reuse that knowledge.
 
-In particular, humans can be told to change their behavior in a way completely inconsistent with their prior learning, such as trying to lose a game they have previously been trying to win, and can quite easily do this \citep{Lake2016}. More generally, humans are often able to accurately perform according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
+In particular, humans can be told to change their behavior in a way completely inconsistent with their prior behavior on a task, such as trying to lose a game they have previously been trying to win, and can quite easily do this \citep{Lake2016}. More generally, humans are often able to accurately perform according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
 
 Some of these problems have been partially addressed in the machine learning literature. Two of the most important ideas in this context are multi-task learning and meta-learning, which have been shown to help with some of these issues. However, there are many human-like abilities that remain frustratingly out of reach with contemporary methods. I will first review some of the cognitive issues and the progress to date, try to provide a unifying perspective on how transfer and meta-learning contribute to human learning, and show some new research and future directions on this topic. \par
+
+\section{Human flexibility}
+
+\subsection{Steps towards flexibility in deep learning}
+
+\subsection{What's still missing?}
+
+* Flexible remapping.
+
+* Language.
+
+* Abstraction, sharing of knowledge across layers of abstraction.
+
+\section{Towards more flexible deep learning architectures}
+
+The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks.
+
+\subsection{Embedded meta-learning}
+
+\subsection{Results}
+
+\section{Discussion}
+
+\subsection{Future directions}
 
 
 \section{Reading notes/literature to incorporate(?)}
