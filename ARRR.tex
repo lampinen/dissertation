@@ -58,11 +58,23 @@ Deep learning models are data-hungry, while humans can frequently learn from rel
 
 Furthermore, even if they are given a large amount of data, these systems may not be able to generalize well outside the data distribution they trained on. Once knowledge is learned in the weights of a deep learning model, it is difficult to flexibly reuse that knowledge.
 
-In particular, humans can be told to change their behavior in a way completely inconsistent with their prior behavior on a task, such as trying to lose a game they have previously been trying to win, and can quite easily do this \citep{Lake2016}. More generally, humans are often able to accurately perform according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
+In particular, humans can flexibly remap their behavior in a way completely inconsistent with their prior behavior on a task, such as trying to lose a game they have previously been trying to win \citep{Lake2016}. More generally, humans are often able to accurately perform according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
 
 Some of these problems have been partially addressed in the machine learning literature. Two of the most important ideas in this context are multi-task learning and meta-learning, which have been shown to help with some of these issues. However, there are many human-like abilities that remain frustratingly out of reach with contemporary methods. I will first review some of the cognitive issues and the progress to date, try to provide a unifying perspective on how transfer and meta-learning contribute to human learning, and show some new research and future directions on this topic. \par
 
 \section{Human flexibility}
+
+There are a variety of factors and systems that contribute to human flexibility and rapid learning. 
+
+* It has been proposed that we have complementary learning systems \citep{McClelland1995, Kumaran2016}, which allows us to learn rapidly from new knowledge while avoiding catastrophic interference \citep{McCloskey1989} with the statistical knowledge we have accumulated over longer timescales.
+
+* Can generate surprisinly good hypotheses from few samples. 
+
+* Active learning ???? (Gureckis)
+
+At their core, most of these issues revolve around a synergy between learning across different timescales (as highlighted in complementary learning systems). In particular, the knowledge that we accumulate over a lifetime of experience allows us to constrain the hypothesis space for new learning, so that we can successfully infer structure from few examples. These regularities can occur both in the mapping from inputs to our conscious awareness, and in the types of computations we are asked to consciously perform.  
+
+* Tradeoff: Overfitting, negative transfer, and what happens when you step outside of the hypothesis space that has been built up.
 
 \subsection{Steps towards flexibility in deep learning}
 
@@ -76,7 +88,9 @@ Some of these problems have been partially addressed in the machine learning lit
 
 \section{Towards more flexible deep learning architectures}
 
-The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks.
+The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data and tasks over time and rapidly adapt to new structure-consistent inputs.
+
+* something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and langauage/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
 
 \subsection{Embedded meta-learning}
 
