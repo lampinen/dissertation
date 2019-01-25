@@ -78,19 +78,23 @@ At their core, most of these issues revolve around a synergy between learning ac
 
 \subsection{Steps towards flexibility in deep learning}
 
+* something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and langauage/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
+
 \subsection{What's still missing?}
 
 * Flexible remapping.
 
 * Language.
 
-* Abstraction, sharing of knowledge across layers of abstraction.
+* Abstraction, sharing of knowledge across layers of abstraction/flexibly mapping between different *kinds* of knowledge.
 
 \section{Towards more flexible deep learning architectures}
 
-The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data and tasks over time and rapidly adapt to new structure-consistent inputs.
+The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data or tasks, and rapidly adapt to new data or tasks consistent with this learned structure.
 
-* something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and langauage/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
+In particular, our system learns to map different kinds of knowledge -- data, tasks, language, etc. -- into a common representational space, and meta-learns to compute mappings over this space. This allows a number of advantages in the ability of the system to rapidly and flexibly learn and adapt. Many of the features of human flexibility are represented under a fairly unified computational principle in this framework. For example, following instructions to perform zero-shot on a task is just a mapping from language to a behavioral strategy. Trying to alter behavior on a task, such as switching from trying to win a game to trying to lose, is a mapping from one behavioral strategy to another. Explaining ones behavior is a mapping from behavioral strategies to language. Our system makes all these mappings in-principle learnable. \par 
+
+One can loosely think of the common representational space as being something like a global workspace of consciousness \citep{Baars2005, Dehaene2017}, and the mappings within it as being the operations that we can consciously perform. Of course, these operations are constrained by the experiences we've had and the mappings we've been required to make, so the space of conscious representation may be set up to make certain types of mappings more easily realizable than others on certain kinds of data. Nevertheless, we are in principle capable of learning an arbitrary mapping between any sets of things of which we are conscious, whereas we are not necessarily capable of learning an arbitrary mapping between features that are unconsciously represented in the brain, such as the activity of a single neuron. The features which the brain learns to consciously represent are precisely those that are useful for the computations we consciously perform. These prior expectations contribute to our flexibility within the broad bounds of learned schemas, but our difficulty with adapting to tasks which are completely unlike those we've encountered before. Our architecture attempts to imitate this combination of inherent flexiblity and learned specialization. \par  
 
 \subsection{Embedded meta-learning}
 
@@ -100,6 +104,10 @@ The fundamental insight of meta-learning is that there is a continuum between ta
 
 \subsection{Future directions}
 
+* Karmilov-Smith \& rerepresentation
+* Related: Offloading from conscious to unconscious
+    - Consciousness as HoT not(?) captured in this model as is?
+    
 
 \section{Reading notes/literature to incorporate(?)}
 \subsection{Machine learning}
