@@ -96,17 +96,28 @@ In particular, our system learns to map different kinds of knowledge -- data, ta
 
 One can loosely think of the common representational space as being something like a global workspace of consciousness \citep{Baars2005, Dehaene2017}, and the mappings within it as being the operations that we can consciously perform. Of course, these operations are constrained by the experiences we've had and the mappings we've been required to make, so the space of conscious representation may be set up to make certain types of mappings more easily realizable than others on certain kinds of data. Nevertheless, we are in principle capable of learning an arbitrary mapping between any sets of things of which we are conscious, whereas we are not necessarily capable of learning an arbitrary mapping between features that are unconsciously represented in the brain, such as the activity of a single neuron. The features which the brain learns to consciously represent are precisely those that are useful for the computations we consciously perform. These prior expectations contribute to our flexibility within the broad bounds of learned schemas, but our difficulty with adapting to tasks which are completely unlike those we've encountered before. Our architecture attempts to imitate this combination of inherent flexiblity and learned specialization. \par  
 
-\subsection{Embedded meta-learning}
+\subsection{Embedded meta-learning architecture}
 
 \subsection{Results}
-
-\section{Discussion}
 
 \subsection{Future directions}
 
 * Karmilov-Smith \& rerepresentation
 * Related: Offloading from conscious to unconscious
     - Consciousness as HoT not(?) captured in this model as is?
+
+
+\section{Towards better understanding of human knowledge transfer}
+
+* Building off implicit and explicit structure-learning work including on artificial grammar learning and transfer \citet{Cleeremans1991, Tunney2001}. 
+* More recent work on more complex graph-structure learning starting with work by Anna Schapiro and colleagues \citep{Schapiro2012, Schapiro2013}, and continuing to work showing that some graph structures are more learnable than others \citep{Kahn2018}.
+
+* Plan: try an experiment similar to the above, learning the same structures as \citet{Kahn2018}, but where one context is learning them as grammars where they must press the correct key, and the other context is learning them in the multi-key-press context like the original authors. Does similarity of structures between these two tasks predict learning speed on the second task?
+
+* If we observe transfer, does this imply that the results of \citet{Kahn2018} could be due to the presence of structures more like this (hierarchical, clustery) in the world rather than any inherent learnability advantages per se?
+
+\section{Discussion}
+
     
 
 \section{Reading notes/literature to incorporate(?)}
@@ -184,6 +195,7 @@ One can loosely think of the common representational space as being something li
 \item Learning the structure of event sequences -- Jay \& Axel's paper on implicit learning of grammars \citep{Cleeremans1991}.
 \item Network constrainsts on learnability of probabilistic motor sequences -- Paper Danielle Bassett talked about in MBC with how graph structure affects implicit learning a la Schapiro or Cleeremans. \citep{Kahn2018} 
 \end{itemize}
+
 
 \section{Transfer}
 It has been frequently noted that human learning is efficient, \citep[e.g.]{Gentner2003}, and in particular that it is much more data-efficient and flexible than current deep learning systems \citep{Lake2016}. Why might this be? \par
