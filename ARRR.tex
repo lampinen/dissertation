@@ -68,7 +68,7 @@ There are a variety of factors and systems that contribute to human flexibility 
 
 * It has been proposed that we have complementary learning systems \citep{McClelland1995, Kumaran2016}, which allows us to learn rapidly from new knowledge while avoiding catastrophic interference \citep{McCloskey1989} with the statistical knowledge we have accumulated over longer timescales.
 
-* Can generate surprisinly good hypotheses from few samples. 
+* Can generate surprisingly good hypotheses from few samples. 
 
 * Active learning ???? (Gureckis)
 
@@ -78,7 +78,17 @@ At their core, most of these issues revolve around a synergy between learning ac
 
 \subsection{Steps towards flexibility in deep learning}
 
-* something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and langauage/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
+* something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and language/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
+
+* Prior work on meta-learning.
+
+* The differentiable neural computer (DNC), proposed by \citet{Graves2016}, and its precursors \citep[e.g.]{Graves2014} brought some additional flexibility to the type of computations networks were allowd to do by allowing them to read and write from a memory buffer with a variety of mechanisms for attending to this buffer to look up knowledge. Like other meta-learning systems, this allows flexibility to learn and reason from new knowledge rapidly. However, this flexibility remains fundamentally within the computations done for a task, and does not allow the more general flexibility we seek.
+
+* Other memory-based architectures here
+
+* Jacob Andreas' stuff.
+
+* Summary: meta-learning is starting to solve the small-data problem, but general flexibility remains out of reach. 
 
 \subsection{What's still missing?}
 
@@ -92,7 +102,7 @@ At their core, most of these issues revolve around a synergy between learning ac
 
 The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data or tasks, and rapidly adapt to new data or tasks consistent with this learned structure.
 
-In particular, our system learns to map different kinds of knowledge -- data, tasks, language, etc. -- into a common representational space, and meta-learns to compute mappings over this space. This allows a number of advantages in the ability of the system to rapidly and flexibly learn and adapt. Many of the features of human flexibility are represented under a fairly unified computational principle in this framework. For example, following instructions to perform zero-shot on a task is just a mapping from language to a behavioral strategy. Trying to alter behavior on a task, such as switching from trying to win a game to trying to lose, is a mapping from one behavioral strategy to another. Explaining ones behavior is a mapping from behavioral strategies to language. Our system makes all these mappings in-principle learnable. \par 
+In particular, our system learns to map different kinds of knowledge -- data, tasks, language, etc. -- into a common representational space, and meta-learns to compute mappings over this space. This allows a number of advantages in the ability of the system to rapidly and flexibly learn and adapt. Many of the features of human flexibility are represented under a fairly unified computational principle in this framework. For example, following instructions to perform zero-shot on a task is just a mapping from language to a behavioral strategy. Trying to alter behavior on a task, such as switching from trying to win a game to trying to lose, is a mapping from one behavioral strategy to another. Explaining behavior is a mapping from behavioral strategies to language. Our system makes all these mappings in-principle learnable. \par 
 
 One can loosely think of the common representational space as being something like a global workspace of consciousness \citep{Baars2005, Dehaene2017}, and the mappings within it as being the operations that we can consciously perform. Of course, these operations are constrained by the experiences we've had and the mappings we've been required to make, so the space of conscious representation may be set up to make certain types of mappings more easily realizable than others on certain kinds of data. Nevertheless, we are in principle capable of learning an arbitrary mapping between any sets of things of which we are conscious, whereas we are not necessarily capable of learning an arbitrary mapping between features that are unconsciously represented in the brain, such as the activity of a single neuron. The features which the brain learns to consciously represent are precisely those that are useful for the computations we consciously perform. These prior expectations contribute to our flexibility within the broad bounds of learned schemas, but our difficulty with adapting to tasks which are completely unlike those we've encountered before. Our architecture attempts to imitate this combination of inherent flexiblity and learned specialization. \par  
 
@@ -110,7 +120,7 @@ One can loosely think of the common representational space as being something li
 \section{Towards better understanding of human knowledge transfer}
 
 * Building off implicit and explicit structure-learning work including on artificial grammar learning and transfer \citet{Cleeremans1991, Tunney2001}. 
-* More recent work on more complex graph-structure learning starting with work by Anna Schapiro and colleagues \citep{Schapiro2012, Schapiro2013}, and continuing to work showing that some graph structures are more learnable than others \citep{Kahn2018}.
+* More recent work on more complex graph-structure learning starting with work by Anna Schapiro and colleagues \citep{Schapiro2013}, and continuing to work showing that some graph structures are more learnable than others \citep{Kahn2018}.
 
 * Plan: try an experiment similar to the above, learning the same structures as \citet{Kahn2018}, but where one context is learning them as grammars where they must press the correct key, and the other context is learning them in the multi-key-press context like the original authors. Does similarity of structures between these two tasks predict learning speed on the second task?
 
