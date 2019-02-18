@@ -58,31 +58,36 @@ Some of these problems have been partially addressed in the machine learning lit
 \section{Human flexibility}
 
 What kind of flexibility do humans have? We are often able to learn rapidly. For example, we can achieve some competence in a video game we've never seen before within a few minutes \citep{Lake2016}. We can learn new concepts from seeing only a relatively small number of examples \citep[e.g.]{Bourne1970}. We can often learn even faster if we can actively participate in the learning process by selecting examples rather than passively receiving them, especially if the concepts are simple enough that we can generate a good hypothesis space \citep{Markant2014a}. \par
-We can then apply what we have learned to new situations. The studies of \citet{Bourne1970} that I referenced above show that once people have learned a new concept from examples, they can generalize that knowedge to learn structurally-similar new concepts more rapidly. \par
+We can then apply what we have learned to new situations. The studies of \citet{Bourne1970} that I referenced above show that once people have learned a new concept from examples, they can generalize that knowedge to learn structurally-similar new concepts more rapidly. Indeed, even without explicit recognition of the relationship between knowledge 
+
+Human analogical transfer abilities have been suggested to be a critical component of `` what makes us smart'' \citep{Gentner2003}. \par
 More generally, we can often competently change our learned behavior in response to instruction or other goals, such as trying to lose a game we were previously trying to win or achieve some orthogonal task \citep{Lake2016}. Indeed, it has been known for almost a century that even other animals exhibit this sort of flexible knowledge use -- they engage in ``latent learning'' of environmental features that may be useful when solving future tasks \citep{Blodgett1929}. With human language abilities come a substantial increase in flexibility,   \par
 Yet sometimes it is quite difficult for us to integrate new knowledge. For example, even undergraduate students with substantial mathematical background often struggle with understanding new mathematical concepts. They may mistakenly assume the converse of a theorem, or get caught up in concrete ways of thinking about abstract concepts \citep{Hazzan1999}. Even if they can learn a basic concept rapidly, it may be hard for them to apply it in more abstract situations or to extract more formal understanding from it \citep[e.g.]{Lampinen2017b}. Indeed, even students who complete a course in geometry in high school may not achieve formal deductive understanding of the concepts taught unless they become undergraduate mathematics majors \citep{Burger1986}. Indeed, superficial details of how a concept is presented can have profound impacts on how easy it is to reason about, even if the underlying concept is exactly the same \citep[e.g.]{Kotovsky1985}. \par 
-Similarly, we cannot always flexibly use our knowledge. Knowing a rule or theorem does not necessarily mean that you will be able to apply it to create a proof \citep{Weber2001}. Clearly humans are not always rapid learners or flexible reasoners. \par 
+Similarly, we cannot always flexibly use our knowledge. For example, even mathematics students who can correctly state a rule or theorem are not necessarily able to apply it to create a proof \citep{Weber2001}. Rapid transfer of knowledge is often only possible when superficial details match closely, and so \citet{Detterman1993} has argued that siince inducing transfer often requires manipulations ``with the subtlety of a baseball bat,'' we can conclude that ``significant transfer is probably rare and accounts for very little human behavior.'' This is a particularly tendentious presentation of the issues, but it captures a broader insight that humans are not always rapid learners or flexible reasoners. \par 
+How can we reconcile the demonstrations of rapid learning and flexibility with the evidence that some concepts are learned slowly and some knowledge is inflexible? There a variety of factors. We need high-quality representations of the concepts we are learning in order to reason flexibly with them. These generalizable representations are generally created through making connections between different pieces of our knowledge \citep{Wilensky1991, Schwartz2015}. Relatedly, we often need strategic meta-knowledge about where and how to apply our knowledge in new situations, which also must be learned \citep{Weber2001}. Both these factors mean that transfer may happen more easily over longer periods of time, as I have argued in my prior work \citep{Lampinen2017}. The quality of the representations we have, and the way those representations relate to the new tasks we are presented with, affects our ability to learn rapidly and reason flexibly. \par 
 
+\subsection{What factors contribute to our flexibility?}
+With the above caveats in mind, we need to address the computational question of how we are able to learn rapidly and flexibly. There are a variety of factors and systems that contribute to human flexibility and rapid learning. In this section I will review a few of these. \par 
+First, it has been proposed that we have complementary learning systems \citep{McClelland1995, Kumaran2016}, which allow us to learn rapidly from new knowledge while avoiding catastrophic interference \citep{McCloskey1989} with the statistical knowledge we have accumulated over longer timescales. That is, the slow learning system sets up good representations, while the fast learning system stores new knowledge by using these representations. Throughout this paper, we will return to this theme of fast and slow learning which support each other. \par
 
-How can we reconcile the demonstrations of rapid learning and flexibility with the evidence that some concepts are learned slowly and some knowledge is inflexible?
+* Culture as a slow representation creating system. 
 
-There 
+* Grounding and representation quality.
 
-There are a variety of factors and systems that contribute to human flexibility and rapid learning. 
-
-* It has been proposed that we have complementary learning systems \citep{McClelland1995, Kumaran2016}, which allows us to learn rapidly from new knowledge while avoiding catastrophic interference \citep{McCloskey1989} with the statistical knowledge we have accumulated over longer timescales.
+* Interactive learning.
 
 * Can generate surprisingly good hypotheses from few samples. 
+ - Active learning \citep{Markant2014a}
 
-* Active learning ???? (Gureckis)
+At their core, most of these issues revolve around a synergy between learning across different timescales (as highlighted in complementary learning systems). In particular, the knowledge that our cultures have accumulated over millenia and that we have accumulated over our lifetimes allows us to constrain the hypothesis space for new learning, so that we can successfully infer structure from few examples in new situations. 
 
-At their core, most of these issues revolve around a synergy between learning across different timescales (as highlighted in complementary learning systems). In particular, the knowledge that we accumulate over a lifetime of experience allows us to constrain the hypothesis space for new learning, so that we can successfully infer structure from few examples. These regularities can occur both in the mapping from inputs to our conscious awareness, and in the types of computations we are asked to consciously perform.  
+* These slowly learned regularities can occur both in the mapping from inputs to our conscious awareness, and in the types of computations we are asked to consciously perform.  
 
 * Tradeoff: Overfitting, negative transfer, and what happens when you step outside of the hypothesis space that has been built up.
 
 \subsection{Steps towards flexibility in deep learning}
 
-* something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and language/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
+* Retraining final layer weights as a kind of flexible reuse of knowledge.
 
 * Prior work on meta-learning.
 
@@ -94,6 +99,8 @@ At their core, most of these issues revolve around a synergy between learning ac
 
 * Summary: meta-learning is starting to solve the small-data problem, but general flexibility remains out of reach. 
 
+* However, something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and language/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
+
 \subsection{What's still missing?}
 
 * Flexible remapping.
@@ -104,7 +111,7 @@ At their core, most of these issues revolve around a synergy between learning ac
 
 \section{Towards more flexible deep learning architectures}
 
-The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data or tasks, and rapidly adapt to new data or tasks consistent with this learned structure.
+The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data or tasks, and rapidly adapt to new data or tasks consistent with this learned structure \par.
 
 In particular, our system learns to map different kinds of knowledge -- data, tasks, language, etc. -- into a common representational space, and meta-learns to compute mappings over this space. This allows a number of advantages in the ability of the system to rapidly and flexibly learn and adapt. Many of the features of human flexibility are represented under a fairly unified computational principle in this framework. For example, following instructions to perform zero-shot on a task is just a mapping from language to a behavioral strategy. Trying to alter behavior on a task, such as switching from trying to win a game to trying to lose, is a mapping from one behavioral strategy to another. Explaining behavior is a mapping from behavioral strategies to language. Our system makes all these mappings in-principle learnable. \par 
 
