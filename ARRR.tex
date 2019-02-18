@@ -45,24 +45,28 @@
 \setlength\parindent{0pt}
 \parskip = \baselineskip
 \begin{document} 
-\title{Transfer and interactions between different types of knowledge}
+\title{ARRR: Transfer and flexibility}
 \author{Andrew Lampinen}
 \date{}
 \maketitle
 \section{Introduction}
-Deep learning methods have achieved incredible success recently, achieving human level performance in domains ranging from vision \citep{???} to playing go \citep{???}. 
-
-Yet these systems lack some important human abilities \citep[e.g.]{Lake2016}. 
-
-Deep learning models are data-hungry, while humans can frequently learn from relatively few examples. 
-
-Furthermore, even if they are given a large amount of data, these systems may not be able to generalize well outside the data distribution they trained on. Once knowledge is learned in the weights of a deep learning model, it is difficult to flexibly reuse that knowledge.
-
-In particular, humans can flexibly remap their behavior in a way completely inconsistent with their prior behavior on a task, such as trying to lose a game they have previously been trying to win \citep{Lake2016}. More generally, humans are often able to accurately perform according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
-
+Deep learning methods have achieved incredible success recently, achieving human level performance in domains ranging from vision \citep{} to playing go \citep{Silver2016}. Yet these systems lack some important human abilities \citep[e.g.]{Lake2016}. Deep learning models are data-hungry, while humans can frequently learn from relatively few examples. \par 
+Furthermore, even if they are given a large amount of data, deep learning systems may not be able to generalize well outside the data distribution they trained on. Once knowledge is learned in the weights of a deep learning model, it is difficult to flexibly reuse that knowledge. \par
+In particular, humans can flexibly remap their behavior in a way completely inconsistent with their prior behavior on a task, such as trying to lose a game they have previously been trying to win \citep{Lake2016}. More generally, humans are often able to accurately behave according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
 Some of these problems have been partially addressed in the machine learning literature. Two of the most important ideas in this context are multi-task learning and meta-learning, which have been shown to help with some of these issues. However, there are many human-like abilities that remain frustratingly out of reach with contemporary methods. I will first review some of the cognitive issues and the progress to date, try to provide a unifying perspective on how transfer and meta-learning contribute to human learning, and show some new research and future directions on this topic. \par
 
 \section{Human flexibility}
+
+What kind of flexibility do humans have? We are often able to learn rapidly. For example, we can achieve some competence in a video game we've never seen before within a few minutes \citep{Lake2016}. We can learn new concepts from seeing only a relatively small number of examples \citep[e.g.]{Bourne1970}. We can often learn even faster if we can actively participate in the learning process by selecting examples rather than passively receiving them, especially if the concepts are simple enough that we can generate a good hypothesis space \citep{Markant2014a}. \par
+We can then apply what we have learned to new situations. The studies of \citet{Bourne1970} that I referenced above show that once people have learned a new concept from examples, they can generalize that knowedge to learn structurally-similar new concepts more rapidly. \par
+More generally, we can often competently change our learned behavior in response to instruction or other goals, such as trying to lose a game we were previously trying to win or achieve some orthogonal task \citep{Lake2016}. Indeed, it has been known for almost a century that even other animals exhibit this sort of flexible knowledge use -- they engage in ``latent learning'' of environmental features that may be useful when solving future tasks \citep{Blodgett1929}. With human language abilities come a substantial increase in flexibility,   \par
+Yet sometimes it is quite difficult for us to integrate new knowledge. For example, even undergraduate students with substantial mathematical background often struggle with understanding new mathematical concepts. They may mistakenly assume the converse of a theorem, or get caught up in concrete ways of thinking about abstract concepts \citep{Hazzan1999}. Even if they can learn a basic concept rapidly, it may be hard for them to apply it in more abstract situations or to extract more formal understanding from it \citep[e.g.]{Lampinen2017b}. Indeed, even students who complete a course in geometry in high school may not achieve formal deductive understanding of the concepts taught unless they become undergraduate mathematics majors \citep{Burger1986}. Indeed, superficial details of how a concept is presented can have profound impacts on how easy it is to reason about, even if the underlying concept is exactly the same \citep[e.g.]{Kotovsky1985}. \par 
+Similarly, we cannot always flexibly use our knowledge. Knowing a rule or theorem does not necessarily mean that you will be able to apply it to create a proof \citep{Weber2001}. Clearly humans are not always rapid learners or flexible reasoners. \par 
+
+
+How can we reconcile the demonstrations of rapid learning and flexibility with the evidence that some concepts are learned slowly and some knowledge is inflexible?
+
+There 
 
 There are a variety of factors and systems that contribute to human flexibility and rapid learning. 
 
