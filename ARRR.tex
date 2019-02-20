@@ -87,36 +87,50 @@ From my perspective, these slowly-learned regularities in the world can occur in
 
 \subsection{Steps towards flexibility in deep learning}
 
-A great deal of recent work in machine learning can be seen as attempting to make machine learning systems more flexible. This work typically falls into two categories: learning multiple tasks with the hope that the additional constraints will improve the representations in the model and cause it to generalize better (multi-task learning), and learning to learn tasks (meta learning). I will review some of this literature in this section.
+A great deal of recent work in machine learning can be seen as attempts to make machine learning systems more flexible, in particular to allow them to learn more rapidly and generalize better to data that weren't seen during training. This work typically follows one of two approaches. The first, multi-task learning, focuses on learning multiple tasks with the hope that the additional constraints will improve the representations in the model and cause it to learn more rapidly or generalize better. The second approach, meta-learning, focuses on learning to learn tasks in the hopes of learning faster and generalizing better from small samples. I will review some of this literature in this section.
 
 \subsubsection{Multi-task learning}
 
 Multi-task learning is generally related to the ``slow'' learning systems I described in humans. Typically, parameters are partially shared between the two tasks, and these shared parameters are learned over long time-scales. This can be done either in a sequential fashion (where you use one task to pre-train the network for another), or simultaneously (where you learn multiple tasks at the same time or on alternating gradient steps). Auxiliary tasks need not be of the same type as the main task, for example reinforcement learning tasks can be supplemented with auxiliary supervised tasks like temmporal autoencoding \citep[e.g.]{Hermann2017}, or unsupervised tasks can be used to pre-train for supervised ones \citep[e.g.]{Wu2018}. \par
-\textbf{Pre-training:} One example of sequential multi-task learning is the extremely common practice of pre-training a network on some canonical task in order to use one of its hidden layers as a feature for some other related task. For example, pre-training on ImageNet \citep{Deng2009} is often seen as a useful general feature extractor for vision tasks \citep{Huh2016}, even for quite different transfer domains \citep[e.g.]{Marmanis2016}. \par    
-Pre-training is used on more than just vision tasks, however. In natural language processing (NLP) applications, the representations of words is often pre-trained on co-occurrence prediction tasks \citep[e.g.]{Pennington2014}. In AlphaGo \citep{Silver2016}, the networks were pre-trained to predict expert go-players' moves, and then were tuned from that starting point using reinforcement learning. \par
+\textbf{Pre-training:} One example of sequential multi-task learning is the extremely common practice of pre-training a network on some canonical task in order to use one of its hidden layers as a feature for some other related task. For example, pre-training on ImageNet \citep{Deng2009} is often seen as a useful general feature extractor for vision tasks \citep{Huh2016}, even for quite different transfer domains \citep[e.g.]{Marmanis2016}. There is still active research on how to optimally pre-train features for various goals \citep[e.g.]{Wu2018}. \par    
+However, pre-training is used on more than just vision tasks, however. In natural language processing (NLP) applications, the representations of words is often pre-trained on co-occurrence prediction tasks \citep[e.g.]{Pennington2014}. In AlphaGo \citep{Silver2016}, the networks were pre-trained to predict expert go-players' moves, and then were tuned from that starting point using reinforcement learning. The principle that pre-training a network can allow it to generalize better from smaller training sets appears to be quite general. \par
 
 \textbf{Simultaneous multi-task learning:} However, many multi-task learning approaches train on the tasks simultaneously. For example, simultaneously training a natural language translation system to do image captioning in the target language improves its translation performance \citep{Luong2016}. Even training it to translate between multiple language pairs is beneficial \citep{Dong2015}. This can even lead to zero-shot generalization to translation between language pairs never seen together in training \citep{Johnson2016a}. \par 
 In Reinforcement Learning (RL), auxiliary tasks have been suggested as key to overcoming the problem of signal sparsity \citep[e.g.]{LeCun2016}. They have been used this way on a variety of RL tasks, for example in grounded language learning \citep{Hermann2017}. \par
 The observation that deep networks will learn representations that represent shared structure in the tasks they perform, and can exploit this shared structure to generalize better is not new. It was observed at least as long ago as \citet{Hinton1986}, and has continued to intrigue researchers since \citep[e.g]{Rogers2008}.  
 
-\textbf{Towards a theoretical understanding of multi-task benefits:}
-* \citep{Lampinen2019}
+%% Should this go in the research roadmap?
+\textbf{Towards a theoretical understanding of multi-task benefits:} Recently, I have explored the benefits of multi-task learning from a theoretical perspective. I have analyzed empirically the evolution of the representations of a network learning multiple related tasks \citep{Lampinen2017a}, yielding a minimal example of a network which shows extraction of shared structure. In brief, while a linear network cannot exploit or represent shared structure (up to a rotation of its representation space), a nonlinearity at the output suffices to allow representation of this shared structure. \par
+More recently, we have derived a fully-analytic theory of generalization dynamics in deep linear neural networks \citep{Lampinen2019}, which we apply to understanding the issue of multi-task transfer. We show that transfer is most beneficial in the regime of learning a low SNR task with well-aligned auxiliary tasks (and that this pattern is qualitatively quite similar in deep nonlinear networks). 
 
 \subsubsection{Meta-learning \& related approaches}
 
-* Memory based parameter adaptation. 
+The fundamental insight of meta-learning is that there is a continuum between data and tasks. We can interpret each (input, target) tuple as a simple task, and we can interpret subsets of a dataset as sub-tasks, for example all the dog images contained within ImageNet form a semantically distinguishable sub-task of the overall task. Analogously, we can often interpret a single task as being just a point in a larger space of tasks. Most meta-learning models exploit this approach to have the architecture adapt to a given task within its activations instead of its weights, just as a CNN would adapt to the fact that its current input was a dog image rather than a tree image within its activations. Learning to adapt to new tasks in this way has been shown to allow for much more efficient learning on new tasks. \par 
+\textbf{Basic meta-learning:}
+The basic meta-learning approach has been applied to many settings. For example, it has been used to learn to classify new images based on single exemplars of \citep{Vinyals2016}. It has also been used to teach recurrent networks to solve simple reinforcement learning problems within activations \citep{Duan2016, Wang2016a}. \par
 
-* The differentiable neural computer (DNC), proposed by \citet{Graves2016}, and its precursors \citep[e.g.]{Graves2014} brought some additional flexibility to the type of computations networks were allowd to do by allowing them to read and write from a memory buffer with a variety of mechanisms for attending to this buffer to look up knowledge. Like other meta-learning systems, this allows flexibility to learn and reason from new knowledge rapidly. However, this flexibility remains fundamentally within the computations done for a task, and does not allow the more general flexibility we seek.
+\textbf{Memory based approaches:} There are a variety of meta-learning approaches that are based on a non-parametric memory, and generally some form of key-value attentional lookup over it. For example, the differentiable neural computer (DNC), proposed by \citet{Graves2016} is able to receive a graph structure as inputs, learns to store it in memory, and then learns to use that stored information to solve problems like computing shortest paths. That is, it has the flexibility to learn and reason from new knowledge rapidly. However, this flexibility remains fundamentally within the computations done for a task which is slowly learned, and does not allow the more general flexibility we seek. \par
+Other approaches are based on using memory only at testing, e.g. by tuning the network rapidly to perform well on similar examples, as proposed by \citet{Sprechmann2018}. \par 
 
 * Other memory-based architectures here
+
+\textbf{Other work:}
+
+* MAML
+
+* Proposals to use meta-learning to adapt hyperparameters of reinforcement learning \citep{Xu2018}.
 
 * Jacob Andreas' stuff.
 
 * Summary: meta-learning is starting to solve the small-data problem, but general flexibility remains out of reach. 
 
+\subsection{Relating transfer in humans and neural networks}
+
 * However, something something adversarial reprograminng \citep{Elsayed2018} something something chaotic systems and language/human culture just shapes us so that we can exploit that latent flexibility in useful ways.
 
-\subsection{What's still missing?}
+* \citep{Lampinen2019} Because the small-data regime is inherently low SNR, but we have many well aligned auxiliary tasks (often culturally constructed with this exact purpose), we may operate in precisely the regime where transfer is most beneficial. 
+
+\subsubsection{What's still missing?}
 
 * Flexible remapping.
 
@@ -126,7 +140,7 @@ The observation that deep networks will learn representations that represent sha
 
 \section{Towards more flexible deep learning architectures}
 
-The fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data or tasks, and rapidly adapt to new data or tasks consistent with this learned structure \par.
+As noted above, the fundamental insight of meta-learning is that there is a continuum between tasks and data. We attempt to follow this premise to its logical conclusion by implementing architectures which minimize the distinction between data and tasks. At the same time, our architecture exploits different timescales of learning to allow the system to slowly accumulate knowledge about regularities among data or tasks, and rapidly adapt to new data or tasks consistent with this learned structure \par.
 
 In particular, our system learns to map different kinds of knowledge -- data, tasks, language, etc. -- into a common representational space, and meta-learns to compute mappings over this space. This allows a number of advantages in the ability of the system to rapidly and flexibly learn and adapt. Many of the features of human flexibility are represented under a fairly unified computational principle in this framework. For example, following instructions to perform zero-shot on a task is just a mapping from language to a behavioral strategy. Trying to alter behavior on a task, such as switching from trying to win a game to trying to lose, is a mapping from one behavioral strategy to another. Explaining behavior is a mapping from behavioral strategies to language. Our system makes all these mappings in-principle learnable. \par 
 
