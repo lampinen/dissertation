@@ -109,16 +109,10 @@ The fundamental insight of meta-learning is that there is a continuum between da
 \textbf{Basic meta-learning:}
 The basic meta-learning approach has been applied to many settings. For example, it has been used to learn to classify new images based on single exemplars of \citep{Vinyals2016}. It has also been used to teach recurrent networks to solve simple reinforcement learning problems within activations \citep{Duan2016, Wang2016a}. \par
 
-\textbf{Memory based approaches:} There are a variety of meta-learning approaches that are based on a non-parametric memory, and generally some form of key-value attentional lookup over it. For example, the differentiable neural computer (DNC), proposed by \citet{Graves2016} is able to receive a graph structure as inputs, learns to store it in memory, and then learns to use that stored information to solve problems like computing shortest paths. That is, it has the flexibility to learn and reason from new knowledge rapidly. However, this flexibility remains fundamentally within the computations done for a task which is slowly learned, and does not allow the more general flexibility we seek. \par
-Other approaches are based on using memory only at testing, e.g. by tuning the network rapidly to perform well on similar examples, as proposed by \citet{Sprechmann2018}. \par 
+\textbf{Memory based approaches:} There are a variety of meta-learning approaches that are based on a non-parametric memory, and generally some form of key-value attentional lookup over it. A general extension of the basic meta-learning approach to the case with memory is given in \citet{Santoro2016}. Other approaches are based on using memory only at testing, e.g. by tuning the network rapidly to perform well on similar examples, as proposed by \citet{Sprechmann2018}. \par 
+More flexible variants have also been proposed. For example, the differentiable neural computer (DNC), proposed by \citet{Graves2016} is able to receive a graph structure as inputs, learns to store it in memory, and then learns to use that stored information to solve problems like computing shortest paths. This can effecetively be seen as meta-learning -- the architecture has the flexibility to learn and reason from new knowledge rapidly. However, this flexibility remains fundamentally within the computations done for a task which is slowly learned, and does not allow the more general flexibility we seek. \par
 
-* Other memory-based architectures here
-
-\textbf{Other work:}
-
-* MAML
-
-* Proposals to use meta-learning to adapt hyperparameters of reinforcement learning \citep{Xu2018}.
+\textbf{Other work:} There is a variety of other work that has exploited different perspectives on meta-learning. \citet{Finn2017a} proposed Model-Agnostic Meta Learning (MAML), an approach based on optimizing the model so that it could adapt well to a new task in a few gradient steps. \citet{Xu2018} proposed using meta-learning to adapt hyperparameters of reinforcement learning algorithms across tasks. \par
 
 * Jacob Andreas' stuff.
 
