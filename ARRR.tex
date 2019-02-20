@@ -66,25 +66,33 @@ How can we reconcile the demonstrations of rapid learning and flexibility with t
 
 \subsection{What factors contribute to our flexibility?}
 With the above caveats in mind, we need to address the computational question of how we are able to learn rapidly and flexibly. There are a variety of factors and systems that contribute to human flexibility and rapid learning. In this section I will review a few of these. \par 
-First, it has been proposed that we have complementary learning systems \citep{McClelland1995, Kumaran2016}, which allow us to learn rapidly from new knowledge while avoiding catastrophic interference \citep{McCloskey1989} with the statistical knowledge we have accumulated over longer timescales. That is, the slow learning system sets up good representations, while the fast learning system stores new knowledge by using these representations. Throughout this paper, we will return to this theme of fast and slow learning which support each other. \par
-Another example of this theme is culture. Our cultures have accumulated knowledge over extremely long time scales that allows us to advance much more rapidly now. Before they graduate high school, many children in the US gain fluency in concepts like calculus that took thousands of years to discover. Because culture has set up useful representations for these concepts, we are able to acquire them much more rapidly \citep{McClelland2016}. \par 
 
-* Grounding and representation quality.
+\textbf{Complementary learning systems:} First, it has been proposed that we have complementary learning systems \citep{McClelland1995, Kumaran2016}, which allow us to learn rapidly from new knowledge while avoiding catastrophic interference \citep{McCloskey1989} with the statistical knowledge we have accumulated over longer timescales. That is, the slow learning system sets up good representations, while the fast learning system stores new knowledge by using these representations. Throughout this paper, we will return to this theme of fast and slow learning which support each other. I will therefore divide the rest of this section into a ``slow'' and a ``fast'' part. \par
+\subsubsection{Slow}
+\textbf{Culture:} One critical example of this is culture. Our cultures have accumulated knowledge over extremely long time scales that allows us to advance much more rapidly now. Before they graduate high school, many children in the US gain fluency in concepts like calculus that took thousands of years to discover. Because culture has set up useful representations for these concepts, we are able to acquire them much more rapidly \citep{McClelland2016}. \par 
+\textbf{Transfer between tasks:} Even if culture has not explicitly highlighted (or engineered) structural relationships between tasks, we can benefit from structural similarity. For example, after learning an artificial grammar, subjects can generalize their knowledge to novel sequences from the same grammar applied to novel symbols \citep[e.g.]{Tunney2001}. From learning about simple harmonic oscillators in the context of springs, participants can transfer to a superficially unrelated problem about controlling the population of a city \citep[e.g.]{Day2011}. Because many tasks we perform share deep underlying structures, we can take advantage of transfer to learn faster on new tasks. \par 
+\textbf{Grounding and representation quality:} One particular type of transfer that seems to be especially useful is grounding \citep{Barsalou2007}. In particular, conceptual representations often tend to be tied into more basic perceptual-motor systems, e.g. arithmetic in the Approximate Number System \citep{Park2013}, or mathematical concepts in gestures \citep{Goldin-Meadow1993}. Indeed, even our perception of symbols seems to be influenced by ``meaningless'' perceptual details like their spacing \citep{Landy2007}. Because our perceptual-motor system have exceptionally good representations that are trained over long developmental time-scales, we may benefit from leveraging these representations to transfer our understanding to analogous conceptual domains. \par 
 
-* Interactive learning.
+\subsubsection{Fast learning}
+\textbf{Hippocampal:} TODO \par 
+ * REMERGE?
 
-* Can generate surprisingly good hypotheses from few samples. 
- - Active learning \citep{Markant2014a}
+\textbf{Interactive learning \& hypothesis testing:} In certain settings, humans are able to generate hypotheses based on small amounts of data, and update them with new data, even from a very young age \citep{Sobel2004, Gopnik2014}. We can even take advantage of these hypotheses in order to actively learn and acquire information from the world that is most useful for us \citep[e.g.]{Markant2014a}. Using our prior knowledge of the world, we are able to make extremely fast inferences about how to understand a new situation. \par
 
+\subsubsection{Interactions between fast and slow learning systems}
 At their core, most of these issues revolve around a synergy between learning across different timescales (as highlighted in complementary learning systems). In particular, the knowledge that our cultures have accumulated over millenia and that we have accumulated over our lifetimes allows us to constrain the hypothesis space for new learning, so that we can successfully infer structure from few examples in new situations. 
 
 * These slowly learned regularities can occur both in the mapping from inputs to our conscious awareness, and in the types of computations we are asked to consciously perform.  
+
+\subsubsection{The limitations of human flexibility}
 
 * Tradeoff: Overfitting, negative transfer, and what happens when you step outside of the hypothesis space that has been built up.
 
 \subsection{Steps towards flexibility in deep learning}
 
 * Retraining final layer weights as a kind of flexible reuse of knowledge.
+
+* Multi-task transfer
 
 * Prior work on meta-learning.
 
