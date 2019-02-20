@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[11pt]{article}
 \usepackage[fleqn]{amsmath}
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -50,7 +50,7 @@
 \date{}
 \maketitle
 \section{Introduction}
-Deep learning methods have achieved incredible success recently, achieving human level performance in domains ranging from vision \citep{} to playing go \citep{Silver2016}. Yet these systems lack some important human abilities \citep[e.g.]{Lake2016}. Deep learning models are data-hungry, while humans can frequently learn from relatively few examples. \par 
+Deep learning methods have achieved incredible success recently, achieving human level performance in domains ranging from vision \citep[e.g.]{Szegedy2015} to playing games \citep[e.g.]{Silver2016}. Yet these systems lack some important human abilities \citep[e.g.]{Lake2016}. Deep learning models are data-hungry, while humans can frequently learn from relatively few examples. \par 
 Furthermore, even if they are given a large amount of data, deep learning systems may not be able to generalize well outside the data distribution they trained on. Once knowledge is learned in the weights of a deep learning model, it is difficult to flexibly reuse that knowledge. \par
 In particular, humans can flexibly remap their behavior in a way completely inconsistent with their prior behavior on a task, such as trying to lose a game they have previously been trying to win \citep{Lake2016}. More generally, humans are often able to accurately behave according to linguistic instructions without seeing examples of such behavior. This type of ``zero-shot'' learning can be quite difficult for deep learning systems. \par 
 Some of these problems have been partially addressed in the machine learning literature. Two of the most important ideas in this context are multi-task learning and meta-learning, which have been shown to help with some of these issues. However, there are many human-like abilities that remain frustratingly out of reach with contemporary methods. I will first review some of the cognitive issues and the progress to date, try to provide a unifying perspective on how transfer and meta-learning contribute to human learning, and show some new research and future directions on this topic. \par
@@ -74,27 +74,32 @@ With the above caveats in mind, we need to address the computational question of
 \textbf{Grounding and representation quality:} One particular type of transfer that seems to be especially useful is grounding \citep{Barsalou2007}. In particular, conceptual representations often tend to be tied into more basic perceptual-motor systems, e.g. arithmetic in the Approximate Number System \citep{Park2013}, or mathematical concepts in gestures \citep{Goldin-Meadow1993}. Indeed, even our perception of symbols seems to be influenced by ``meaningless'' perceptual details like their spacing \citep{Landy2007}. Because our perceptual-motor system have exceptionally good representations that are trained over long developmental time-scales, we may benefit from leveraging these representations to transfer our understanding to analogous conceptual domains. \par 
 
 \subsubsection{Fast learning}
-\textbf{Hippocampal:} TODO \par 
- * REMERGE?
-
-\textbf{Interactive learning \& hypothesis testing:} In certain settings, humans are able to generate hypotheses based on small amounts of data, and update them with new data, even from a very young age \citep{Sobel2004, Gopnik2014}. We can even take advantage of these hypotheses in order to actively learn and acquire information from the world that is most useful for us \citep[e.g.]{Markant2014a}. Using our prior knowledge of the world, we are able to make extremely fast inferences about how to understand a new situation. \par
+\textbf{Hippocampal:} From the complementary learning systems perspective, the hippocampus serves as a fast learning system which can store an essentially unlimited number of distinct experiences while minimizing interference, i.e. as a nonparametric learning sytem \citep{Kumaran2016}. This makes it an excellent sub-system for learning from a small amount of data, because it can store a few experiences and allow them to be retrieved at a later time. It can also help with integrating this knowledge without catastrophically interfering \citep{McCloskey1989} with knowledge gleaned from prior experiences, by allowing interleaving of these prior experiences in learning. This can potentially occur in a usefully biased way \citep{Kumaran2016}. There may even be interesting computations performed within the hippocampus to support generalization \citep{Kumaran2012}. \par 
+\textbf{Interactive learning \& hypothesis testing:} Humans are able to use our stored experiences to rapidly learn, by behaving as though we are formulating and testing hypotheses, even from a very young age \citep{Sobel2004, Gopnik2014}. We can even take advantage of these hypotheses in order to actively learn and acquire information from the world that is most useful for us \citep[e.g.]{Markant2014a}. By using our prior knowledge of the world to help interpret new experiences, we are able to make extremely fast inferences about how to understand a new situation. \par
 
 \subsubsection{Interactions between fast and slow learning systems}
-At their core, most of these issues revolve around a synergy between learning across different timescales (as highlighted in complementary learning systems). In particular, the knowledge that our cultures have accumulated over millenia and that we have accumulated over our lifetimes allows us to constrain the hypothesis space for new learning, so that we can successfully infer structure from few examples in new situations. 
+At their core, most of these issues revolve around a synergy between learning across different timescales (as highlighted in complementary learning systems). In particular, the knowledge that our cultures have accumulated over millenia and that we have accumulated over our lifetimes allows us to constrain the hypothesis space for new learning, so that we can successfully infer structure from few examples in new situations. \par 
+From my perspective, these slowly-learned regularities in the world can occur in multiple places. They can occur in the mapping from inputs to our awareness, for example in visual cortex neurons which adapt to the regularities encountered over development \citep{Barlow1975}. However, they can also occur in the systems that implement higher-level computations. For example, the results on transfer in artificial grammar learning described above \citep[e.g.]{Tunney2001} show that humans are able to transfer knowledge at the level of structures or algorithms. The limits of this transfer are as yet unclear; a part of the work in my dissertation will attempt to explore them. \par  
 
-* These slowly learned regularities can occur both in the mapping from inputs to our conscious awareness, and in the types of computations we are asked to consciously perform.  
+\textbf{Limitations \& tradeoffs:} Of course, there are trade-offs to relying on transfer and prior knowledge. When new tasks are not well aligned with our prior knowledge, relying on prior knowledge can actually interfere with learning. For example, this is one piece of the argument that we made \citep{Lampinen2017b} to explain the results of \citet{Kaminski2008}. This is an illustration of the broader phenomenon of negative transfer -- interference effects produced by transferring between non-isomorphic domains. \par
 
-\subsubsection{The limitations of human flexibility}
-
-* Tradeoff: Overfitting, negative transfer, and what happens when you step outside of the hypothesis space that has been built up.
+%% TODO: expand on negative transfer
 
 \subsection{Steps towards flexibility in deep learning}
 
-* Retraining final layer weights as a kind of flexible reuse of knowledge.
+A great deal of recent work in machine learning can be seen as attempting to make machine learning systems more flexible. This work typically falls into two categories: learning multiple tasks with the hope that the additional constraints will improve the representations in the model and cause it to generalize better (multi-task learning), and learning to learn tasks (meta learning). I will review some of this literature in this section.
 
-* Multi-task transfer
+\subsubsection{Multi-task learning}
 
-* Prior work on meta-learning.
+Multi-task learning is generally related to the ``slow'' learning systems I described in humans. Typically, parameters are partially shared between the two tasks, and these shared parameters are learned over long time-scales. This can be done either in a sequential fashion (where you use one task to pre-train the network for another), or simultaneously (where you learn multiple tasks at the same time or on alternating gradient steps). Auxiliary tasks need not be of the same type as the main task, for example reinforcement learning tasks can be supplemented with auxiliary supervised tasks like temmporal autoencoding \citep[e.g.]{Hermann2017}, or unsupervised tasks can be used to pre-train for supervised ones \citep[e.g.]{Wu2018}. \par
+\textbf{Pre-training:} One example of sequential multi-task learning is the extremely common practice of pre-training a network on some canonical task in order to use one of its hidden layers as a feature for some other related task. For example, pre-training on ImageNet \citep{Deng2009} is often seen as a useful general feature extractor for vision tasks \citep{Huh2016}, even for quite different transfer domains \citep[e.g.]{Marmanis2016}. \par    
+Pre-training is used much more broadly than just vision, however. In natural language processing (NLP) applications, the representations of words is often pre-trained on co-occurrence prediction tasks \citep[e.g.]{Pennington2014}. In AlphaGo \citep{Silver2016}, the networks were pre-trained to predict expert go-players' moves, and then were tuned from that starting point using reinforcement learning. \par
+\textbf{Simultaneous multi-task learning:} However, many multi-task learning approaches train on the tasks simultaneously. 
+
+* In reinforcement learning, auxiliary tasks have been suggested as key to overcoming the problem of signal sparsity \citep[e.g.]{LeCun2016}. They have been used this way on a variety of RL tasks, \citep[e.g.]{Hermann2017}.
+
+
+\subsubsection{Meta-learning \& related approaches}
 
 * The differentiable neural computer (DNC), proposed by \citet{Graves2016}, and its precursors \citep[e.g.]{Graves2014} brought some additional flexibility to the type of computations networks were allowd to do by allowing them to read and write from a memory buffer with a variety of mechanisms for attending to this buffer to look up knowledge. Like other meta-learning systems, this allows flexibility to learn and reason from new knowledge rapidly. However, this flexibility remains fundamentally within the computations done for a task, and does not allow the more general flexibility we seek.
 
