@@ -174,11 +174,11 @@ In particular, our system learns to map different kinds of knowledge -- data, ta
 
 One can loosely think of the common representational space as being something like a global workspace of consciousness, and the mappings within it as being the operations that we can consciously perform. Of course, these operations are constrained by the experiences we've had and the mappings we've been required to make, so the space of conscious representation may be set up to make certain types of mappings more easily realizable than others on certain kinds of data. Nevertheless, we are in principle capable of learning an arbitrary mapping between any sets of things of which we are conscious, whereas we are not necessarily capable of learning an arbitrary mapping between features that are unconsciously represented in the brain, such as the activity of a single neuron. The features which the brain learns to consciously represent are precisely those that are useful for the computations we consciously perform. These prior expectations contribute to our flexibility within the broad bounds of learned schemas, but our difficulty with adapting to tasks which are completely unlike those we've encountered before. Our architecture attempts to imitate this combination of inherent flexiblity and learned specialization. \par  
 
-\subsubsection{Embedded meta-learning architecture}
+%%\subsubsection{Embedded meta-learning architecture}
 
 %% TODO: building off program meta-induction, hyper networks, etc.
 
-\subsubsection{Results}
+%%\subsubsection{Results}
 
 \subsubsection{Future directions}
 
@@ -189,17 +189,17 @@ One can loosely think of the common representational space as being something li
 
 \subsection{Towards better understanding of human knowledge transfer}
 
-In this section I propose a set of behavioral experiments that will help us to probe the limits of human knowledge transfer. \par
+In this section I propose a set of behavioral experiments that will help us to probe the extent of human ability to transfer knowledge within an experimental session. This work builds off of work showing that humans can learn artificial grammars \citet{Cleeremans1991}, and can transfer this knowledge to isomorphic grammars with novel symbols \citep{Tunney2001}. It also builds off work on more complex graph-structure learning, starting with work by Anna Schapiro and colleagues \citep{Schapiro2013}, and continuing to more recent work showing that some graph structures are more learnable than others \citep{Kahn2018}. \par
+The proposed experiment is as follows. We will have subjects perform two different tasks. The first will be analogous to the initial learning stage in \citet{Kahn2018}, and will consist of subjects trying to press key combinations in response to lit patterns of squares. Unbeknownst to them, these stimuli will come from a random walk on a structured graph. \citet{Kahn2018} showed that participants implicitly learned about the structure of this graph. After the first part of the experiment, participants will advance to a second part. This will be essentially analogous to the first, except that the cover task will be hitting single letters displayed on the screen, as in \citep{Cleeremans1991}. \par
+We will experimentally manipulate the graph structure experienced in the first and second stages of the experiment in a 2 x 2 design, such that subjects may either experience the modular structure of \citep{Schapiro2013} or a random graph which has the same number of nodes and edges (this will be randomly generated but fixed across subjects).
+%% TODO: figures
+The structure in the second task will be crossed with this in a 2 x 2 design. We can thus examine whether there is a benefit to learning the second struture (i.e. more rapid learning and/or fewer mistakes) from learning an isomorphic first structure as opposed to a non-isomorphic one. \par
+Finally, because I am interested in flexibility, we will also assess subjects' ability to explicitly reason about the structures they encountered. Specifically, we will reveal that the stimuli were generated from a structure, and give a subjects a two-alternative forced choice between the two structures, and ask them to pick which one they experienced in the second part of the experiment. We will also ask them to place the stimuli they encountered on this graph, and then evaluate how well they were able to explicitly reconstruct the true structure. \par
 
-* Building off implicit and explicit structure-learning work including on artificial grammar learning and transfer \citet{Cleeremans1991, Tunney2001}. 
-* More recent work on more complex graph-structure learning starting with work by Anna Schapiro and colleagues \citep{Schapiro2013}, and continuing to work showing that some graph structures are more learnable than others \citep{Kahn2018}.
+\subsubsection{Results and implications}
+I believe this is an interesting study for a number of reasons. First, if we see transfer at the level of procedural performance, it will allow us to increase the upper bound on the complexity of structures which can be transferred over a short time scale. Prior work has shown that structures of this complexity can be learned, and that simpler structures can be transferred, but we are not aware of any work showing transfer effects with structures of this complexity. Second, the question of how we can reuse implicitly learned knowledge explicitly is underexplored. If subjects are not at chance on our explicit reasoning outcome measures, it will be interesting to investigate what predicts their performance on these questions. Both of these outcomes will help us to elucidate what sort of flexibility humans have when learning complex structures over short time scales. \par 
+Furthermore, this work may have other implications for the literature. For example, \citet{Kahn2018} interpreted their results as showing that some structures are inherently more learnable than others. However, if we observe transfer benefits, an alternative interpretation would be that those results are due to the presence of structures more like this (hierarchical, clustery) in the world rather than any inherent learnability advantages. \par
 
-* Plan: try an experiment similar to the above, learning the same structures as \citet{Kahn2018}, but where one context is learning them as grammars where they must press the correct key, and the other context is learning them in the multi-key-press context like the original authors. Does similarity of structures between these two tasks predict learning speed on the second task?
-
-* If we observe transfer, does this imply that the results of \citet{Kahn2018} could be due to the presence of structures more like this (hierarchical, clustery) in the world rather than any inherent learnability advantages per se?
-
-* The kinds of transfer effects we see tell us something about how fast the meta-learning system adapts (or how it primes, it may be hard to dissociate). 
-* C.f. transfer or learning effects observed by \citet{Bourne1970} in binary category learning. 
 
 \section{Reading notes/literature to incorporate(?)}
 %%\subsection{Machine learning}
