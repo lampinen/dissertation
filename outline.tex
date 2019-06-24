@@ -133,21 +133,6 @@ There are a number of future directions I would like to explore:
 
 
 \section{Towards a better understanding of human transfer and flexibility}
-\begin{figure}
-\centering
-\begin{subfigure}[t]{0.5\textwidth}
-\includegraphics[width=\textwidth]{figures/graph_transfer/three_rooms.png}
-\captionsetup{width=.9\linewidth}
-\caption{Modular structure: this structure contains three distinct clusters with much stronger connectivity within each cluster than between.}
-\end{subfigure}%
-\begin{subfigure}[t]{0.5\textwidth}
-\includegraphics[width=\textwidth]{figures/graph_transfer/fixed_random.png}
-\captionsetup{width=.9\linewidth}
-\caption{Randomly generated structure: This structure is randomly generated subject to the constraints that it have the same number of nodes and edges as the modular structure, and that each node have degree at least 2.}
-\end{subfigure}%
-\caption{The graph structures we intend to use in our transfer experiment.}
-\label{graph_struct_fig}
-\end{figure}
 In this section I propose a set of behavioral experiments that will help us to probe the extent of human ability to transfer knowledge within an experimental session. This work builds off of work showing that humans can learn artificial grammars \citet{Cleeremans1991}, and can transfer this knowledge to isomorphic grammars with novel symbols \citep{Tunney2001}. It also builds off work on more complex graph-structure learning, starting with work by Anna Schapiro and colleagues \citep{Schapiro2013}, and continuing to more recent work showing that some graph structures are more learnable than others \citep{Kahn2018}. \par
 The proposed experiment is as follows. We will have subjects perform two different tasks. The first will be analogous to the initial learning stage in \citet{Kahn2018}, and will consist of subjects trying to press key combinations in response to lit patterns of squares. Unbeknownst to them, these stimuli will come from a random walk on a structured graph. \citet{Kahn2018} showed that participants implicitly learned about the structure of this graph. After the first part of the experiment, participants will advance to a second part. This will be essentially analogous to the first, except that the cover task will be hitting single letters displayed on the screen, as in \citep{Cleeremans1991}. \par
 We will experimentally manipulate the underlying graph structure which generates subjects stimuli in each stage of the experiment. In the first stage, subjects may either experience the modular structure of \citep{Schapiro2013} or a random graph which has the same number of nodes and edges (this will be randomly generated but fixed across subjects). See Fig. \ref{graph_struct_fig} for diagrams of the two structures. The structure in the second task will be crossed with this in a 2 x 2 design. We can thus examine whether there is a benefit to learning the second struture (i.e. more rapid learning and/or fewer mistakes) after an isomorphic graph as opposed to a non-isomorphic one.  \par

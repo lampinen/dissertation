@@ -1,6 +1,7 @@
 \documentclass{report}
 
-\usepackage[nottoc, numbib]{tocbibind}
+\usepackage{style/suthesis-2e}
+
 \usepackage[fleqn]{amsmath}
 \usepackage{epigraph}
 \usepackage{amssymb}
@@ -15,7 +16,8 @@
 \usepackage{tikz}
 \usepackage{natbib}
 
-\usepackage{style/suthesis-2e}
+
+\include{header/header}
 
 \dept{Psychology}
 
@@ -29,11 +31,13 @@
 %\fourthreader{Severus Snape} %if needed
 
 \beforepreface
-\prefacesection{Preface}
+\prefacesection{Abstract}
 
 \afterpreface
 
+\include{1-introduction/introduction}
 
+\include{outline}
 
 \appendix
 
