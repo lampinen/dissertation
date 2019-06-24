@@ -1,0 +1,44 @@
+\lstset{language=Python,
+    frame=single,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
+\restylefloat{figure}
+\newcommand{\Prop}{\textbf{Proposition: }}
+\newcommand{\Prob}{\textbf{Problem: }}
+\newcommand{\Prf}{\textbf{Proof: }}
+\newcommand{\Sol}{\textbf{Solution: }}
+\newcommand{\grad}{\nabla}
+\newcommand{\Nats}{\mathbb{N}}
+\newcommand{\Ints}{\mathbb{Z}}
+\newcommand{\Rats}{\mathbb{Q}}
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\Comps}{\mathbb{C}}
+\newcommand{\Prb}[1]{P\left( #1 \right)}
+\newcommand{\PT}[1]{P\left( \text{#1} \right)}
+\newcommand{\PCon}[2]{P\left( #1 \mid #2 \right)}
+\newcommand{\PConT}[2]{P\left( \text{#1} \mid \text{#2} \right)}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\tr}{\textbf{tr}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\newcommand{\thus}{\quad\mathlarger{\mathlarger{\mathlarger{\Rightarrow}}}\quad}
+\newcommand{\wght}{\mathbf{w}}
+\newcommand{\im}{\text{im }}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,nohead]{geometry}
+%%\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+\setlength\parindent{0pt}
+\parskip = \baselineskip
+
+
+\usetikzlibrary{shapes,arrows}
+
+\tikzstyle{block} = [rectangle, draw, thick, align=center, rounded corners]
+\tikzstyle{boundingbox} = [very thick, dotted, gray]
+\tikzstyle{dashblock} = [rectangle, draw, thick, align=center, dashed]
+\tikzstyle{conc} = [ellipse, draw, thick, dashed, align=center]
+\tikzstyle{netnode} = [circle, draw, very thick, inner sep=0pt, minimum size=0.5cm]
+\tikzstyle{relunode} = [rectangle, draw, very thick, inner sep=0pt, minimum size=0.5cm]
+\tikzstyle{line} = [draw, very thick, -latex']
+
