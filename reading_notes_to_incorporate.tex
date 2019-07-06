@@ -2,6 +2,10 @@ Transfer (multi-task):
 
 * Regularization may hurt transfer, perhaps by preventing features that are irrelevant for this task, but relevant for others, from coming through. \citep{Kornblith2019} 
 
+    Disentanglement (relevant to transfer, since it's a kind of abstraction?):
+        * Irina Higgins & colleagues define disentanglement formally in terms of symmetry groups \citep{Higgins2018}
+        * A paper critical of naive notions of disentanglement, arguing that there may not be a single meaningful way in which features can be disentangled in an unsupervised way. \citep{Locatello2019}
+
 
 Meta-learning:
 * Reptile paper: Instead of differentiating through many gradient steps, or doing first-order MAML, take many gradient steps, and then just update the initialization weights in the direction of your net update (possibly with momentum or Adam or whatever). \citep{Nichol2018} 
@@ -12,21 +16,26 @@ Meta-learning:
 
  * Chelsea at it again, using language as an intermediate representation, but in a more-free way than Jacob Andreas, say. \citep{Jiang2019}
 
-Generalization:
-
-* Even if flatter minima found through learning generalize better, it is not *necessary* for a minimum to be flat for it to generalize well. relies on some (silly?) constructions where you turn a flat minimum into an arbitrarily sharp one without altering the computation, just by playing with the weights. \citep{Dinh2017} 
-
-
-* information-theoretic argument for a bias toward simple outputs (in many kinds of functions) \citep{Dingle2018}
-
-* follow-up to \citep{Dingle2018} applying these ideas to deep nets, but with a lot of strong assumptions. \citep{Perez2019} Note in the context of the previous work this form of simplicity emphatically does not apply to linear maps, and yet we're able to show good generalization driven by SGD in that setting...  
-
-
-
 RL:
 
 * Hindsight Experience Replay. \citep{Andrychowicz2017}
 
 * genetic algorithms for RL \citep{Petroski2018}
+
+* Distributional RL \citep{Bellemare2017}
+
+* Meta-gradients \citep{Xu2018a}
+
+Generalization:
+
+* Even if flatter minima found through learning generalize better, it is not *necessary* for a minimum to be flat for it to generalize well. relies on some (silly?) constructions where you turn a flat minimum into an arbitrarily sharp one without altering the computation, just by playing with the weights. \citep{Dinh2017} 
+
+* information-theoretic argument for a bias toward simple outputs (in many kinds of functions) \citep{Dingle2018}
+
+* follow-up to \citep{Dingle2018} applying these ideas to deep nets, but with a lot of strong assumptions. \citep{Perez2019} Note in the context of the previous work this form of simplicity emphatically does not apply to linear maps, and yet we're able to show good generalization driven by SGD in that setting...  
+
+Theory:
+
+* Saxe and colleagues point out some issues with the IB theory of deep learning \citep{Saxe2018a}.
 
 
