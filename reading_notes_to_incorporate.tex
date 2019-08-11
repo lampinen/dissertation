@@ -10,6 +10,15 @@ Transfer (multi-task):
 
 * Three symbol ungrounding problems: Tries to articulate some of the different concepts that go under the name of abstraction, to try to get at the issues around what grounding means. \citep{Dove2006}
 
+* Beyond the computer metaphor: Behavior as interaction -- argues that the closed-loop nature of behavior is missing in the brain-as-computer metaphor, and that issues like symbol grounding are non-issues when you consider what an organism or agent is actually trying to achieve. \citep{Cisek1999}
+
+* Resynthesizing behavior through phylogenetic refinement -- The radical version of the above, which argues that behavior should be intereprted as progressing from simple to complex over the course of evolution as was useful at each stage, essentially developing more and more complex control systems for interaction, and that this perspective provides more useful perspective for understanding than approaches that ignore it. \citep{Cisek2019}
+
+* Embodied Cognition: A field guide -- A useful (if slightly out of date) review to refer to and cite. \citep{Anderson2003}
+
+* ViLBERT: Joint visual and language pre-training. \citep{Lu2019}
+
+
 Meta-learning:
 * Reptile paper: Instead of differentiating through many gradient steps, or doing first-order MAML, take many gradient steps, and then just update the initialization weights in the direction of your net update (possibly with momentum or Adam or whatever). \citep{Nichol2018} 
 
@@ -20,6 +29,7 @@ Meta-learning:
 * Chelsea at it again, using language as an intermediate representation, but in a more-free way than Jacob Andreas, say. \citep{Jiang2019}
 
 * Never-Ending Learning: Been learning to read the web for 8 years. Because of the age, takes a fairly boring knowledge graph type approach, and it's not really clear what they've achieved, but conceptually it makes some good points about what the limitations of contemporary AI are. \citep{Mitchell2018}
+
 
 RL:
 
@@ -33,6 +43,7 @@ RL:
 
 * Learning to generate matching networks \citep{Li2019a}
 
+
 Generalization:
 
 * Even if flatter minima found through learning generalize better, it is not *necessary* for a minimum to be flat for it to generalize well. relies on some (silly?) constructions where you turn a flat minimum into an arbitrarily sharp one without altering the computation, just by playing with the weights. \citep{Dinh2017} 
@@ -41,8 +52,15 @@ Generalization:
 
 * follow-up to \citep{Dingle2018} applying these ideas to deep nets, but with a lot of strong assumptions. \citep{Perez2019} Note in the context of the previous work this form of simplicity emphatically does not apply to linear maps, and yet we're able to show good generalization driven by SGD in that setting...  
 
+
 Theory:
 
 * Saxe and colleagues point out some issues with the IB theory of deep learning \citep{Saxe2018a}.
 
+
+Architectures:
+
+* Gated Linear Networks - Proposes a new deep architecture where each layer is composed of weighted geometric means of experts of the previous layer plus a bias. The weights are selected via a fixed (for that neuron, not necessarily across eurons or layers) context function, which indexes differen weight vectors. These weight vectors are learned, in fact their learning is a convex optimization problem, which can be trained *locally*, which is nice. They have both nice capacity guarantees (with rich contexts and deep networks), *and* guarantees that optimization will find the solutions. It can achieve reasonable results online (i.e. in a single epoch), at least on simple tasks. Worth implementing and playing around with, but its unclear how it would perform on something more complex. (Fixed context functions are a bit boring, what if they were learned as well? Difficult because of the hard selection though...) \citep{Veness2017} 
+
+* Conditional Neural Processes - A functional gaussian-process-like interpretation of learning that bears some similarities to the way I conceptualize things in the EML paper -- should probably compare and contrast, though their motivation is more strict meta-learning and/or fill-in-the-blank type regression problems, like image completion. \citep{Garnelo2018}
 
