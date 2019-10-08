@@ -3,18 +3,34 @@
 \usepackage{style/suthesis-2e}
 
 \usepackage[fleqn]{amsmath}
-\usepackage{epigraph}
 \usepackage{amssymb}
-\usepackage{amsmath}
 \usepackage{bm}
-\usepackage{mathrsfs}
-\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{epigraph}
 \usepackage{float}
-\usepackage{subcaption}
-\usepackage{relsize}
+\usepackage{graphicx}
 \usepackage{listings}
-\usepackage{tikz}
+\usepackage{mathrsfs}
 \usepackage{natbib}
+\usepackage{relsize}
+\usepackage{subcaption}
+\usepackage{url}
+
+\usepackage{tikz}
+
+\usetikzlibrary{shapes,arrows}
+
+\tikzstyle{block} = [rectangle, draw, thick, align=center, rounded corners]
+\tikzstyle{boundingbox} = [thick, lightgray]
+\tikzstyle{dashblock} = [rectangle, draw, thick, align=center, dashed]
+\tikzstyle{conc} = [ellipse, draw, thick, dashed, align=center]
+\tikzstyle{netnode} = [circle, draw, very thick, inner sep=0pt, minimum size=0.5cm]
+\tikzstyle{relunode} = [rectangle, draw, very thick, inner sep=0pt, minimum size=0.5cm]
+\tikzstyle{line} = [draw, very thick, -latex']
+\tikzstyle{arrow} = [draw, ->, thick]
+
+\definecolor{bpurp}{HTML}{984ea3}
+\definecolor{bblue}{HTML}{377eb8}
 
 
 \include{header/header}
@@ -36,11 +52,15 @@
 \afterpreface
 
 \include{1-introduction/introduction}
+\include{2-HoMM/homoiconic_meta_mapping_main}
 
-\include{outline}
+%\include{outline}
 
 \appendix
 
+\include{2-HoMM/homoiconic_meta_mapping_appendix}
+
+\addcontentsline{toc}{chapter}{Bibliography}
 \bibliographystyle{apalike}
 \bibliography{arrr}
 
