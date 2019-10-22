@@ -83,6 +83,12 @@ Theory:
 * There exist turing-complete neural nets. \citep{Siegelman1992}.
 
 
+Understanding:
+
+* Is coding a relevant metaphor for the brain? - Argues that the idea of interpreting neural coding may be misleading, because of context dependence, the fact that the brain can't read things out as average firing rates, etc. Has relevance for how we think about interpreting AI (see below). \citep{Brette2019} 
+
+* Is coding a relavant metaphor for building AI? Highlights the similar challenges in RL. \citep{Santoro2019}
+
 Architectures:
 
 * Gated Linear Networks - Proposes a new deep architecture where each layer is composed of weighted geometric means of experts of the previous layer plus a bias. The weights are selected via a fixed (for that neuron, not necessarily across eurons or layers) context function, which indexes differen weight vectors. These weight vectors are learned, in fact their learning is a convex optimization problem, which can be trained *locally*, which is nice. They have both nice capacity guarantees (with rich contexts and deep networks), *and* guarantees that optimization will find the solutions. It can achieve reasonable results online (i.e. in a single epoch), at least on simple tasks. Worth implementing and playing around with, but its unclear how it would perform on something more complex. (Fixed context functions are a bit boring, what if they were learned as well? Difficult because of the hard selection though...) \citep{Veness2017} 
