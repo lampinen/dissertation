@@ -29,6 +29,15 @@ Transfer (multi-task):
 
 * ViLBERT: Joint visual and language pre-training. \citep{Lu2019}
 
+* Why does unsupervised pretraining help deep learning? -- Thoroughly explores the effects of pre-training
+"Unsupervised pre-training, as a regularizer that only influences the starting point of
+supervised training, has an effect that, contrary to classical regularizers, does not disappear with
+more data (at least as far as we can see from our results). Basically, unsupervised pre-training favors
+hidden units that compute features of the input X that correspond to major factors of variation in
+the true P(X). Assuming that some of these are near features useful at predicting variations in Y,
+unsupervised pre-training sets up the parameters near a solution of low predictive generalization error" \citep{Erhan2010}
+
+
 
 Meta-learning:
 + Reptile paper: Instead of differentiating through many gradient steps, or doing first-order MAML, take many gradient steps, and then just update the initialization weights in the direction of your net update (possibly with momentum or Adam or whatever). \citep{Nichol2018} 
@@ -42,6 +51,9 @@ Meta-learning:
 + Never-Ending Learning: Been learning to read the web for 8 years. Because of the age, takes a fairly boring knowledge graph type approach, and it's not really clear what they've achieved, but conceptually it makes some good points about what the limitations of contemporary AI are. \citep{Mitchell2018}
 
 * Fast context adaptation via meta-learning -- alternative to MAML based on adapting just a context input to the network in the inner loop instead of all weights, results in less overfitting in some cases, and maybe more interpretable context parameters. \citep{Zintgraf2018}
+
+* One-shot learning in discriminative neural networks -- a Bayesian one-shot learning take based on picking weights for a new classification output for new class. \citep{Burgess2016}
+
 
 RL:
 
