@@ -37,6 +37,8 @@ hidden units that compute features of the input X that correspond to major facto
 the true P(X). Assuming that some of these are near features useful at predicting variations in Y,
 unsupervised pre-training sets up the parameters near a solution of low predictive generalization error" \citep{Erhan2010}
 
+* Using contextual parameters (generated in a hyper network way based on inputs for the in/out languages) for natural language translation can allow for zero-shot generalization to unseen language pairs \citep{Platanios2017}
+
 
 
 Meta-learning:
@@ -53,6 +55,10 @@ Meta-learning:
 * Fast context adaptation via meta-learning -- alternative to MAML based on adapting just a context input to the network in the inner loop instead of all weights, results in less overfitting in some cases, and maybe more interpretable context parameters. \citep{Zintgraf2018}
 
 * One-shot learning in discriminative neural networks -- a Bayesian one-shot learning take based on picking weights for a new classification output for new class. \citep{Burgess2016}
+
+* Hierarchically structured meta-learning -- clusters tasks hierarchically during meta-learning \citep{Yao2019}.
+
+
 
 
 RL:
