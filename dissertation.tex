@@ -32,6 +32,10 @@
 \definecolor{bpurp}{HTML}{984ea3}
 \definecolor{bblue}{HTML}{377eb8}
 
+% footnote without a marker
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext} 
+\makeatother
 
 \include{header/header}
 
