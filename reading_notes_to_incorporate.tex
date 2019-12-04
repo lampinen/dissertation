@@ -69,6 +69,13 @@ Meta-learning:
 
 
 
+Zero-shot:
+
+* Synthesized classifiers for zero-shot learning -- Zero-shot learning as aligning a semantic space and a classification model space as graphs, using a basis constructed from pseudo-classes which are chosen to serve as a useful basis for the known classes. This approach allows for pretty decent performance. \citep{Changpinyo2016} 
+
+* Zero-shot learning by convex combination of semantic embeddings -- To classify a new image, combines word vectors for old labels, weighted by how strongly the image activates those output probabilities, and then takes this hybrid word vector and uses cosine similarity to find the closest label vector, and outputs that as a label. Simple and clever. \citep{Norouzi2014}
+
+
 
 RL:
 
@@ -92,6 +99,8 @@ RL:
 * Learning to generate matching networks \citep{Li2019a}
 
 * Deep RL that matters -- points out that deep RL can be quite fragile to changes in hyperparameters, choices like scaling rewards, or even which codebase you're using, and argues that we should be evaluating more carefully \citep{Henderson2018}
+
+* Optimizing agent behavior over long time scales by transporitng value -- Argues that discount-based RL will never be the right approach to solving long-term credit assignment, proposes an alternate approach based on assigning credit between times when a memory was created and when it was strongly recalled by adding a pseudo-reward at the memory creation time based on the later value, with discount not depending on intervening time. Shows that this allows for solving some LTCA tasks. \citep{Hung2019}
 
 
 Generalization:
@@ -125,3 +134,7 @@ Architectures:
 * Conditional Neural Processes - A functional gaussian-process-like interpretation of learning that bears some similarities to the way I conceptualize things in the EML paper -- should probably compare and contrast, though their motivation is more strict meta-learning and/or fill-in-the-blank type regression problems, like image completion. \citep{Garnelo2018}
 
 
+
+Other:
+
+? Language and space -- Review of the utility of different frames of reference and cultural differences from an anthropological and linguistic perspective. \citep{Levinson1996}
