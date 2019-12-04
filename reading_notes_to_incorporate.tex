@@ -127,6 +127,11 @@ Understanding:
 
 * Is coding a relavant metaphor for building AI? Highlights the similar challenges in RL. \citep{Santoro2019}
 
+* What's hidden in a randomly weighted neural network -- Unsurprisingly, in wide networks there are subsets of weights which perform well, builds on lottery ticket results by not even requiring optimization of the subnetwork. \citep{Ramanujan2019}
+
+* Selective brain damage -- Pruning networks does not uniformly impact performance, instead some classes and exemplars are affected more strongly. The model seems to slightly degrade some classes in order to preserve slightly better average performance on a larger set of other classes. Exemplars that are affected by pruning (in the sense that the modal label across an ensemble changes) tend to be more ambiguous or poorly/incorrectly labeled, or just more atypical exemplars of the class. \citep{Hooker2019}
+
+
 Architectures:
 
 * Gated Linear Networks - Proposes a new deep architecture where each layer is composed of weighted geometric means of experts of the previous layer plus a bias. The weights are selected via a fixed (for that neuron, not necessarily across eurons or layers) context function, which indexes differen weight vectors. These weight vectors are learned, in fact their learning is a convex optimization problem, which can be trained *locally*, which is nice. They have both nice capacity guarantees (with rich contexts and deep networks), *and* guarantees that optimization will find the solutions. It can achieve reasonable results online (i.e. in a single epoch), at least on simple tasks. Worth implementing and playing around with, but its unclear how it would perform on something more complex. (Fixed context functions are a bit boring, what if they were learned as well? Difficult because of the hard selection though...) \citep{Veness2017} 
