@@ -29,7 +29,7 @@ Transfer (multi-task):
 
 * ViLBERT: Joint visual and language pre-training. \citep{Lu2019}
 
-* Why does unsupervised pretraining help deep learning? -- Thoroughly explores the effects of pre-training
++ Why does unsupervised pretraining help deep learning? -- Thoroughly explores the effects of pre-training
 "Unsupervised pre-training, as a regularizer that only influences the starting point of
 supervised training, has an effect that, contrary to classical regularizers, does not disappear with
 more data (at least as far as we can see from our results). Basically, unsupervised pre-training favors
@@ -37,16 +37,16 @@ hidden units that compute features of the input X that correspond to major facto
 the true P(X). Assuming that some of these are near features useful at predicting variations in Y,
 unsupervised pre-training sets up the parameters near a solution of low predictive generalization error" \citep{Erhan2010}
 
-* Using contextual parameters (generated in a hyper network way based on inputs for the in/out languages) for natural language translation can allow for zero-shot generalization to unseen language pairs \citep{Platanios2017}
++ Using contextual parameters (generated in a hyper network way based on inputs for the in/out languages) for natural language translation can allow for zero-shot generalization to unseen language pairs \citep{Platanios2017}
 
 
 
 
 Continual:
 
-* A recent continual learning review \citep{Parisi2019}.
++ A recent continual learning review \citep{Parisi2019}.
 
-* Continual Unsupervised Representation Learning -- Unsupervised representation learning without task boundaries, based on what is effectively a generative model which infers a latent based on a mixture of task gaussians, with a dynamic expansion approach for when new tasks are added. Uses the generative model structure to allow replay and avoid catastrophic interference. Some nice developments towards more realistic settings without task boundaries. \citep{Rao2019}
++ Continual Unsupervised Representation Learning -- Unsupervised representation learning without task boundaries, based on what is effectively a generative model which infers a latent based on a mixture of task gaussians, with a dynamic expansion approach for when new tasks are added. Uses the generative model structure to allow replay and avoid catastrophic interference. Some nice developments towards more realistic settings without task boundaries. \citep{Rao2019}
 
 
 
@@ -71,9 +71,9 @@ Meta-learning:
 
 Zero-shot:
 
-* Synthesized classifiers for zero-shot learning -- Zero-shot learning as aligning a semantic space and a classification model space as graphs, using a basis constructed from pseudo-classes which are chosen to serve as a useful basis for the known classes. This approach allows for pretty decent performance. \citep{Changpinyo2016} 
++ Synthesized classifiers for zero-shot learning -- Zero-shot learning as aligning a semantic space and a classification model space as graphs, using a basis constructed from pseudo-classes which are chosen to serve as a useful basis for the known classes. This approach allows for pretty decent performance. \citep{Changpinyo2016} 
 
-* Zero-shot learning by convex combination of semantic embeddings -- To classify a new image, combines word vectors for old labels, weighted by how strongly the image activates those output probabilities, and then takes this hybrid word vector and uses cosine similarity to find the closest label vector, and outputs that as a label. Simple and clever. \citep{Norouzi2014}
++ Zero-shot learning by convex combination of semantic embeddings -- To classify a new image, combines word vectors for old labels, weighted by how strongly the image activates those output probabilities, and then takes this hybrid word vector and uses cosine similarity to find the closest label vector, and outputs that as a label. Simple and clever. \citep{Norouzi2014}
 
 
 
@@ -96,7 +96,7 @@ RL:
 
 + Meta-gradients \citep{Xu2018a}
 
-* Learning to generate matching networks \citep{Li2019a}
++ Learning to generate matching networks \citep{Li2019a}
 
 * Deep RL that matters -- points out that deep RL can be quite fragile to changes in hyperparameters, choices like scaling rewards, or even which codebase you're using, and argues that we should be evaluating more carefully \citep{Henderson2018}
 
@@ -136,7 +136,7 @@ Architectures:
 
 * Gated Linear Networks - Proposes a new deep architecture where each layer is composed of weighted geometric means of experts of the previous layer plus a bias. The weights are selected via a fixed (for that neuron, not necessarily across eurons or layers) context function, which indexes differen weight vectors. These weight vectors are learned, in fact their learning is a convex optimization problem, which can be trained *locally*, which is nice. They have both nice capacity guarantees (with rich contexts and deep networks), *and* guarantees that optimization will find the solutions. It can achieve reasonable results online (i.e. in a single epoch), at least on simple tasks. Worth implementing and playing around with, but its unclear how it would perform on something more complex. (Fixed context functions are a bit boring, what if they were learned as well? Difficult because of the hard selection though...) \citep{Veness2017} 
 
-* Conditional Neural Processes - A functional gaussian-process-like interpretation of learning that bears some similarities to the way I conceptualize things in the EML paper -- should probably compare and contrast, though their motivation is more strict meta-learning and/or fill-in-the-blank type regression problems, like image completion. \citep{Garnelo2018}
+*+ Conditional Neural Processes - A functional gaussian-process-like interpretation of learning that bears some similarities to the way I conceptualize things in the EML paper -- should probably compare and contrast, though their motivation is more strict meta-learning and/or fill-in-the-blank type regression problems, like image completion. \citep{Garnelo2018}  (cited in intro, but should discuss further)
 
 * FiLM (feature-wise linear modulation): A simple attention mechnaism -- affine transforms of the activations, which allows for improved performance on CLEVR etc. Worth discussing both in the context of HoMM type function adaptation, *and* as a future direction for input attention and interaction, which we know is important (drop citation to Jay in here). \citep{Perez2018}
 
