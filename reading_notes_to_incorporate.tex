@@ -39,6 +39,10 @@ unsupervised pre-training sets up the parameters near a solution of low predicti
 
 + Using contextual parameters (generated in a hyper network way based on inputs for the in/out languages) for natural language translation can allow for zero-shot generalization to unseen language pairs \citep{Platanios2017}
 
+* Better transfer learning with inferred successor maps -- Because succesor maps implicitly build the impact of the policy into the state transitions, they can be very misleading if task changes radically. This paper uses task clustering to group successor maps by relatedness of tasks to handle this problem. \citep{Madarasz2019}
+
+
+
 
 
 
@@ -102,6 +106,8 @@ RL:
 
 * Optimizing agent behavior over long time scales by transporitng value -- Argues that discount-based RL will never be the right approach to solving long-term credit assignment, proposes an alternate approach based on assigning credit between times when a memory was created and when it was strongly recalled by adding a pseudo-reward at the memory creation time based on the later value, with discount not depending on intervening time. Shows that this allows for solving some LTCA tasks. \citep{Hung2019}
 
+* Discovery of useful questions as auxiliary tasks -- uses meta-gradients to learn generalized value functions that are useful for atari game playing, and show that they are better than hand-designed ones, and improve data effiency of the agents. \citep{Veeriah2019}
+
 
 Generalization:
 
@@ -142,5 +148,9 @@ Architectures:
 
 
 Other:
+
+* Deep learning for symbolic mathematics -- shows that transformer-based seq 2 seq can outperfrom mathematica at certain symbolic integration and ODE solving problems. \citep{Lample2019} But for (weak) criticism, see below
+
+* The approach above doesn't always generate correct answers, relies on simplified input, and in some sense is searching a smaller space than the symbolic systems. \citep{Davis2019}
 
 ? Language and space -- Review of the utility of different frames of reference and cultural differences from an anthropological and linguistic perspective. \citep{Levinson1996}
