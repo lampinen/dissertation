@@ -1,0 +1,135 @@
+\chapter{Supplemental material for chapter \ref{chapter:human}} \label{appendix:human}
+
+\section{Detailed methods}
+The full code for the experiment and analysis can be found at \url{https://github.com/lampinen/cards_for_humans}. In this section we provide some details in a more easily readable format.
+
+\subsection{Detailed experiment outline}
+
+\subsubsection{Introduction \& rules}
+\begin{itemize}
+\item Page 1:
+    \begin{itemize}
+    \item Hi, welcome to our HIT. We are researchers from the Stanford Department of Psychology, conducting an experiment on game playing.
+    \item The first part of this experiment should take 5-10 minutes. The base pay is \$1, and if you pass the end of the first phase, there will be a second phase that will take about 10 minutes. You will be paid a bonus of \$1.50 for making it to this second phase, there will be an extra bonus based on performance in the second phase.
+    \item If you do not wish to participate, you may return the HIT at any time, but you will not be compensated unless you complete it.
+    \end{itemize}
+\item  Page 2:
+    \begin{itemize}
+    \item If you make it to the second phase of the experiment, you'll be playing a simple card game. In this first phase of the experiment, you'll learn the rules.
+    \item We'll test your understanding of the rules at the end of the first phase, and if you pass you'll make it to the second phase, where you'll earn a \$1 bonus + an extra performance bonus.
+    \item Make sure you follow all instructions very carefully, in order to make it to the second phase of the experiment and earn the maximum bonus pay.
+    \end{itemize}
+\item  Page 3:
+    \begin{itemize}
+    \item In the card game, you will receive a hand of two cards, each of which has a number (1-4) and a color (red or black). There are several decks in play, so there are multiple copies of each card, and two or more can appear in the same round.
+    \end{itemize}
+\item  Page 4:
+    \begin{itemize}
+    \item You will be playing against an opponent, trying to win money. You'll get to make a bet of 0, 5, or 10 cents.
+    \item If your hand beats your opponent's hand, you will win the amount you bet. If your opponent wins, you'll lose the amount you bet. If you bet nothing, you won't win or lose anything. Also, if you tie, you won't win or lose either.
+    \item In the second phase, we'll pay you a bonus equal to your net earnings (or 0 if your earnings are negative), on top of the \$1 bonus for making it to the second phase."
+    \end{itemize}
+\item  Page 5:
+    \begin{itemize}
+    \item In the card game, \textbf{the best types of hands are two adjacent numbers of the same color}, for example black 2 and black 3.
+    \item \textbf{The next best hands are those with two adjacent numbers of different color,} for example black 3 and red 4.
+    \item \textbf{The worst types of hands are those with matching numbers or non-adjacent numbers}, like 4, 4 or 1, 3.
+    \item \textbf{Hands of better types always beat worse hands.}
+    \end{itemize}
+\item  Page 6:
+    \begin{itemize}
+    \item \textbf{If two hands are of the same type, the one with the highest card wins.} If the highest cards of the two hands tie, the tie is broken by the lower cards.
+    \item \textbf{If both cards are tied, black cards beat red cards,} highest first, lowest if the high cards are the same color. If the hands are perfectly tied, you don't win or lose money.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Game understanding check}
+\begin{itemize}
+\item Instructions:
+    \begin{itemize}
+    \item We'll now test your understanding by giving you a few example pairs of hands. Just click on the hand from each pair that would win. \textbf{\color{red} If you make more than one mistake in this section, the experiment will end. Make sure you fully understand the instructions before proceeding, otherwise you may not make it to the second phase!}
+    \item If you need to, you can go back to the earlier instructions to refresh your memory before proceeding.
+    \item Click next to start the test.
+    \end{itemize}
+\item Trials (see fig. \ref{fig:appdx_human_comparison_trial}, hand position was randomized):
+    \begin{itemize}
+        \item black 3 and red 2 vs. red 4 and 1. Explanation: "Adjacent cards beat non-adjacent." 
+        \item red 1 and 2 vs. red 4 and black 3. Explanation: "Same-suit adjacent beats different suit." 
+        \item black 3 and red 3 vs. red 4 and 1. Explanation: "Highest card breaks ties." 
+        \item black 4 and 3 vs. red 4 and 3. Explanation: "Black cards beat red cards if the numbers are tied." 
+    \end{itemize}
+\item Evaluation: If the participants got 3 out of 4 trials correct, they passed. 
+    \begin{itemize}
+        \item \textbf{Passed:} Congratulations, you passed the test, and will get to proceed to phase 2! You have earned a \$1.50 bonus, and will be awarded a performance bonus based on your bets in the next phase. Press any key to continue.
+        \item \textbf{Failed:} Sorry, you made more than one mistake, and did not pass the test. The experiment will now end. Press any key to continue.
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{3-human-adaptation/figures/comparison_correct.png}
+\caption{An example hand-comparison trial from the understanding check.} \label{fig:appdx_human_comparison_trial}
+\end{figure}
+
+\subsubsection{Block 1: with feedback}
+\begin{itemize}
+\item Instructions:
+    \begin{itemize}
+    \item Now you get to play a few hands. After you bet, we'll show you your opponent's hand and how much you won (or lost), and at the end of these hands we'll tell you your total earnings. Press any key to continue.
+    \end{itemize}
+
+\item Trials:
+    \begin{itemize}
+    \item 32 trials of playing the game and seeing the result of each hand, with the participants hand distributed evenly across 16 bins of hand win probability. Opponents hands were randomly sampled. 
+    \end{itemize}
+\item Block end:
+    \begin{itemize}
+    \item Participants were shown their block earnings, as well as their total earnings so far.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Block 2: without feedback}
+\begin{itemize}
+\item Instructions:
+    \begin{itemize}
+    \item To test how well you understand the game, we'll now give you a series of hands where you won't see your results after you bet. You will just see your earnings at the end of the set of hands. Press any key to continue.
+    \end{itemize}
+\item Trials:
+    \begin{itemize}
+    \item 24 trials of playing the game with the result grayed out, with the participants hand distributed evenly across 8 bins of hand win probability. Opponents hands were not sampled, participants were paid their expected earnings for each hand, with the final block total rounded to the closest 10 cents. 
+    \end{itemize}
+\item Block end:
+    \begin{itemize}
+    \item Participants were shown their block earnings, as well as their total earnings so far.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Block 3: losing variation, no feedback}
+\begin{itemize}
+\item Instructions:
+    \begin{itemize}
+    \item \textbf{\color{red} Now, we want you to try to lose the game! For the remainder of the experiment, if you bet and lose, you'll gain the amount you bet, and if you bet and win, you'll lose the amount you bet.}
+    \item As before, you won't win or lose anything if you tie your opponent, or if you don't bet.
+    \item Press any key to continue.
+    \end{itemize}
+\item Attention check:
+    \begin{itemize}
+    \item To make sure you understand, please answer this question. From now on, I will earn money if I:
+    \item ``Bet and my hand wins.'', ``Bet and my hand loses.'' 
+    \end{itemize}
+\item Instructions 2:
+    \begin{itemize}
+    \item Great, now you get to play a few hands! As before, you won't see your results after you bet. You will just see your earnings at the end of the set of hands. Press any key to continue.
+    \end{itemize}
+\item Trials:
+    \begin{itemize}
+    \item 24 trials of playing the game with the result grayed out, with the participants hand distributed evenly across 8 bins of hand win probability. Opponents hands were not sampled, participants were paid their expected earnings for each hand, with the final block total rounded to the closest 10 cents. 
+    \end{itemize}
+\item Block end:
+    \begin{itemize}
+    \item Participants were shown their block earnings, as well as their total earnings so far.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Debrief}
+We asked participants about their age, education, gender, and race/ethnicity. However, we did not analyze these data.
