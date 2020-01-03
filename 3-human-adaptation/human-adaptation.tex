@@ -3,10 +3,26 @@
 In the previous chapter we proposed a framework for modeling human adaptation to new tasks, based on relationships between tasks. To understand whether we have developed a good model, it is necessary to compare its adaptation to human adaptation. It is worth stopping for a moment to consider how flexible humans actually are. We certainly experience short-term interference from switching tasks or goals \citep{Rogers1995}. Over longer periods of time, our adaptation might be a response to learning in the new situation, rather than the type of zero-shot flexbiility we modeled. How flexibly are we able to adapt to task changes? \par
 Unfortunately a complete evaluation of human flexibility is a large research program. Thus, in this chapter we evaluate human adaptation in a task inspired from those used as demonstration in the previous chapter. In particular, we implemented a more human-comprehensible version of the poker-like card game we used for those experiments, and its losing variation. \par
 
-\section{Experimental details}
-We made several changes to the game to make it easier for humans to learn. We also 
-
-See appendix \ref{appendix:human} for detailed methods.
+\section{Experimental design}
+We made several changes to the game to make it easier for humans to learn. In particular, we changed the rules to follow a more hierarchical structure, and we made it so no money was gained or lost on ties. \par
+The game we had participants play was a simplified variation of poker. They were dealt hands which consisted of two cards, each with a number (rank) between 1 and 4, and a color (suit) of red or black. The participants played against a computer opponent that was dealt a similar hand. The hands were ranked such that straight flushes (adjacent cards in the same suit) beat adjacent cards in a different suit, which beat non-adjacent cards (including pairs). Ties were broken by the highest card, or by suit if both cards were tied. \par
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/pre_bet_screenshot.png}
+\caption{Before betting.}
+\end{subfigure}%
+\begin{subfigure}[b]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/post_bet_screenshot.png}
+\caption{Feedback.} \label{fig_human_betting_trial_feedback}
+\end{subfigure}%
+\caption{The card game experiment trials, as seen by participants.} \label{fig_human_betting_trial}
+\end{figure}
+On each trial, participants were dealt a hand and asked to make a bet of 0, 5, or 10 cents (see fig. \ref{fig_human_betting_trial}). If their hand beat the opponent's hand, they won the bet amount. If their hand lost, they lost it. If the hands were tied, they neither won nor lost money. \par
+The experiment had several phases. First, participants were instructed in the rules and payment scheme for the experiment. Next, they were instructed on the rules of the game. After this, they were tested with four hand-comparison trials intended to probe their understanding of each of the rules of the game. If they failed more than one of these trials, they were not allowed to continue with the experiment. \par
+Following this understanding check, subjects played a block of 32 hands (sampled to have a diversity of expected values), where they saw the results of their play, as in (fig. \ref{fig_human_betting_trial_feedback}). After this block, they played a similar block of 24 trials where they did not see the results of their play. The results were replaced with a brief grayed-out screen, and participants were payed the net expected value of their actions over the block (rounded to the nearest 10). This provides an evaluation phase with relatively less potential for learning. \par
+Finally, participants were told that we wanted them to try to lose for the remaining trials. They were then given an attention check to evaluate whether they had understood this instruction. They then played another block of 24 trials where they were rewarded for losing instead of winning (i.e. the expected returns were reversed). As in the previous block, they did not see the results of their actions. They were finally asked a few demographic questions. See appendix \ref{appendix:human} for detailed instructions \& methods.\par
+Our main target comparison was performance in the two blocks without feedback -- were participants able to switch their behavior to losing at the game as well as they won at it?\par
 
 
 \section{Human performance}
