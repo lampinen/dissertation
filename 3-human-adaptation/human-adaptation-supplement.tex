@@ -1,7 +1,7 @@
 \chapter{Supplemental material for chapter \ref{chapter:human}} \label{appendix:human}
 
 \section{Detailed methods}
-The full code for the experiment and analysis can be found at \url{https://github.com/lampinen/cards_for_humans}. In this section we provide some details in a more easily readable format.
+The experiment was implemented online, and run on Amazon Mechanical Turk. The code was based on the jsPsych library \citep{DeLeeuw2015}. The full code for the experiment and analysis can be found at \url{https://github.com/lampinen/cards_for_humans}. In this section we provide some details in a more easily readable format.
 
 \subsection{Detailed experiment outline}
 
@@ -133,3 +133,22 @@ The full code for the experiment and analysis can be found at \url{https://githu
 
 \subsubsection{Debrief}
 We asked participants about their age, education, gender, and race/ethnicity. However, we did not analyze these data.
+
+
+\section{Suboptimality}\label{appendix:human:suboptimality}
+As \citet{Jarvstad2013} note, how ``optimal'' human performance seems to be depends on how you measure performance. In particular, performance seems better when measured in terms of expected earnings than when measured in terms of how accurately participants decided whether or not to bet (fig. \ref{fig:appx_human_calibration}). This is because the participants were more accurate on trials with higher (absolute) expected value, and less accurate on trials where they had less to gain or lose. We chose the more optimistic performance measure as the basis for our comparison to the HoMM model.
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/human_adaptation_supp_earnings.png}
+\caption{Performance measured in terms of earnings.}
+\end{subfigure}%
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/human_adaptation_supp_accuracy.png}
+\caption{Performance measured in terms of accuracy, i.e. the percent of hands where an optimal decision was made}
+\end{subfigure}%
+\caption{How close human perforance seems to optimal depends on your metric.} \label{fig:appx_human_calibration}
+\end{figure}
+
+
+

@@ -1,10 +1,10 @@
 \chapter{Comparing to human adaptation} \label{chapter:human}
 
-In the previous chapter we proposed a framework for modeling human adaptation to new tasks, based on relationships between tasks. To understand whether we have developed a good model, it is necessary to compare its adaptation to human adaptation. It is worth stopping for a moment to consider how flexible humans actually are. We certainly experience short-term interference from switching tasks or goals \citep{Rogers1995}. Over longer periods of time, our adaptation might be a response to learning in the new situation, rather than the type of zero-shot flexbiility we modeled. How flexibly are we able to adapt to task changes? \par
-Unfortunately a complete evaluation of human flexibility is a large research program. Thus, in this chapter we evaluate human adaptation in a task inspired from those used as demonstration in the previous chapter. In particular, we implemented a more human-comprehensible version of the poker-like card game we used for those experiments, and its losing variation. \par
+In the previous chapter we proposed a framework for modeling human adaptation to new tasks, based on relationships between tasks. To understand whether we have developed a good model, it is necessary to compare its adaptation to human adaptation. It is worth stopping for a moment to consider how flexible humans actually are. We certainly experience short-term interference from switching tasks or goals \citep{Rogers1995}, or when we try to override a habitual response \citep{Stroop1935, MacLeod1991}. Over longer periods of time, our adaptation might be a response to learning in the new situation, rather than the type of zero-shot flexbiility that HoMM is intended to model. How flexibly are humans able to adapt to task changes in a short amount of time? \par
+Unfortunately a complete evaluation of human flexibility is a large research program. In this chapter we evaluate human adaptation in one setting, inspired by those used as demonstrations in the previous chapter. In particular, we implemented a more human-comprehensible version of the poker-like card game we used for those experiments, and evaluate how well participants are able to switch to losing the game, after learning to win it. \par
 
 \section{Experimental design}
-We made several changes to the game to make it easier for humans to learn. In particular, we changed the rules to follow a more hierarchical structure, and we made it so no money was gained or lost on ties. \par
+We made several changes to the game used in the previous experiments to make it easier for humans to learn. We changed the rules to follow a more hierarchical structure, and we made it so no money was gained or lost on ties. \par
 The game we had participants play was a simplified variation of poker. They were dealt hands which consisted of two cards, each with a number (rank) between 1 and 4, and a color (suit) of red or black. The participants played against a computer opponent that was dealt a similar hand. The hands were ranked such that straight flushes (adjacent cards in the same suit) beat adjacent cards in a different suit, which beat non-adjacent cards (including pairs). Ties were broken by the highest card, or by suit if both cards were tied. \par
 \begin{figure}
 \centering
@@ -14,17 +14,52 @@ The game we had participants play was a simplified variation of poker. They were
 \end{subfigure}%
 \begin{subfigure}[b]{0.5\textwidth}
 \includegraphics[width=\textwidth]{3-human-adaptation/figures/post_bet_screenshot.png}
-\caption{Feedback.} \label{fig_human_betting_trial_feedback}
+\caption{Feedback.} \label{fig:human_betting_trial_feedback}
 \end{subfigure}%
-\caption{The card game experiment trials, as seen by participants.} \label{fig_human_betting_trial}
+\caption{The card game experiment trials, as seen by participants.} \label{fig:human_betting_trial}
 \end{figure}
-On each trial, participants were dealt a hand and asked to make a bet of 0, 5, or 10 cents (see fig. \ref{fig_human_betting_trial}). If their hand beat the opponent's hand, they won the bet amount. If their hand lost, they lost it. If the hands were tied, they neither won nor lost money. \par
+On each trial, participants were dealt a hand and asked to make a bet of 0, 5, or 10 cents (see fig. \ref{fig:human_betting_trial}). If their hand beat the opponent's hand, they won the bet amount. If their hand lost, they lost it. If the hands were tied, they neither won nor lost money. \par
 The experiment had several phases. First, participants were instructed in the rules and payment scheme for the experiment. Next, they were instructed on the rules of the game. After this, they were tested with four hand-comparison trials intended to probe their understanding of each of the rules of the game. If they failed more than one of these trials, they were not allowed to continue with the experiment. \par
-Following this understanding check, subjects played a block of 32 hands (sampled to have a diversity of expected values), where they saw the results of their play, as in (fig. \ref{fig_human_betting_trial_feedback}). After this block, they played a similar block of 24 trials where they did not see the results of their play. The results were replaced with a brief grayed-out screen, and participants were payed the net expected value of their actions over the block (rounded to the nearest 10). This provides an evaluation phase with relatively less potential for learning. \par
-Finally, participants were told that we wanted them to try to lose for the remaining trials. They were then given an attention check to evaluate whether they had understood this instruction. They then played another block of 24 trials where they were rewarded for losing instead of winning (i.e. the expected returns were reversed). As in the previous block, they did not see the results of their actions. They were finally asked a few demographic questions. See appendix \ref{appendix:human} for detailed instructions \& methods.\par
-Our main target comparison was performance in the two blocks without feedback -- were participants able to switch their behavior to losing at the game as well as they won at it?\par
+Following this understanding check, subjects played a block of 32 hands (sampled to have a diversity of expected values), where they saw the results of their play, as in (fig. \ref{fig:human_betting_trial_feedback}). After this block, they played a similar block of 24 trials where they did not see the results of their play. The results were replaced with a brief grayed-out screen, and participants were payed the net expected value of their actions over the block (rounded to the nearest 10). This provides an evaluation phase with relatively less potential for learning. \par
+Finally, participants were told that we wanted them to try to lose for the remaining trials, and that ``for the remainder of the experiment, if you bet and lose, you’ll gain the amount you bet, and if you bet and win, you’ll lose the amount you bet.''. They were then given an attention check to evaluate whether they had understood this instruction. Subjects who failed this attention check were excluded from the analysis. They then played another block of 24 trials where they were rewarded for losing instead of winning (i.e. the expected returns were reversed). As in the previous block, they did not see the results of their actions. They were finally asked a few demographic questions. See Appendix \ref{appendix:human} for detailed instructions \& methods.\par
+Our main target comparison was performance in the two blocks without feedback -- were participants able to switch their behavior to lose at the game as well as they won at it?\par
 
 
 \section{Human performance}
+First, how well were participants able to learn the game? Participants performance is reasonable, although they are far from optimal, and there is substantial individual variability (fig. \ref{fig:human_cards_basic_results}). In particular, participants are sometimes making intermediate bets, which an optimal agent would never do. Furthermore, all subjects thresholds (where they cross a betting probability of 0.5) are variable, some subjects are substantially over- or under-conservative. However, performance is actually more optimal than some basic statistics might suggest, see Appendix \ref{appendix:human:suboptimality}. \par 
+Participants also performed above chance, but far from optimally after being asked to lose (fig. \ref{fig:human_cards_losing_results}). So how well were they able to adapt? 
 
-\section{Comparing HoMM to humans}
+\begin{figure}
+\centering
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/testing_basic_bet_densities.png}
+\caption{Bet density by expected value.}
+\end{subfigure}%
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/testing_basic_subject_response_fits.png}
+\caption{Probability of non-zero bet by expected value. The red dashed line is the optimal threshold, the grey curves are the individual subject fits.}
+\end{subfigure}%
+\caption{Card game behavior, basic game evaluation block. While participants are performing well above chance, they are far from optimal. They make intermediate value bets, and do not switch optimally between betting and not betting. There is also substantial inter-subject variability.} \label{fig:human_cards_basic_results}
+\end{figure}
+\begin{figure}
+\centering
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/testing_losing_bet_densities.png}
+\caption{Bet density by expected value.}
+\end{subfigure}%
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/testing_losing_subject_response_fits.png}
+\caption{Probability of non-zero bet by expected value. The red dashed line is the optimal threshold, the grey curves are the individual subject fits.}
+\end{subfigure}%
+\caption{Card game behavior, losing block. There is again substantial inter-subject variability.} \label{fig:human_cards_losing_results}
+\end{figure}
+
+
+\section{Adaptation in humans and HoMM}
+Human adaptation was quite good, in the sense that on average performance was almost identically preserved (fig. \ref{fig:human_cards_adaptation_results}). However, this average masks substantial individual variability. Because the figure plots \emph{expected} earnings, and hand values were closely matched, almost all the change from one point to the next is due to either stochasticity, or non-standard adaptation. (We cannot call this non-standard adaptation sub-optimal, since it sometimes results in \emph{improved} performance on the adapted task.) It would be interesting to explore in detail what factors underlie this variability, but here we focus on the comparison to the HoMM model. \par  
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{3-human-adaptation/figures/human_adaptation.png}
+\caption{Human adaptation in the cards experiment: the change in performance from the winning evaluation block to the losing evaluation block. Larger lines are the average, smaller are individual subjects. While there is substantial individual variability, average performance is preserved.} \label{fig:human_cards_adaptation_results}
+\end{figure}
