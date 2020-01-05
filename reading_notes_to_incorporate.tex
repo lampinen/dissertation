@@ -1,5 +1,7 @@
 Mine/proximal:
 
+* SWIL really needs to be mentioned, especially in timescales chapter.
+
 + Emergent Systematicity paper with Felix + Adam.
 
 * Setter-solver paper.
@@ -41,7 +43,9 @@ unsupervised pre-training sets up the parameters near a solution of low predicti
 
 * Better transfer learning with inferred successor maps -- Because succesor maps implicitly build the impact of the policy into the state transitions, they can be very misleading if task changes radically. This paper uses task clustering to group successor maps by relatedness of tasks to handle this problem. \citep{Madarasz2019}
 
+* Jeff Clune's AI-generating AIs argument. \citep{Clune2019}
 
+*
 
 
 
@@ -55,6 +59,10 @@ Continual:
 * Continual learning with hypernetworks -- Contemporaneously with (a few weeks after) my observation about continual learning the original HoMM paper version, this paper introduced some related ideas, although they have a different implementation focuses on a more standard continual learning setting. \citep{Oswald2020}
 
 * Three scenarios for continual learning -- Discusses different settings where task IDs are known, unknown, or unknown *and must be inferred*. \citep{Ven2018}
+
+* A chinese-restaurant-processed based adaptation system for model-based RL, that can handle multiple tasks without boundary marking. \citep{Nagabandi2019}
+
+* Meta-learning to avoid interference \citep{Velez2017}
 
 
 
@@ -153,6 +161,8 @@ Architectures:
 * Weight normalization -- Parameterizing weight vectors direction (as unit vector) and norm (as scalar) separately results in a better-conditioned optimization. \citep{Salimans2016}
 
 * Generative teaching networks -- Learns by meta-gradients to generate pseudo-data for training that accelerates NAS. Possibly more important contribution (at least to me) is to show that the above weight-normalization technique, when applied in an meta-learning setting, substantially improves results. \citep{Such2019}
+
+* Learning learning rules by meta-gradients \citep{Miconi2019}
 
 
 Other:
