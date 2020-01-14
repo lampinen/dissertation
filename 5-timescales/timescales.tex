@@ -26,17 +26,21 @@ As noted above, we make this comparison by optimizing the task embeddings for th
 We used a similar distribution of tasks to our polynomial results presented above, except that we ensured every evaluation task was a trained meta-mapping of a trained task, but where that task had not been used as an example for the meta-mapping during training. This eliminates the uncertainty introduced by having to learn a new task or mapping from examples, as well as applying the transformation, which allows for a more controlled comparison. To be precise, we trained the system on 60 base tasks plus the results of applying 20 meta-mappings to them. We additionally trained the system on 40 new base tasks, and held out the results of applying the 20 meta-mappings to them. It is these \(40 \times 20 = 800\) novel tasks that we optimized the embeddings for. \par 
 In Fig. \ref{fig:timescales_polynomial_optimization_curves}, we show how the log-loss on the new tasks changes over epochs of learning on the new tasks. While all initializations suffice to produce good performance eventually, the better starting point provided by a meta-mapping initialization results in both lower initial error, and faster learning early on, so much lower cumulative error. \par
 To demonstate this last point, in Fig. \ref{fig:timescales_polynomial_optimization_regret} we plot the average log cumulative ``regret'' on the novel tasks for the different initializations, that is, the integrated error over the course of learning. Initializing with the meta-mapping output results in orders of magnitude less cumulative error. \par
-Thus we conclude that, at least in this simple setting, the zero-shot initialization is advantageous in reducing the time to reach near-optimal performance, and the cumulative regret (errors made along the way).
-
+Thus we conclude that, at least in this simple setting, the zero-shot initialization is advantageous in reducing the time to reach near-optimal performance, and the cumulative regret (errors made along the way). \par 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{5-timescales/figures/polynomial_optimization_curves.png}
 \caption{Learning curves when optimizing the task embedding for held-out polynomials from various starting points. The meta-mapping initialization provides a much better starting-point, and reaches near-optimal performance much faster.} \label{fig:timescales_polynomial_optimization_curves}
 \end{figure}
-~
+
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{5-timescales/figures/polynomial_optimization_cumulative_regret.png}
 \caption{Cumulative loss when optimizing the task embedding for held-out polynomials from various starting points. The meta-mapping initialization results in orders of magnitude less errors over the course of learning.} \label{fig:timescales_polynomial_optimization_regret}
 \end{figure}
+
+\section{Discussion}
+In this chapter, we have shown that a zero-shot initialization reduces both the time to learn a novel task, and the mistakes made along the way. This is a useful observation for multiple reasons. \par 
+First, the idea that deep learning is ``data-hungry'' is commonly used as a critique \citep[e.g.]{Lake2016, Marcus2018}. These critiques ignore the success of meta-learning, as we noted in a previous commentary \citep{Hansen2017}. However, as shown in this chapter, zero-shot adaptation provides another perspective on how learning in a novel task can be accelerated. While using deep learning from scratch can be data-hungry, starting from a good task representation output by a meta-mapping might allow deep learning to go on a diet. \par  
+Second, starting from a good representation substantially reduces the errors made on the way to mastery. This can be an important goal in its own right, since making errors can be quite costly in settings like robotics, where errors may damage the robot or its surroundings, or even injure bystanders. This has spawned an increasing amount of recent work on ``safe exploration'' \citep[e.g.][]{Turchetta2016, Turchetta2019}. While we have not explored applications to safe exploration in detail, our results suggest that zero-shot adaptation to a novel task might allow for much safer exploration, by reducing the potential errors and allowing the system to explore more productively. This provides an exciting direction for future work. \par  
 
