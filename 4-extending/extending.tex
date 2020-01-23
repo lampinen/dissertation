@@ -29,9 +29,46 @@ There are in total 2 task types \(\times\) 5 color pairs \(\times\) binary wheth
 
 \subsection{Model}
 %% TODO: detailed parameters
-To accomodate this setting, we essentially combined the DQN architecture \citep{Mnih2015} with our previous approaches. That is, the input to the model was raw pixels, which were passed through several convolutional layers to produce state embeddings. As in the card game tasks discussed in previous chapters, we used (state, action, reward) tuples as input to the meta-network \(\mathcal{M}\). More precisely, we processed actions and rewards through several layers to produce an ``action-outcome'' embedding, and then concatenated that to the visual embedding as input to \(\mathcal{M}\). As before, \(\mathcal{M}\) produced a task embedding, which was passed through a HyperNetwork \(\mathcal{H}\) to parameterize the task network \(F\). The task network took state embeddings output by the convolutional network, and processed these to produce to produce output embeddings, which were linearly decoded to Q-values for the different actions. When meta-mapping, the input task embeddings replaced the input state embeddings to \(\mathcal{M}\) and \(F\), and the output task embeddings replaced the action-outcome inputs to \(\mathcal{M}\). See appendix \ref{appendix:extending_grids_methods} for further details of the architecture and training. \par 
+To accomodate this setting, we essentially combined the DQN architecture \citep{Mnih2015} with our previous approaches. That is, the input to the model was raw pixels, which were passed through several convolutional layers to produce state embeddings. As in the card game tasks discussed in previous chapters, we used (state, action, reward) tuples as input to the meta-network \(\mathcal{M}\). More precisely, we processed actions and rewards through several layers to produce an ``action-outcome'' embedding, and then concatenated that to the visual embedding as input to \(\mathcal{M}\). As before, \(\mathcal{M}\) produced a task embedding, which was passed through a HyperNetwork \(\mathcal{H}\) to parameterize the task network \(F\). The task network took state embeddings output by the convolutional network, and processed these to produce to produce output embeddings, which were linearly decoded to Q-values for the different actions. When meta-mapping, the input task embeddings replaced the input state embeddings to \(\mathcal{M}\) and \(F\), and the output task embeddings replaced the action-outcome inputs to \(\mathcal{M}\). See Appendix \ref{appendix:extending_grids_methods} for further details of the architecture and training. \par 
 We made one additional change to the architecture that proved essential to learning -- rather than constructing the task embedding completely from scratch each time, we kept persistent task embeddings cached, and used a random convex-combination of the output of \(\mathcal{M}\) and the cached embedding to perform the task. We added an additional \(\ell_2\) loss between the cached and transient embedding that attempted to match each to the other. Having partially persistent embeddings made it easier for the system to overcome the initial confusion about the fact that objects were sometimes positively rewarding and sometimes negatively rewarding, and made it easier for it to discover the overall structure of the tasks. In the simpler settings of the cards tasks, this was not necessary. It is likely that the temporally extended nature of these tasks makes the interference between the conflicting tasks worse. However, with enough training and time, the model could likely overcome this and learn without persistent representations in this setting as well. \par 
 
 \subsection{Results}
 
+
+\section{Concepts}
+
+There is a long history of cognitive research on how people learn concepts or categories \citep{Bourne1970, Medin1978, Kruschke1992}. This work has focused almost entirely on how people can learn a concept from examples, and more recent work in the area has focused on areas like active learning by choosing the examples to test \citep{Markant2014, Markant2015}. However, humans can also understand concepts without any examples at all. If I teach you that ``blickets'' are red triangles by examples, and then I tell you that ``zipfs are blue blickets,'' you will instantly be able to recognize a zipf without ever having seen an example (Fig. \ref{fig:extending_concept_example}). This type of zero-shot performance can be understood as applying a ``switch-red-to-blue'' meta-mapping to the ``blicket'' classification function. This motivates applying our approach to the domain of concepts. \par 
+
+\subsection{Tasks}
+%% TODO: detailed methods, rework this figure
+\begin{figure}
+\centering
+\begin{tikzpicture}[auto]%, scale=0.8, every node/.style={scale=0.8}]
+% blickets
+\node at (-4.8, 2.2) {\LARGE ``Blickets''};
+\draw[decoration={calligraphic brace, amplitude=0.5cm},decorate,line width=1mm] (-3, 0.3) -- (-3, 4);
+\node at (-2, 3.1) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/32_red_triangle_0.png}};
+\node at (-2, 1.2) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/24_red_triangle_0.png}};
+
+% not blickets
+\node at (-5.2, -2.1) {\LARGE ``Not blickets''};
+\draw[decoration={calligraphic brace, amplitude=0.5cm},decorate,line width=1mm] (-3, -4) -- (-3, -0.3);
+\node at (-2, -3.1) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/32_red_circle_0.png}};
+\node at (-2, -1.2) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/24_yellow_triangle_0.png}};
+\node at (3, 3.5) {\LARGE ``Zipfs = blue blickets''};
+\node at (1.6, 0) {\LARGE ``Zipfs?''};
+\draw[decoration={calligraphic brace, amplitude=0.5cm},decorate,line width=1mm] (3.2, -2.9) -- (3.2, 2.9);
+\node at (4.2, 1.9) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/24_red_triangle_1.png}};
+\node at (4.2, 0) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/32_blue_triangle_1.png}};
+\node at (4.2, -1.9) {\includegraphics[width=1.8cm]{4-extending/figures/categorization_stimuli/32_blue_inverseplus_1.png}};
+\end{tikzpicture}
+\caption{An example of zero-shot concept understanding that can be captured by a meta-mapping. We can understand what zipfs are if we learn about blickets, and about how zipfs relate to blickets.} \label{fig:extending_concept_example}
+
+\end{figure}
+
+We constructed stimuli by selecting from 8 shapes (triangle, square, plus, circle, a t shape, an outline of a square, an outline of a triangle, and 4 small squares forming a larger square) and 8 colors (red, green, blue, yellow, purple, pink, cyan, and ocean). We rendered these stimuli at 3 sizes (16, 24, and 32 pixels) at a random position and rotation within a 50 pixel image, to produce stimuli like those shown in figure \ref{fig:extending_concept_example}. \par
+We gave the system all the basic uni-dimensional concepts as training examples of concepts (i.e. one-vs-all classification of each shape and color), so that it would be able to recognize all the basic attributes. We also constructed a set of composite tasks based on conjuctions, disjunctions, and XORs of shape and color attributes. We trained the system on a subset of these, and on meta-mappings that switched one shape for another, or switched one color for another. We evaluated the system on its ability to apply these meta-mappings to trained tasks in order to perform held-out tasks. \par  
+
+
+\subsection{Results}
 
