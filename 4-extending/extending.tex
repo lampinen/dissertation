@@ -66,8 +66,11 @@ There is a long history of cognitive research on how people learn concepts or ca
 
 \end{figure}
 
-We constructed stimuli by selecting from 8 shapes (triangle, square, plus, circle, a t shape, an outline of a square, an outline of a triangle, and 4 small squares forming a larger square) and 8 colors (red, green, blue, yellow, purple, pink, cyan, and ocean). We rendered these stimuli at 3 sizes (16, 24, and 32 pixels) at a random position and rotation within a 50 pixel image, to produce stimuli like those shown in figure \ref{fig:extending_concept_example}. \par
-We gave the system all the basic uni-dimensional concepts as training examples of concepts (i.e. one-vs-all classification of each shape and color), so that it would be able to recognize all the basic attributes. We also constructed a set of composite tasks based on conjuctions, disjunctions, and XORs of shape and color attributes. We trained the system on a subset of these, and on meta-mappings that switched one shape for another, or switched one color for another. We evaluated the system on its ability to apply these meta-mappings to trained tasks in order to perform held-out tasks. \par  
+We constructed stimuli by selecting from 8 shapes (triangle, square, plus, circle, a t shape, an outline of a square, an outline of a triangle, and 4 small squares forming a larger square) and 8 colors (red, green, blue, yellow, purple, pink, cyan, and ocean). We rendered these stimuli at 3 sizes (16, 24, and 32 pixels) at a random position and rotation within a \(50 \times 50\) pixel image, to produce stimuli like those shown in figure \ref{fig:extending_concept_example}. \par
+We defined the basic task mappings as binary classifications of the images (i.e. functions from images to \(\{0, 1\}\)). We gave the system all the uni-dimensional concepts as training examples of concepts (i.e. one-vs-all classification of each shape and color), so that it would be able to recognize all the basic attributes. We also constructed a set of composite tasks based on conjuctions, disjunctions, and exclusive-disjunctions (XOR) of shape and color attributes. We trained the system on a subset of these, and on meta-mappings that switched one shape for another, or switched one color for another. We evaluated the system on its ability to apply these meta-mappings to trained tasks in order to perform held-out tasks. \par  
+
+\subsection{Model}
+We used a 4 layer convolutional network for input embedding, and a 3-hidden-layer task network \(F\). 
 
 
 \subsection{Results}
