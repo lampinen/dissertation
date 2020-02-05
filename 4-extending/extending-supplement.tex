@@ -36,3 +36,12 @@ In Fig. \ref{fig:app_extending_cat_stims} we show all shapes (triangle, square, 
 \end{subfigure}%
 \caption{Sample stimuli for categorization tasks, showing all shapes, colors, and sizes.} \label{fig:app_extending_cat_stims}
 \end{figure}
+
+\subsection{Language model architecture} \label{app:extending_categorization_lang_arch}
+
+In the categorization experiments, we used a different task network architecture for the meta-mapping based architectures than for the language generalization architectures. Here, we justify that choice by showing that the model architecture we used for the meta-mapping approach results in worse language generalization, in Fig. \ref{fig:app_extending_cat_lang_arch}. In particular, the linear task network resulted in worse generalization performance (mean \(= 0.85\), bootstrap 95\%-CI [0.82, 0.88]) than the deep nonlinear task network (mean \(= 0.92\), bootstrap 95\%-CI [0.89, 0.94]). This difference was significant under a linear mixed-model (\(t(4) = 3.615\), \(p = 0.02\)), and under a permutation test. \par 
+
+\begin{figure}
+\includegraphics[width=0.8\textwidth]{4-extending/figures/language_model_architecture_justification.png}
+\caption{Comparing language generalization with a linear task network to a deep, nonlinear architecture. Although the linear task network worked best for the meta-mapping approaches (not shown), the nonlinear task network generalized better to new language instructions.}
+\end{figure}
