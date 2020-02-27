@@ -4,6 +4,16 @@
 
 All implementation and analysis code can be found at \url{https://github.com/lampinen/HoMM_grids}.\par
 
+
+\subsection{Correlation in generalization across tasks}
+In Fig. \ref{fig:app_extending:RL_correlation_by_run}, we show the correlation in performance on the pick-up and push-off generalization tasks within each run (at different time points in learning). Points are only included if train performance is above the threshold used for selection --- \(3.8\) for the HoMM model, \(3.5\) for the language model. Stricter thresholds for the language model result in weaker (sometimes negative) correlations. \par 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{4-extending/figures/grids_adaptation_correlation_loose_by_run.png}
+\caption[Correlation of performance on the RL tasks, by run.]{Correlation of performance on the two RL tasks, broken down by run. The correlation is higher in the HoMM model, both within and across runs.} \label{fig:app_extending:RL_correlation_by_run}
+\end{figure}
+
+
 \section{Categorization tasks} \label{app:extending_categorization_methods}
 All implementation and analysis code can be found at \url{https://github.com/lampinen/categorization_HoMM}.\par
 In Fig. \ref{fig:app_extending_cat_stims} we show all shapes (triangle, square, plus, circle, tee, inverseplus, emptysquare, emptytriangle), colors (blue, pink, purple, yellow, ocean, green, cyan, red), and sizes (16, 24, and 32 pixels) that we used in our experiments. All stimuli were rendered at random positions within a \(50 \times 50\) image (constrained so that the full shape remained within the frame), and at random angles within \(\pm20^{\circ}\) of their canonical orientation.\par
@@ -43,5 +53,6 @@ In the categorization experiments, we used a different task network architecture
 
 \begin{figure}
 \includegraphics[width=0.8\textwidth]{4-extending/figures/language_model_architecture_justification.png}
-\caption{Comparing language generalization with a linear task network to a deep, nonlinear architecture. Although the linear task network worked best for the meta-mapping approaches (not shown), the nonlinear task network generalized better to new language instructions.}
+\caption[Comparing language generalization with linear vs. deep-nonlinear task-networks.]{Comparing language generalization with a linear task network to a deep, nonlinear architecture. Although the linear task network worked best for the meta-mapping approaches (not shown), the nonlinear task network generalized better to new language instructions.}
 \end{figure}
+
