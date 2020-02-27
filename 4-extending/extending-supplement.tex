@@ -56,3 +56,28 @@ In the categorization experiments, we used a different task network architecture
 \caption[Comparing language generalization with linear vs. deep-nonlinear task-networks.]{Comparing language generalization with a linear task network to a deep, nonlinear architecture. Although the linear task network worked best for the meta-mapping approaches (not shown), the nonlinear task network generalized better to new language instructions.}
 \end{figure}
 
+\subsection{More detailed result visualizations}
+In Fig. \ref{fig:app_extending:concepts_generalization_density} we show the zero-shot generalization accuracy of the models across runs, at different training set sizes. At moderate sample sizes, the HoMM model results in a sharper peak at perfect accuracy --- i.e. more qualitatively ``getting it'' or ``not getting it.'' \par 
+In Fig. \ref{fig:app_extending:concepts_all_runs} we show learning curves for meta-mapping performance across all runs. Performance is highly variable at small training-set sizes, especially on held-out meta-mappings, but becomes increasingly systematic as training set size increases.\par
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{4-extending/figures/concepts_adaptation_generalization_density.png}
+\caption[Visual concept generalization densities.]{In the visual concepts domain, meta-mapping results in more qualitative ``getting it'' or ``not getting it'' behavior, in the middle ranges of dataset size. Here we plot the density of the zero-shot evaluation accuracy across runs for the HoMM model and language generalization. The HoMM model exhibits sharper peaking at one at moderate sample sizes, whereas the language generalization is more smeared out --- i.e. the HoMM model is either systematically getting everything correct or is making a large number of mistakes, whereas the language generalization is more stochastic. This qualitative, systematic difference in performance that HoMM exhibits is more like what would be expected from human cognition.}\label{fig:app_extending:concepts_generalization_density}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=0.88\textwidth]{4-extending/figures/concepts_all_runs_train.png}
+\caption{Trained meta-mappings.}\label{fig:app_extending:concepts_all_runs:train}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=0.88\textwidth]{4-extending/figures/concepts_all_runs_eval.png}
+\caption{Held-out meta-mappings.}\label{fig:app_extending:concepts_all_runs:eval}
+\end{subfigure}
+\caption[Visual concept learning curves by run.]{Meta-mapping learning curves in the visual concepts domain broken down by number of training meta-mappings (rows), and by run (columns). The green lines are performance when the transformed task was encountered during training, the pink lines are performance on transformed tasks that were never encountered during training. Panel (\subref{fig:app_extending:concepts_all_runs:train}) shows the results for trained meta-mappings, and panel (\subref{fig:app_extending:concepts_all_runs:eval}) shows the results for held-out meta-mappings. With more training meta-mappings, HoMM both generalizes better when applying the trained meta-mappings to held-out examples (\subref{fig:app_extending:concepts_all_runs:train}), and when applying held-out meta-mappings (\subref{fig:app_extending:concepts_all_runs:eval}). However, even with smaller sample sizes, HoMM is achieving perfect generalization on the trained meta-mappings on many runs.} \label{fig:app_extending:concepts_all_runs}
+\end{figure}
+
