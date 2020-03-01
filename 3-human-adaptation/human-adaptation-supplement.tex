@@ -1,6 +1,6 @@
 \chapter{Supplemental material for chapter \getrefnumber{chapter:human}} \label{appendix:human}
 
-\section{Detailed methods}
+\section{Details of human experiment}
 The experiment was implemented online, and run on Amazon Mechanical Turk. The code was based on the jsPsych library \citep{DeLeeuw2015}. The full code for the experiment and analysis can be found at \url{https://github.com/lampinen/cards_for_humans}. In this section we provide some details in a more easily readable format.
 
 \subsection{Detailed experiment outline}
@@ -135,7 +135,8 @@ The experiment was implemented online, and run on Amazon Mechanical Turk. The co
 We asked participants about their age, education, gender, and race/ethnicity. However, we did not analyze these data.
 
 
-\section{Suboptimality}\label{appendix:human:suboptimality}
+\section{Results of the human experiment}
+\subsection{Suboptimality}\label{appendix:human:suboptimality}
 As \citet{Jarvstad2013} note, how ``optimal'' human performance seems to be depends on how you measure performance. In particular, performance seems better when measured in terms of expected earnings than when measured in terms of how accurately participants decided whether or not to bet (fig. \ref{fig:appx_human_calibration}). This is because the participants were more accurate on trials with higher (absolute) expected value, and less accurate on trials where they had less to gain or lose. We chose the more optimistic performance measure as the basis for our comparison to the HoMM model.
 \begin{figure}[H]
 \centering
@@ -150,5 +151,31 @@ As \citet{Jarvstad2013} note, how ``optimal'' human performance seems to be depe
 \caption{How close human perforance seems to optimal depends on your metric.} \label{fig:appx_human_calibration}
 \end{figure}
 
+
+\section{Details of model tasks \& training}\label{app:human:model_details}
+\subsection{Tasks}
+
+Our card games were played with two suits, and 4 values per suit. In our setup, each hand in a game has a win probability (proportional to how it ranks against all other possible hands). The agent is dealt a hand, and then has to choose to bet 0, 1, or 2 (the three actions it has available). We considered a variety of games which depend on different features of the hand:
+\begin{itemize}
+\item \textbf{Straight flush:} Most valuable is adjacent numbers in same suit, i.e. 4 and 3 in most valuable suit (royal flush) wins against every other hand. This is the game we tested in human participants.
+\item \textbf{High card:} Highest card wins.
+\item \textbf{Pairs} Same as high card, except pairs are more valuable, and same suit pairs are even more valuable.
+\item \textbf{Match:} The hand with cards that differ least in value (suit counts as 0.5 pt difference) wins.
+\item \textbf{Blackjack:} The hand's value increases with the sum of the cards until it crosses 5, at which point the player ``goes bust,'' and the value becomes negative.
+\end{itemize}
+We also considered three binary attributes that could be altered to produce variants of these games:
+\begin{itemize}
+\item \textbf{Losers:} Try to lose instead of winning! Reverses the ranking of hands. This is the mapping we evaluated in human participants.
+\item \textbf{Suits rule:} Instead of suits being less important than values, they are more important (essentially flipping the role of suit and value in most games).
+\item \textbf{Switch suit:} Switches which of the suits is more valuable.
+\end{itemize}
+Any combination of these options can be applied to any of the 5 games, yielding 40 possible games. \par
+
+\subsection{Training}
+\textbf{Meta-mappings:} We trained the network on meta-mappings that toggled each of the binary attributes, but evaluated primarily on switching to losing the Straight Flush game (since that corresponded to the human experiment).\par
+\textbf{Meta-classifications:} For meta-tasks, we gave the network 8 task-embedding classification tasks (one-vs-all classification of each of the 5 game types, and of each of the 3 attributes) \par
+\textbf{Language:} We encoded the tasks in language by sequences of the form\\
+\verb|[``game'', <game_type>, ``losers'', <losers-value>, ``suits rule'', <suits-rule-value>,|\\
+\verb|``switch suit'', <switch-suit-value>]|.
 
 

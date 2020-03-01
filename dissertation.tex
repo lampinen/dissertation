@@ -21,7 +21,7 @@
 \usepackage{tikz}
 
 \usetikzlibrary{shapes,arrows}
-\usetikzlibrary{decorations.pathreplacing, calligraphy}
+\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, snakes, calligraphy}
 
 \tikzstyle{block} = [rectangle, draw, thick, align=center, rounded corners]
 \tikzstyle{boundingbox} = [thick, lightgray]
@@ -32,8 +32,13 @@
 \tikzstyle{line} = [draw, very thick, -latex']
 \tikzstyle{arrow} = [draw, ->, thick]
 
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
 \definecolor{bpurp}{HTML}{984ea3}
 \definecolor{bblue}{HTML}{377eb8}
+\definecolor{bgreen}{HTML}{4daf4a}
+\definecolor{borange}{HTML}{ff7f00}
+
 
 % footnote without a marker
 \makeatletter

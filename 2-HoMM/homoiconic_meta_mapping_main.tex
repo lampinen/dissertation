@@ -1,337 +1,336 @@
-\chapter{Zero-shot task adaptation by homoiconic meta-mapping} \label{chapter:zero_shot_via_homm}
-\blfootnote{Some of the material in this chapter originally appeared as a workshop paper in the NeurIPS 2019 Learning Transferable Skills Workshop.}
+\chapter{Meta-mapping} \label{chapter:zero_shot_via_homm}
+%\blfootnote{Some of the material in this chapter originally appeared as a workshop paper in the NeurIPS 2019 Learning Transferable Skills Workshop.}
 
-Humans are able to use and reuse knowledge more flexibly than most deep learning models can, as discussed in the previous chapter, and in prior work \citep{Lake2016, Marcus2018}. The problem of rapid learning has been partially addressed by meta-learning systems \citep[see also section \ref{sec_discussion}]{Santoro2016, Finn2017a, Finn2018, Stadie2018, Botvinick2019}. However, humans can use our knowledge of a task to flexibly adapt when the task changes. In particular, we can often perform an altered task zero-shot, that is, without seeing any data at all. For example, once we learn to play a game, we can immediately switch to playing in order to lose, and can perform reasonably on our first attempt. \par
-One fundamental reason for this is that humans are aware of what we are trying to compute and why. This allows us to adapt our task representations to perform a new task zero-shot. By contrast, most deep learning models do not explicitly represent tasks at all. Those that do (such as some meta-learning models) generally do not represent relationships between tasks, and so cannot adapt to a new task without data from the new task. To address this, it is necessary to represent tasks in a transformable space. This can grant the ability to rapidly adapt behavior to a new task. \par
-In this paper, we propose a new class of tasks based on this idea: meta-mappings, i.e. mappings between tasks (see below). As noted above, this type of transfer is easily accessible to humans \citep{Lake2016}, but is generally inaccessible to deep-learning models. To address this challenge, we propose using architectures which essentially take a functional perspective on meta-learning, and exploit the idea of homoiconicity. (A homoiconic programming language is one in which programs in the language can be manipulated by programs in the language, just as data can.) By treating both data and task behaviors as functions, we can conceptually think of both data \emph{and} learned task behaviors as transformable. This yields the ability to not only learn to solve new tasks, but to learn how to transform these solutions in response to changing task demands. We demonstrate that our architectures can flexibly remap their behavior to address the meta-mapping challenge. By allowing the network to recursively treat its task representations as data points, and transform them to produce new task representations, our approach is able to achieve this flexibility parsimoniously. We suggest that approaches like ours will be key to building more intelligent and flexible deep learning systems. \par
+As noted in the introduction, humans have the ability to transform our behavior on a task, in accordance with a change in goals. For example, if we are told to try to lose at poker, we can perform quite well on our first try, even if we have always tried to win previously. If we are shown an object, and told to find the same object in a new color or texture, we can do so. How can we adapt our behavior so drastically, without any data on the new task, even when our new goal contradicts all our prior experience? We can do so by exploiting the relationship between the adapted version of the task and the original. In this chapter, I propose a computational model of this adaptation, and demonstrate its success across a variety of domains. Our model is both useful for understanding the flexibility of human cognition, and for designing artificial intelligence systems with more human-like flexibility.   
 
-\section{Meta-mapping}
-We propose the meta-mapping challenge. We define a meta-mapping as a task, or mapping, that takes a task as an input, output, or both. These include mapping from tasks to language (explaining), mapping from language to tasks (following instructions), and mapping from tasks to tasks (adapting behavior). While the first two categories have been partially addressed in prior work \citep[e.g.][]{Hermann2017, Co-Reyes2019}, the latter is more novel. (We discuss the relationship between our work and prior work in section \ref{sec_discussion}.) This adaptation can be cued in several ways, including examples of the mapping (after winning and losing at poker, try to lose at blackjack) or natural-language instructions (``try to lose at blackjack''). \par
-We argue that task-to-task meta-mappings are a useful way to think about human-like flexibility, because a great deal of our rapid adaptation is from a task to some variation on that task. For example, the task of playing go on a large board is closely related to the task of playing go on a small board. Humans can exploit this to immediately play well on a different board, but deep learning models generally have no way to achieve this. We can also adapt in much deeper ways, for example fundamentally altering our value function on a task, such as trying to lose, or trying to achieve some orthogonal goal. While meta-learning systems can rapidly learn a new task from a distribution of tasks they have experience with, this does not fully capture human flexibility. Given appropriate conditioning (see below), our architecture can use meta-mappings to adapt to substantial task alterations zero-shot, that is, without seeing a single example from the new task \citep{Lake2016}. Achieving this flexibility to meta-map to new tasks will be an important step toward more general intelligence -- intelligence that is not limited to precisely the training tasks it has seen. \par 
+The model incorporates several key insights into human cognition. First, when performing a task (such as playing poker), humans are aware of what we are doing and why. Our model therefore performs tasks from a task representation. We take inspiration from various approaches from the machine learning and cognitive science literature, and construct task representations from examples via meta-learning \citep[e.g.][]{Vinyals2016, Santoro2016, Finn2017a, Finn2018, Stadie2018, Botvinick2019}, or from a natural language instruction \citep{Larochelle2008, Hermann2017, Hill2019a}. The model then uses this task representation to respond in a task-appropriate way to its inputs. 
 
-\section{Homoiconic meta-mapping (HoMM) architecture}
-%\vspace{-0.5em} % section
-To address these challenges, we propose HoMM architectures, composed of two components:
-%\vspace{-0.5em}
-\begin{enumerate} \setlength \itemsep{0em}
-\item Input/output systems: domain specific encoders and decoders (vision, language, etc.) that map into a shared embedding space $Z$.
-\item A meta-learning system that a) learns to embed tasks into the shared embedding space $Z$, b) learns to use these task embeddings to perform task-appropriate behavior, c) learns to embed meta-mappings into the same space, and d) learns to use these meta-mapping embeddings to transform basic task embeddings in a meta-mapping appropriate way.\end{enumerate}
-%\vspace{-0.5em}
-%\looseness=-1
-These architectures are homoiconic because they have a completely shared $Z$ for individual data points, tasks, and meta-mappings. This parsimoniously allows for arbitrary mappings between these entities. In addition to basic tasks, the system can learn to perform meta-mappings to systematically alter task behavior based on relationships to other tasks. That is, it can transform task representations using the same components it uses to transform basic data points. (See also Appendix \ref{app_lesion_results_shared_z}.) \par
-Without training on meta-mappings, of course, the system will not be able to execute them well. However, as we will show, if it is trained on a broad enough set of such mappings, it will be able to generalize to new instances drawn from the same meta-mapping distribution. For instances that fall outside its data distribution, or for optimal performance, it may require some retraining, however. This reflects the structure of human behavior -- we are able to adapt rapidly when new knowledge is relatively consistent with our prior knowledge, but learning an entirely new paradigm (such as calculus for a new student) can be quite slow \citep[cf.][]{Kumaran2016, Botvinick2019}. \par
-\begin{figure}[t]
+To implement the task computations, we assume that a great deal of input processing (perception) can be shared across different tasks. If a human is playing cards, much of the perception of the cards will be identical whether the game is poker or blackjack or bridge, and the task-specific computations will be performed over abstract features such as suit and rank relationships. We thus allow the system to learn perceptual features over multiple tasks. The system then transforms these features in a task-specific way in order to perform task-appropriate behavior. Specifically, the model uses the representation of the current task to parameterize this transformation of the perceptual features, and then decodes the result through an output system which is also shared across the tasks. 
+
+We also allow the model to transform its representations of tasks, to accomodate task alterations. We refer to these transformations of tasks as \textbf{meta-mappings}. Meta-mappings allow the model to adapt to a new task \emph{zero-shot} (i.e. without requiring any data from that new task), based on the relationship between the new task and prior tasks. For example, meta-mappings could be used to switch to losing at poker, based on knowledge of poker, and what ``losing'' means across other games. Meta-mappings can be cued either by examples of the meta-mapping applied to other tasks, or by an instruction, (just as basic tasks can be inferred from examples or instructions). 
+
+Our model infers and implements these task transformations using the same architetural components that are used to perform the basic tasks. Using the same architectural components for basic tasks and meta-mappings is parsimonious, as it requires no more parameters for adaptation than are needed for basic performance of the tasks. Furthermore, it reflects our theory that the brain reuses the same sytems for computations at different levels of abstraction. This may be key to the human ability to repeatedly build abstractions on top of prior abstractions \citep{Wilensky1991, Hazzan1999, Lampinen2017b}, allowing, in principle, for recursion upon our own cognitive processes. Finally, it relates to the computational notion of ``homoiconicity.'' A homoiconic programming language is one in which programs can be manipulated within the language as data. Our implementation is therefore homoiconic, in the sense that tasks can be transformed just like data can. We refer to these architectures as \textbf{homoiconic meta-mapping} (HoMM) architectures. These architectures allow for computational adaptibility that is closer, at least in some ways, to that exhibited by humans.  
+
+The main contributions of this chapter are to propose meta-mapping as a computational framework for understanding task adaptation, and to propose an implementation of this framework in the form of homoiconic meta-mapping, which we hope others will see as elegant and parsimonious. In this chapter we will demonstrate the success of our approach in a simple proof of concept domain, and explore some features of its performance. In the subsequent two chapters, we will compare to human adaptation and show the success of our approach across a variety of tasks, ranging from visual classification to reinforcement learning. To our knowledge, this is the first work that proposes transforming a task representation in order to adapt to task alterations zero-shot. 
+
+
+\section{Task transformation via meta-mappings} \label{sec:HoMM:metamappings}
+
+\textbf{Basic tasks are input-output mappings:} We take as a starting point the construal of basic tasks as mappings from inputs to outputs. For example, poker can be seen as a mapping from hands to bets, chess as a mapping of board positions to moves, and object recognition as a mapping from images to labels. This perspective is common across machine learning approaches, which generally try to infer a task mapping from many examples, or meta-learn how to infer it from fewer examples. In our work, we infer these mappings either from examples, from natural language instructions, or by transforming a prior task mapping. 
+
+\textbf{Tasks can be transformed via meta-mappings:} We propose meta-mappings as a computational approach to the problem of transforming a basic task mapping. A meta-mapping is a higher-order task, which takes a task representation as input, and outputs a representation of the transformed task. For example, we might have a ``lose'' meta-mapping. If given poker as an input, the lose meta-mapping would output a losing variation of poker. If given blackjack, it would output a losing variation of blackjack. If we have such a meta-mapping, we can use it to transform a task in order to perform the transformed version of the task. This allows a model to adapt to a transformed task without having any data on it, just as humans are able to easily switch to trying to lose at a game they have only tried to win in the past. 
+
+How can a meta-mapping be constructed? There is an analogy between meta-mappings and basic task mappings -- they are both simply functions from inputs to outputs. Thus to construct a meta-mapping that we use analogous approaches to those we use for constructing basic task representations. In particular, we infer a meta-mapping from examples (e.g. winning and losing at blackjack), or natural language (e.g. ``try to switch to losing''). We can then apply this meta-mapping to other basic tasks, in order to infer losing variations of those tasks. Importantly, the system is able to generalize to new meta-mappings, just as it can generalize to new basic tasks. 
+
+
+
+\section{Homoiconic meta-mapping architectures} \label{sec:HoMM:architecture}
+
+\begin{figure}[tbhp]
 \centering
-\begin{tikzpicture}[scale=0.8, every node/.style={scale=0.8}]
-%% basic meta learning
-\begin{scope}[shift={(0.4, 0.4)}]
-\draw[boundingbox, fill=white] (-3, -4.3) rectangle (2.5, 3.2);
-\end{scope}
-\begin{scope}[shift={(0.2, 0.2)}]
-\draw[boundingbox, fill=white] (-3, -4.3) rectangle (2.5, 3.2);
-\end{scope}
+\begin{tikzpicture}[auto]
+%% a) constructing
+\draw[boundingbox, draw=gray, fill=white] (-8, -2.5) rectangle (-0.25, 2.5);
 
-\draw[boundingbox, fill=white] (-3, -4.3) rectangle (2.5, 3.2);
-\node[lightgray] at (-1.2, 2.9) {(a) Basic meta-learning};
-\node at (-1.5, -4) (examples) {Examples};
-\node at (-1.5, -3.2) (D1) {
+%% from language
+\node[gray] at (-6.5, 2.1) {Instructions};
+\node at (-6.5, 1.25) (language) {``Play poker.''};
+
+\node[gray, text width=2cm, align=center] at (-3.5, 2.1) {Language network};
+\node[block] at (-3.5, 1.25) (languagenet) {\(\mathcal{L}\)}; 
+\path[arrow] (language.east) -- ([xshift=-3]languagenet.west);
+
+\node[bpurp, text width=2cm] at (-0.5, 1.25) (languagetaskrep) {\(z_{task}\)}; 
+\path[arrow] ([xshift=3]languagenet.east) -- (languagetaskrep.west);
+
+
+%% from examples
+
+\node[gray, text width=2.5cm, align=center] at (-6.5, -0.2) {Task examples (encoded)};
+\node at (-6.5, -1.25) (examples) {
 \(\left\{
 \begin{matrix}
-(z^{ex}_{in,0}, z^{ex}_{targ,0})\\
+({\color{bgreen}z_{hand_{1}}}, {\color{bgreen}z_{bet_{1}}})\\
 $\vdots$
 \end{matrix}\right\}\)};
 
-\node at (1.5, -4) (probes) {Probes};
-\node at (1.5, -3.2) (D2) {
-%\(z^{prb}_{in}\)};
-\(\left\{
-\begin{matrix}
-z^{prb}_{in,0}\\
-$\vdots$
-\end{matrix}\right\}\)};
+\node[gray, text width=2cm, align=center] at (-3.5, -0.4) {Example network};
+\node[block] at (-3.5, -1.25) (examplenet) {\(\mathcal{E}\)}; 
+\path[arrow] (examples.east) -- ([xshift=-3]examplenet.west);
 
-\node [block] at (-1.5, -1.95) (M) {\(\mathcal{M}\)};
-\path [arrow] ([yshift=-5]D1.north) to (M);
+\node[bpurp, text width=2cm] at (-0.5, -1.25) (examplestaskrep) {\(z_{task}\)}; 
+\path[arrow] ([xshift=3]examplenet.east) -- (examplestaskrep.west);
 
-\node at (-1, -1) (zfunc) {\(z^{func}\)};
-\path [arrow, out=90, in=-135] (M.north) to ([xshift=6,yshift=3]zfunc.south west);
+%% b) performing 
+\draw[boundingbox, draw=gray, fill=white] (0.25, -2.5) rectangle (8, 2.5);
+\node[bpurp] at (1, 1.25) (taskrep) {\(z_{task}\)};
 
-\node[block] at (0, -0.55) (H) {\(\mathcal{H}\)};
-\path [arrow, out=45, in=180] ([yshift=-3]zfunc.north) to (H.west);
+\node[gray, text width=2cm, align=center] at (3, 2.1) {Hyper network};
+\node[block] at (3, 1.25) (hypernet) {\(\mathcal{H}\)}; 
+\path[arrow] (taskrep.east) -- ([xshift=-3]hypernet.west);
 
-\node [block, dashed] at (1.5, -0.55) (F) {\(F_{z^{func}}\)};
-\path[arrow] (H.east) to (F.west);
+\node[text width=0.5cm] at (0.7, -1.25) (inputs) {\includegraphics[width=0.5cm]{2-HoMM/figures/2_of_spades.png}\\\includegraphics[width=0.5cm]{2-HoMM/figures/4_of_hearts.png}};
 
-\path [arrow, dashed] (D2) to (F);
+\node[gray, text width=2cm, align=center] at (1.9, -0.4) {Perception network};
+\node[block] at (1.9, -1.25) (perceptionnet) {\(\mathcal{P}\)}; 
+\path[arrow] (inputs.east) -- ([xshift=-3]perceptionnet.west);
 
-\node at (1.5, 1) (outputs) {
-%\(z^{pred}_{out}\)};
-\(\left\{
-\begin{matrix}
-z^{pred}_{out,0},\\
-$\vdots$
-\end{matrix}\right\}\)};
-\node at (1.5, 1.75) (predictions) {Predictions};
+\node[bgreen] at (3.2, -1.25) (handrep) {\(z_{hand}\)};
+\path[arrow] ([xshift=3]perceptionnet.east) -- (handrep.west);
 
-\path [arrow, dashed] (F) to ([yshift=3]outputs.south);
-
-\node at (-1.5, 1.75) (probetargs) {Probe targets};
-\node at (-1.5, 1) (D2targs) {
-%\(z^{prb}_{in}\)};
-\(\left\{
-\begin{matrix}
-z^{prb}_{targ,0}\\
-$\vdots$
-\end{matrix}\right\}\)};
-
-\node [align=center, text width=1.25 cm] at (0, 2.25) (dispatch) {\baselineskip=12pt Loss\par};
-
-\path [arrow, dashed, out=180, in=-90] ([xshift=3]outputs.west) to (dispatch.south);
-
-\path [arrow, dashed, out=0, in=-90] ([xshift=-3.5]D2targs.east) to (dispatch.south);
-
-%% meta mapping
-\begin{scope}[shift={(6.4, 1.5)}]
-\draw[boundingbox, draw=bpurp, fill=white] (-3, -4.3) rectangle (2.6, 3.2);
-\node[bpurp] at (-1.6, 2.9) {(b) Meta-mapping};
-\node at (-1.5, -4) (metaexamples) {Examples};
-\node at (-1.5, -3.2) (metaD1) {
-\(\left\{
-\begin{matrix}
-(z^{func}_{in,0}, z^{func}_{targ,0})\\
-$\vdots$
-\end{matrix}\right\}\)};
-
-\node at (1.5, -4) (metaprobes) {Probes};
-\node at (1.5, -3.2) (metaD2) {
-%\(z^{prb}_{in}\)};
-\(\left\{
-\begin{matrix}
-z^{func,prb}_{in,0}\\
-$\vdots$
-\end{matrix}\right\}\)};
-
-\node [block] at (-1.5, -1.95) (metaM) {\(\mathcal{M}\)};
-\path [arrow] ([yshift=-5]metaD1.north) to (metaM);
-
-\node at (-1, -1) (metazfunc) {\(z^{meta}\)};
-\path [arrow, out=90, in=-135] (metaM.north) to ([xshift=6,yshift=3]metazfunc.south west);
-
-\node[block] at (0, -0.55) (metaH) {\(\mathcal{H}\)};
-\path [arrow, out=45, in=180] ([yshift=-3]metazfunc.north) to (metaH.west);
-
-\node [block, dashed] at (1.5, -0.55) (metaF) {\(F_{z^{meta}}\)};
-\path[arrow] (metaH.east) to (metaF.west);
-
-\path [arrow, dashed] (metaD2) to (metaF);
-
-\node at (1.5, 1) (metaoutputs) {
-%\(z^{pred}_{out}\)};
-\(\left\{
-\begin{matrix}
-z^{func,pred}_{out,0},\\
-$\vdots$
-\end{matrix}\right\}\)};
-\node at (1.5, 1.75) (metapredictions) {Predictions};
-
-\path [arrow, dashed] (metaF) to ([yshift=3]metaoutputs.south);
-
-\node at (-1.5, 1.75) (metaprobetargs) {Probe targets};
-\node at (-1.5, 1) (metaD2targs) {
-%\(z^{prb}_{in}\)};
-\(\left\{
-\begin{matrix}
-z^{func,prb}_{targ,0}\\
-$\vdots$
-\end{matrix}\right\}\)};
-
-\node [align=center] at (0, 2.25) (metadispatch) {Loss (train)};
-
-\path [arrow, dashed, out=180, in=-90] ([xshift=3]metaoutputs.west) to (metadispatch.south);
-
-\path [arrow, dashed, out=0, in=-90] ([xshift=1]metaD2targs.east) to (metadispatch.south);
+\node[bblue, block, dashed] at (4.5, -1.25) (tasknet) {\(\mathcal{T}\)}; 
+\node[bblue, text width=2cm, align=center] at (4.5, -2) {Task network};
+\path[arrow] (handrep.east) -- ([xshift=-3]tasknet.west);
+\path[arrow, out=0, in=90] ([xshift=3]hypernet.east) to ([yshift=3]tasknet.north);
 
 
-\end{scope}
-\path [arrow, very thick, draw=bpurp, dotted, out=-40, in=-140] ([xshift=-1, yshift=3]zfunc.south) to ([xshift=19, yshift=3]metaD1.west);
+\node[bgreen] at (5.65, -1.25) (betrep) {\(z_{bet}\)};
+\path[arrow] ([xshift=3]tasknet.east) -- (betrep.west);
 
-%% evaluating meta mapping
-\begin{scope}[shift={(11.8, 0)}]
-\draw[boundingbox, draw=bblue, fill=white] (-2.25, -4.3) rectangle (2.5, 3.2);
-\node[bblue] at (-0.1, 2.9) {(c) Meta-mapping evaluation};
+\node[gray, text width=2cm, align=center] at (6.8, -0.4) {Action network};
+\node[block] at (6.8, -1.25) (actionnet) {\(\mathcal{A}\)}; 
+\path[arrow] (betrep.east) -- ([xshift=-3]actionnet.west);
 
-\node at (1.5, -4) (metaevalprobes) {Probes};
-\node at (1.5, -3.2) (metaevalD2) {
-%\(z^{prb}_{in}\)};
-\(\left\{
-\begin{matrix}
-z^{prb}_{in,0}\\
-$\vdots$
-\end{matrix}\right\}\)};
+\node at (7.7, -1.25) (output) {\bf \$};
+\path[arrow] ([xshift=3]actionnet.east) -- (output.west);
 
-\node at (-1, -1) (metaevalzfunc) {\(z^{func,pred}\)};
-
-\node[block] at (0, -0.55) (metaevalH) {\(\mathcal{H}\)};
-\path [arrow, out=45, in=180] ([yshift=-3]metaevalzfunc.north) to (metaevalH.west);
-
-\node [block, dashed] at (1.5, -0.55) (metaevalF) {\(F_{z^{func,pred}}\)};
-\path[arrow] (metaevalH.east) to (metaevalF.west);
-
-\path [arrow, dashed] (metaevalD2) to (metaevalF);
-
-\node at (1.5, 1) (metaevaloutputs) {
-%\(z^{pred}_{out}\)};
-\(\left\{
-\begin{matrix}
-z^{pred}_{out,0},\\
-$\vdots$
-\end{matrix}\right\}\)};
-\node at (1.5, 1.75) (metaevalpredictions) {Predictions};
-
-\path [arrow, dashed] (metaevalF) to ([yshift=3]metaevaloutputs.south);
-
-\node at (-1, 1.75) (metaevalprobetargs) {Probe targets};
-\node at (-1, 1) (metaevalD2targs) {
-%\(z^{prb}_{in}\)};
-\(\left\{
-\begin{matrix}
-z^{prb}_{targ,0}\\
-$\vdots$
-\end{matrix}\right\}\)};
-
-\node [align=center] at (0.3, 2.25) (metaevaldispatch) {Loss (eval)};
-
-\path [arrow, dashed, out=180, in=-90] ([xshift=3]metaevaloutputs.west) to (metaevaldispatch.south);
-
-\path [arrow, dashed, out=0, in=-90] ([xshift=-0.5]metaevalD2targs.east) to (metaevaldispatch.south);
-\end{scope}
-\path [arrow, very thick, draw=bblue, dotted, out=-30, in=160] (metaoutputs.center) to ([xshift=5, yshift=-5]metaevalzfunc.north west);
 \end{tikzpicture}
-\caption{The HoMM architecture allows for transformations at different levels of abstraction. (a) For basic meta-learning a dataset consisting of (input embedding, output embedding) tuples is processed by the meta-network \(\mathcal{M}\) to produce a function embedding \(z^{func}\), which is processed by the hyper network \(\mathcal{H}\) to parameterize a function \(F_{z^{func}}\), which attempts to compute the transformation on probe inputs (used to encourage the system to generalize). However, our approach goes beyond basic meta-learning. The function embedding \(z^{func}\) can then be seen as a single input or output at the next level of abstraction, when the same networks \(\mathcal{M}\) and \(\mathcal{H}\) are used to transform function embeddings based on examples of a meta-mapping (b). To evaluate meta-mapping performance, a probe embedding of a held-out function is transformed by the architecture to yield a predicted embedding for the transformed task. The performance of this predicted embedding is evaluated by moving back down a level of abstraction and evaluating on the actual target task (c). Because the function embedding is predicted by a transformation rather than from examples, new tasks can be performed zero-shot. (\(M\) and \(H\) are learnable deep networks, and $F_{z}$ is a deep network parameterized by $\mathcal{H}$ conditioned on function embedding \(z\). Input and output encoders/decoders are omitted for simplicity. See the text and Appendix \ref{app_model_details} for details.)} \label{architecture_inference_fig}
-\end{figure}
-\looseness=-1
-More formally, we treat functions and data as entities of the same type. From this perspective, the data points that one function receives can themselves be functions\footnote{Indeed, any data point can be represented as a constant function that outputs the data point.}. The key insight is that then our architecture can transform data points\footnote{Where ``data'' is a quite flexible term. The approach is agnostic to whether the learning is supervised or reinforcement learning, whether inputs are images or natural language, etc.} to perform basic tasks (as is standard in machine learning), but it can also transform these task functions to adapt to new tasks. This is related to the concepts of homoiconicity, defined above, and higher-order functions. Under this perspective, basic tasks and meta-mappings from task to task are really the same type of problem. The functions at one level of abstraction (the basic tasks) become inputs and outputs for higher-level functions at the next level of abstraction (meta-mapping between tasks). \par
-Specifically, we embed each input, target, or mapping into a shared representational space $Z$. This means that single data points are embedded in the same space as the representation of a function or an entire dataset. Inputs are embedded by a deep network $\mathcal{I}: \text{input} \rightarrow Z$. Model outputs are decoded from $Z$ by $\mathcal{O}: Z \rightarrow \text{output}$. Target outputs are encoded by $\mathcal{T}: \text{targets} \rightarrow Z$.\par
-Given this, the task of mapping inputs to outputs can be framed as trying to find a transformation of the representational space that takes the (embedded) inputs from the training set to embeddings that will decode to the target outputs. These transformations are performed by a system with the following components (see Fig. \ref{architecture_inference_fig}): $\mathcal{M}: \{(Z, Z), ...\} \rightarrow Z $ -- the meta network, which collapses a dataset of (input embedding, target embedding) pairs to produce a single function embedding. $\mathcal{H}: Z \rightarrow \text{parameters}$ -- the hyper network, which maps a function embedding to parameters. $F: Z \rightarrow Z$ -- the transformation, implemented by a deep network parameterized by $\mathcal{H}$. \par
-%\vspace{-0.5em}
-\paragraph{Basic meta-learning:} To perform a basic task, input and target encoders ($\mathcal{I}$ and $\mathcal{T}$) are used to embed individual pairs from an example dataset \(D_1\), to form a dataset of example (input, output) tuples (Fig. \ref{architecture_inference_fig}a). These examples are fed to $\mathcal{M}$, which produces a function embedding (via a deep neural network, with several layers of parallel processing across examples, followed by an element-wise max across examples, and several more layers). This function embedding is mapped through the hyper network $\mathcal{H}$ to parameterize $F$, and then $F$ is used to process a dataset of embedded probe inputs, and $\mathcal{O}$ to map the resultant embeddings to outputs. This system can be trained end-to-end on target outputs for the probes. Having two distinct datasets forces generalization at the meta-learning level, in exactly the same way as standard meta-learning algorithms learn to generalize. \par
-More explicitly, suppose we have a dataset of example input, target pairs ($D_1 = \{(x_0, y_0), ...\}$), and some input $x$ from a probe dataset $D_2$. The system would predict a corresponding output $\hat{y}$ as:
-\[\hat{y} = \mathcal{O}\left(F_{z^{func}}\left(\mathcal{I} \left(x\right)\right) \right)\]
-where $F_{z^{func}}$ is the meta-learner's representation for the function underlying the examples in $D_1$:
-\[F_{z^{func}} \text{ is parameterized by } \mathcal{H}\left(z^{func}\right), \text{ where } z^{func} = \mathcal{M}\left( \left\{\left(\mathcal{I}\left(x_0\right), \mathcal{T}\left(y_0\right) \right), ... \right\}\right)\]
-Then, given some loss function $\mathfrak{L}(y, \hat{y})$ defined on a single target output $y$ and an actual model output $\hat{y}$, we define our total loss computed on the probe dataset $D_2$ as:
-\[\mathbb{E}_{(x, y)\in {D}_2} \left[ \mathfrak{L}\left(y, \mathcal{O}\left(F_{D_1}\left(\mathcal{I} \left(x\right)\right) \right)\right)\right]\]
-The system can then be trained end-to-end on this loss to adjust the weights of \(\mathcal{T,H,M,O}\), and \(\mathcal{I}\). That is, the meta-learning training procedure optimizes the system for generalizing the function implied by the examples it sees, in order to respond appropriately to probe inputs. As in training a standard meta-learning model, these probes are held-out from the meta-network, but the labels are still used to encourage the system to meta-learn to respond appropriately to new inputs. Other data points are held-out entirely during training, and only used for evaluation, see Appendix \ref{app_clarifying_holdouts} for some detailed description. See Appendix \ref{app_model_details} for further details on the architecture and hyper-parameters. \par
-%\vspace{-0.25em}
-\paragraph{Meta-mapping:} The fundamental insight of our paper is to show how basic tasks and meta-mappings can be treated homogenously, by allowing the network to transform its task representations like data (see Fig. \ref{architecture_inference_fig}b,c). That is, we propose to transform a prior task representation in order to perform a related new task zero-shot. The relationship by which the prior task embedding should be transformed to perform the new task is specified by example tuples of (input, output) task embeddings. This is precisely analogous to how a basic task is specified in terms of (input, output) embeddings of data points, except that the embeddings now represent tasks that are being transformed, rather than individual data points. \par
-Thus from the perspective of our architecture, learning a meta-mapping between tasks is exactly analogous to learning a basic task. Anything that is embedded in $Z$ can be transformed using the same system. Because tasks are embedded in $Z$ for basic meta-learning, this allows for meta-mappings using exactly the same $\mathcal{M}$ and $\mathcal{H}$ that we use for basic tasks. Just as we would take a set of paired embeddings of data points for a basic task, and use them to compute a function embedding for that task, we can take a set of paired function embeddings representing a meta-mapping, and use them to create an embedding for that meta-mapping. We can then use this meta-mapping embedding to transform the embedding of another basic task. We can thus behave zero-shot on a novel task based on its relationship to a prior task. \par
-For example, suppose we have an embedding $z_{game1} \in Z$ for the task of playing some game, and we want to switch to trying to lose this game. We can generate a meta-mapping embedding $z_{\text{meta}} \in Z$ from examples of embeddings generated by the system when it is trying to win and lose various other games: $z_{\text{meta}} = \mathcal{M}\left( \left\{\left((z_{game2},z_{game2,lose}\right), ... \right\}\right)$. We can generate a new task embedding $\hat{z}_{game1,lose} \in Z$:
-\[\hat{z}_{game1,lose} = F_{z_{\text{meta}}}(z_{game1}) \qquad \text{where } F_{z_{\text{meta}}} \text{ is parameterized by } \mathcal{H}\left(z_{\text{meta}}\right)\]
-\looseness=-1
-This $\hat{z}_{games1,lose}$ can be interpreted as the system's guess at a losing strategy for game 1. To train a meta-mapping, we minimize the $\ell_2$ loss in the latent space betwen this guessed embedding and the embedding of the target task\footnote{The gradients do not update the example function embeddings, only the weights of \(\mathcal{M}\) and \(\mathcal{H}\), due to memory contraints. Allowing this might be useful in more complex applications.}. Whether or not we have such a target embedding, we can evaluate how well the system loses with this $\hat{z}_{game1,lose}$ strategy, by stepping back down a level of abstraction and actually having it play the game via this embedding (Fig. \ref{architecture_inference_fig}c). This is how we evaluate meta-mapping performance -- evaluating the loss of transformed task embeddings on the respective target tasks. Note that this allows for zero-shot performance of the new task, because it simply requires transforming a prior task embedding. \par
-Alternatively, we could map from language to a meta-mapping embedding, rather than inducing it from examples of the meta-mapping. This corresponds to the human ability to change behavior in response to instructions. The key feature of our architecture -- the fact that tasks, data, and language are all embedded in a shared space -- allows for substantial flexibility within a unified framework. Furthermore, our approach is parsimonious. Because it uses the same meta-learner for both basic tasks and meta-mappings, this increased flexibility does not require any added parameters.\footnote{At least in principle, in practice of course increasing network size might be more beneficial for HoMM architectures performing meta-mappings as well as basic tasks, compared to those performing only basic tasks.}
-
-\section{Learning multivariate polynomials} \label{sec_poly}
-%\vspace{-0.8em}
-\begin{figure}[t]
-\centering
-\begin{subfigure}[t]{0.5\textwidth}
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/basic_results.png}
-\caption{The polynomials domain, Section \ref{sec_poly}.}
-\label{poly_basic_results}
-\end{subfigure}%
-\begin{subfigure}[t]{0.5\textwidth}
-\includegraphics[width=\textwidth]{2-HoMM/figures/basic_meta_learning.png}
-\caption{The cards domain, Section \ref{sec_cards}.}
-\label{cards_basic_results}
-\end{subfigure}%
-\caption{The HoMM system succeeds at basic meta-learning, which is a necessary prerequisite for meta-mappings. (\subref{poly_basic_results}) The polynomials domain, Section \ref{sec_poly}. The system successfully generalizes to held out polynomials. The solid line indicates optimal performance; the dashed line indicates untrained model performance. (\subref{cards_basic_results}) The card games domain, Section \ref{sec_cards}. The system successfully generalizes to held out games, both when trained on a random sample of half the tasks, or when a targeted subset is held out. The gray dashed line indicates chance performance (otuputting the mean across all polynomials, or playing randomly), while the solid lines are optimal performance. The orange dashed lines shows performance on held-out tasks of playing the strategy from the most correlated trained task. The system generally exceeds this difficult baseline, thus showing deeper generalization than just memorizing strategies and picking the closest. Error-bars are bootstrap 95\%-CIs, numerical values for plots can be found in Appendix \ref{app_numerical_results}.}
-%\vspace{-0.5em}
-\end{figure}
-
-\begin{figure}[t]
-\centering
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_results.png}
-\caption{The polynomials domain, Section \ref{sec_poly}.}
-\label{poly_meta_map_results_examples}
+\caption{Constructing a task representation.}\label{fig:HoMM_architecture:constructing_basic}
 \end{subfigure}%
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=\textwidth]{2-HoMM/figures/meta_mapping.png}
-\caption{The cards domain, Section \ref{sec_cards}.}
-\label{cards_meta_map_results_examples}
-\end{subfigure}%
-\caption{The HoMM architecture performs tasks zero-shot by meta-mappings. (\subref{poly_meta_map_results_examples}) The system generalizes to apply learned meta-mappings to new polynomials, and even to apply unseen meta-mappings. The plots show the loss produced when evaluating the mapped embedding on the target task. For example, if the initial polynomial is $p(x) = x + 1$, and the meta-task is ``square,'' the loss would be evaluated by transforming the embedding of $p(x)$ and evaluating how well the mapped embedding regresses on to $p(x)^2 = x^2 + 2x + 1$. The results show that the system succeeds at applying meta-mappings it is trained on to held-out polynomials, as well as applying held-out meta-mappings to either trained or held-out polynomials. The solid line indicates optimal performance; the dashed line is untrained model performance.
-(\subref{cards_meta_map_results_examples}) The system generalizes to meta-mapping new tasks in the cards domain. The system is trained to do the meta-mappings shown here on a subset of its basic tasks, and is able to generalize these mappings to perform novel tasks zero-shot. For example, for the ``losers'' mapping, the sytem is trained to map games to their losers variants. When given a held-out game, it is able to apply the mapping to guess how to play the losing variation. This plot shows the reward produced by taking the mapped embedding and playing the targeted game. The gray dashed line indicates random performance, while the colored dashed lines indicate performance if the system did not alter its behavior in response to the meta-mapping. The system generally exceeds these baselines, although the switch-suits baseline is more difficult with the targeted holdout.
-Error-bars are bootstrap 95\%-CIs.}
-\label{meta_map_results}
-\end{figure}
-
-As a proof of concept, we first evaluated the system on the task of learning polynomials of degree $\leq 2$ in 4 variables (i.e. the task was to regress functions of the form $p: \mathbb{R}^4 \rightarrow \mathbb{R}$ where $p \in \mathcal{P}_2 \left(\mathbb{R}\right)$, though the model was given no prior inductive bias toward polynomial forms). For example, if $p(w,x,y,z) = x$, the model might see examples like $(-1,1,1,1; 1)$ and $(0.7, 2.1, 1.3, -4; 2.1)$, and be evaluated on its output for points like $(-1, -1.3, 0.5, 0.3)$. This yields an infinite family of base-level tasks (the vector space of all such polynomials), as well as many families of meta-mappings over tasks (for example, multiplying polynomials by a constant, squaring them, or permuting their input variables). This allows us to not only examine the ability of the system to learn to learn polynomials from data, but also to adapt its learned representations in accordance with these meta-tasks. Details of the architecture and training can be found in Appendix \ref{app_detailed_methods}.\par
-%\vspace{-0.7em}
-\paragraph{Basic meta-learning:} First, we show that the system is able to achieve the basic goal of learning a held-out polynomial from a few data points in Fig. \ref{poly_basic_results} (with good sample-efficiency, see Supp. Fig. \ref{supp_poly_sweep_results}). \par
-%\vspace{-0.7em}
-\paragraph{Zero-shot adaptation by meta-mapping (task $\rightarrow$ task):} Furthermore, the system is able to perform meta-mappings over polynomials in order to flexibly reconfigure its behavior (Fig. \ref{poly_meta_map_results_examples}). We train the system to perform a variety of mappings, for example switch the first two inputs of the polynomial, add 3 to the polynomial, or square the polynomial. We then test its ability to generalize to held-out mappings from examples, for example a held-out input permutation, or an unseen additive shift. The system is both able to apply learned meta-mappings to held-out polynomials, and to apply held-out meta-mappings it has not been trained on, simply by seeing examples of the mapping. \par
-
-\section{A stochastic learning setting: simple card games}\label{sec_cards}
-%\vspace{-0.5em} % section
-We next explored the setting of simple card games, where the agent is dealt a hand and must bet. There are three possible bets (including ``don't bet''), and depending on the opponent's hand the agent either wins or loses the amount bet. This task doesn't require long term planning, but does incorporate some aspects of reinforcement learning, namely stochastic feedback on only the action chosen. We considered five games that are simplified analogs of various real card games (see Appendix \ref{meth_data_cards}). We also considered several binary options that could be applied to the games, including trying to lose instead of trying to win, or switching which suit was more valuable. These are challenging manipulations, for instance trying to lose requires completely inverting a learned $Q$-function. \par
-%% Can cut The hand is explicitly ..., maybe some other stuff
-In order to adapt the HoMM architecture, we made a very simple change. Instead of providing the system with (input, target) tuples to embed, we provided it with (state, action, reward) tuples, and trained it to predict rewards for each bet in each state. (A full RL framework is not strictly necessary here because there is no temporal aspect to the tasks; however, because the outcome is only observed for the action you take, it is not a standard supervised task.) The hand is explicitly provided to the network for each example, but which game is being played is implicitly captured in the training examples, without any explicit cues. That is, the system must learn to play directly from seeing a set of (state, action, reward) tuples which implicitly capture the structure and stochasticity of the game. We also trained the system to make meta-mappings, for example switching from trying to win a game to trying to lose. Details of the architecture and training can be found in Appendix \ref{app_detailed_methods}. \par
-%\vspace{-1em}
-\paragraph{Basic meta-learning:} First, we show that the system is able to play a held-out game from examples in Fig. \ref{cards_basic_results}. We compare two different hold-out sets: 1) train on half the tasks at random, or 2) specifically hold out all the ``losers'' variations of the ``straight flush'' game. In either of these cases, the meta-learning system achieves well above chance performance (0) at the held out tasks, although it is slightly worse at generalizing to the targeted hold out, despite having more training tasks in that case. Note that the sample complexity in terms of number of trained tasks is not that high, even training on 20 randomly selected tasks leads to good generalization to the held-out tasks. Furthermore, the task embeddings generated by the system are semantically organized, see Appendix \ref{app_cards_tsne}. \par
-%\vspace{-0.7em}
-\paragraph{Zero-shot adaptation by meta-mapping (task $\rightarrow$ task):} Furthermore, the system is able to perform meta-mappings (mappings over tasks) in order to flexibly reconfigure its behavior. For example, if the system is trained to map games to their losers variations, it can generalize this mapping to a game it has not been trained to map, even if the source or target of that mapping is held out from training. In Fig. \ref{cards_meta_map_results_examples} we demonstrate this by taking the mapped embedding and evaluating the reward received by playing the targeted game with it. This task is more difficult than simply learning to play a held out game from examples, because the system will actually receive no examples of the target game (when it is held out). Furthermore, in the case of the losers mapping, leaving the strategy unchanged would produce a large negative reward, and chance performance would produce 0 reward, so the results are quite good. \par
-%\vspace{-0.5em}
-\section{An extension via language}
-%\vspace{-0.5em} % section
-\begin{figure}
-\centering
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/language_meta_results.png}
-\caption{The polynomials domain.}
-\label{poly_meta_map_results_language}
-\end{subfigure}%
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=\textwidth]{2-HoMM/figures/language_meta_mapping.png}
-\caption{The cards domain.}
-\label{cards_meta_map_results_language}
+\caption{Performing a task from its representation.}\label{fig:HoMM_architecture:performing_basic}
 \end{subfigure}
-\caption{The HoMM system can perform meta-mappings from language cues rather than meta-mapping examples. Compare to Fig. \ref{meta_map_results}, which shows the same results when using examples instead of language. (\subref{poly_meta_map_results_language}) In the polynomials domain, language cues still lead to good performance, even on held-out tasks or held-out meta-mappings, although examples perform slightly better (Fig. \ref{poly_meta_map_results_examples}). (\subref{cards_meta_map_results_language}) Similarly, in the cards domain, language cues perform well. Error-bars are bootstrap 95\%-CIs.}
-\label{language_meta_map_results}
-\end{figure}
-Language is fundamental to human flexibility. Often the examples of the meta-mapping are implicit in prior knowledge about the world that is cued by language. For example, ``try to lose at go'' does not give explicit examples of the ``lose'' meta-mapping, but rather relies on prior knowledge of what losing means. This is a much more efficient way to cue a known meta-mapping. In order to replicate this, we trained the HoMM system with both meta-mappings based on examples, and meta-mappings based on language. In the language-based meta-mappings, a language input identifying the meta-mapping (but not the basic task to apply it to) is encoded by a language encoder, and then provided as the input to $\mathcal{H}$ (instead of an output from $\mathcal{M}$). The meta-mapping then proceeds as normal --- $\mathcal{H}$ parameterizes $F$, which is used to transform the embedding of the input task to produce an embedding for the target. \par
-This language-cued meta-mapping approach also yields good performance (Fig. \ref{language_meta_map_results}). However, examples of the meta-mapping are slightly better, especially for meta-mappings not seen during training, presumably because examples provide a richer description. In the next section we show that using language to specify a meta-mapping performs better than using language to directly specify the target task. \par
+\begin{tikzpicture}[auto]
+%% a) constructing
+\draw[boundingbox, draw=gray, fill=white] (-8, -2.5) rectangle (-0.25, 2.5);
 
-\subsection{Why meta-map from tasks to tasks?} \label{why_meta_mapping}
-Why are meta-mappings between tasks useful? To answer this, we consider various ways of adapting to a new task in Figure \ref{fig_why_meta_mapping} (based on results from the cards domain, Section \ref{sec_cards}). The standard meta-learning approach would be to adapt from seeing examples of the new task, but this requires going out and collecting data, which may be expensive and does not allow zero-shot adaptation. Alternatively, the system could perform the new task via a meta-mapping from a prior learned task, where the meta-mapping is either induced from examples of the meta-mapping, or from language. Finally, the system could perform a new task from language alone, if it is trained to map instructions to tasks. This is the more typical zero-shot paradigm \citep[e.g.][]{Romera-Paredes2015}. \par
-To address this latter possibility, we trained a version of the model where we included training the language system to produce embeddings for the basic tasks (while simultaneously training the system on all the other objectives, such as performing the tasks from examples, in order to provide the strongest possible structuring of the system's knowledge for the strongest possible comparison). We compare this model's performance at held-out tasks to that of systems learning from examples of the new task directly, or from meta-mapping, see Fig. \ref{fig_why_meta_mapping}. \par
-These results demonstrate the advantage of meta-mapping. While learning from examples is still better given enough data, it requires potentially-expensive data collection and does not allow zero-shot adaptation. Performing the new task from a language description alone uses only the implicit knowledge in the model's weights, and likely because of this it does not generalize well to the difficult held-out tasks. Meta-mapping performs substantially better, while relying only on cached prior knowledge, viz. prior task-embedding(s) and a description of the meta-mapping (either in the form of examples or natural language). That is, meta-mapping allows zero-shot adaptation, like performing from language alone, but results in much better performance than language alone, by leveraging a richer description of the new task constructed using the system's knowledge of a prior task and the new task's relationship to it.\par
+%% from language
+\node[gray] at (-6, 2.1) {Instructions};
+\node at (-6, 1.25) (language) {``Try to lose.''};
+
+\node[gray, text width=2cm, align=center] at (-3, 2.1) {Language network};
+\node[block] at (-3, 1.25) (languagenet) {\(\mathcal{L}\)}; 
+\path[arrow] (language.east) -- ([xshift=-3]languagenet.west);
+
+\node[borange, text width=2cm] at (-0.5, 1.25) (languagetaskrep) {\(z_{meta}\)}; 
+\path[arrow] ([xshift=3]languagenet.east) -- (languagetaskrep.west);
+
+
+%% from examples
+
+\node[gray, text width=3.5cm, align=center] at (-6, -0.2) {Mapping examples (input/output tasks)};
+\node at (-6, -1.25) (examples) {
+\(\left\{
+\begin{matrix}
+({\color{bpurp}z_{chess}}, {\color{bpurp}z_{lose chess}})\\
+$\vdots$
+\end{matrix}\right\}\)};
+
+\node[gray, text width=2cm, align=center] at (-3, -0.4) {Example network};
+\node[block] at (-3, -1.25) (examplenet) {\(\mathcal{E}\)}; 
+\path[arrow] (examples.east) -- ([xshift=-3]examplenet.west);
+
+\node[borange, text width=2cm] at (-0.5, -1.25) (examplestaskrep) {\(z_{meta}\)}; 
+\path[arrow] ([xshift=3]examplenet.east) -- (examplestaskrep.west);
+
+%% b) performing 
+\draw[boundingbox, draw=gray, fill=white] (0.25, -2.5) rectangle (8, 2.5);
+\node[borange] at (1, 1.25) (taskrep) {\(z_{meta}\)};
+
+\node[gray, text width=2cm, align=center] at (3, 2.1) {Hyper network};
+\node[block] at (3, 1.25) (hypernet) {\(\mathcal{H}\)}; 
+\path[arrow] (taskrep.east) -- ([xshift=-3]hypernet.west);
+
+\node[bpurp] at (2.66, -1.25) (handrep) {\(z_{poker}\)};
+
+\node[bblue, block, dashed] at (4.5, -1.25) (tasknet) {\(\mathcal{T}\)}; 
+\node[bblue, text width=2cm, align=center] at (4.5, -2) {Task network};
+\path[arrow] (handrep.east) -- ([xshift=-3]tasknet.west);
+\path[arrow, out=0, in=90] ([xshift=3]hypernet.east) to ([yshift=3]tasknet.north);
+
+\node[bpurp] at (6.5, -1.25) (output) {\(z_{lose poker}\)};
+\path[arrow] ([xshift=3]tasknet.east) -- (output.west);
+
+
+\end{tikzpicture}
+\begin{subfigure}{0.5\textwidth}
+\caption{Constructing a meta-mapping representation.}\label{fig:HoMM_architecture:constructing_meta}
+\end{subfigure}%
+\begin{subfigure}{0.5\textwidth}
+\caption{Transforming a task via a meta-mapping.}\label{fig:HoMM_architecture:performing_meta}
+\end{subfigure}
+\caption[Performing and transforming tasks with the HoMM architecture.]{Performing and transforming tasks with the HoMM architecture.} \label{fig:HoMM_architecture}
+\end{figure}
+
+We propose Homoiconic Meta-Mapping (HoMM) architectures as an implementation of a system that can perform tasks, and adapt to task alterations via meta-mappings. In this section, we describe the architecture and training process.
+
+\textbf{Constructing a task representation (Fig. \ref{fig:HoMM_architecture:constructing_basic}):} When humans perform a task, we need to know what the task is. Similarly, to perform a task, our model requires a task representation. Just like humans, our model supports several different ways of cueing a task, such as instructions, examples of appropriate behavior, or memory of performing the task in the past. Specifically, at different times we either construct a task from natural language, from a dataset of (input, target) tuples for the desired task, or we recall a cached task representation. To construct a task representation from language, we process the language through a deep recurrent network (LSTM). This is similar to techniques used in other work \citep[e.g.]{Hermann2017,Oh2017a,Hill2019a}. To construct a task representation from examples, we process the examples individually to construct appropriate representations for each example, and then aggregate across them by taking an element-wise max. (This provides a nonlinear and dataset-order-invariant way of combining examples --- we found other methods such as averaging performed similarly.) This aggregated representation then receives further processing to produce the task representation. This shares some common elements with other approaches used for meta-learning \citep{Garnelo2018}. 
+
+\textbf{Performing a task from its representation (Fig. \ref{fig:HoMM_architecture:performing_basic}):} Once we have a task representation, we need to use it to perform the task. We assume that a large part of the input processing (perception) and output processing (motor) can be shared across the tasks, so that the task-specific computations can be relatively simple and abstract. This is related to the long-standing notion that deep networks (both artificial and biological) will construct more disentangled representations of the task relevant features in deeper layers \citep{Dicarlo2007, Erhan2010}, and is used in a number of meta-learning approaches \citep[e.g.]{Vinyals2016}. We use a HyperNetwork \citep{Ha2016} which takes as input the task representation, and outputs parameters for a task-specific network. Specifically, the parameters shift the values of learned ``default'' connection weights, to make the network task-sensitive. This task-specific network transforms the perceptual features into output features, which can then be decoded to outputs via the shared output processing network. The whole model (including the construction of the task representations) can be trained end-to-end, just as a standard meta-learning system would be. (There are other possible architectures, we show that our approach outperforms the simple alternative of concatenating a task representation to an input embedding before passing it through a fixed network in supplemental Fig. \ref{supp_fig:HoMM_arch_cond_vs_hyper}.) 
+
+\textbf{Transforming task representations via meta-mappings (Fig. \ref{fig:HoMM_architecture:constructing_meta}-\subref{fig:HoMM_architecture:performing_meta}):} Above, we defined a meta-mapping to be a higher-order task, which takes as input a task representation, and outputs a transformed task representation. Because our model constructs task representations to perform the tasks, all that we need to implement is a way of transforming these representations to perform a meta-mapping. To do so, we exploit the functional analogy between basic-tasks and meta-mappings, noted above. We can infer a representation for a mapping from examples of the meta-mapping, or from a language description, just like we infer a basic task representation from examples or language. We can then use this meta-mapping representation to parameterize a meta-mapping-specific network that can be used to transform other task representations. This is analogous to how we used a basic-task representation to parameterize a network specific to that task, which could then be used to perform the task. 
+
+We exploit this analogy by using exactly the same networks for inferring a meta-mapping representation from examples or language as we do for inferring a task representation. We use exactly the same hyper network to parameterize a meta-mapping-specific network as we use to parameterize the task-specific network. That is, we use precisely the same architecture (and default weights that are modulated by the same hyper network) for both basic task computations and meta-mappings. To do so, we assume that the shared perceptual processing embeds individual data points into a representation space that is shared with that used for task representations and meta-mapping representations. This means that all task- or meta-mapping-specific computations can be seen as operations on objects in the same space, and can be inferred identically regardless of the objects being transformed. This is parsimonious, homoiconic, and reflects aspects of the Global Workspace Theory of consciousness \citep{Baars2005}, see discussion.   
+
+\textbf{Training \& evaluating the model:} To train the system to perform the basic tasks, we can compute a task-appropriate loss at the output of the action network, and then minimize this loss with respect to the parameters in all networks. This includes the networks used to construct the task representation, and even the representations of the examples or language that they receive as input. That is, we train the sytem end-to-end to perform the basic tasks. When constructing a task representation from examples, we do not allow the example network to see every item, in order to force the system to generalize to held-out items, in a standard meta-learning fashion. For example, if the basic task is poker, the system will have to construct a task representation from some hands that will be useful for playing other hands. This ensures that the task representations capture the structure of the task, rather than just memorizing the provided examples. 
+
+To train the system to perform meta-mappings, we try to match the output task representations to those constructed when actually performing those tasks. Specifically, we apply an \(\ell_2\) loss to the difference between the output embedding and the embedding constructed when performing the target task. For example, if the system has been trained to play winning and losing variations of blackjack, we would take the task representation for winning blackjack as input, and try to match the output to the task representation for losing blackjack. Again, when we construct a meta-mapping representation from examples of the mapping, we train it with other examples to force it to generalize. Regardless of how the meta-mapping representation is constructed, we can then test the generalization by passing in the representation for a task like poker, that has never been used for any training on this meta-mapping (either as an example or for generalization). We take the output task representation produced by the meta-mapping, and actually perform the task of losing poker with it. This is how we perform all evaluation of the meta-mapping approach in this paper.
+
+In meta-mapping, generalization is possible at different levels of abstraction. The paragraph above refers to basic generalization --- applying a meta-mapping seen during training to a basic task that meta-mapping has not been applied to during training, in order to perform a held-out basic task zero-shot. However, if the system has experienced sufficiently many meta-mappings during training, we can also test its ability to generalize to held-out meta-mappings. For example, if the system has been trained to switch various pairs of colors in a classification task (red for blue, green for yellow, etc.), it should be able to generalize to switching held-out pairs (red for yellow, green for blue, etc.) from an appropriate cue (examples or instructions). This is an important part of human adaptibility --- we are not only able to adapt tasks via meta-mappings that we understand well, but we can infer and use new meta-mappings based on specific instructions or examples. We will demonstrate this ability in the subset of our experimental domains where we can instantiate sufficiently many meta-mappings. 
+
+\textbf{Comparing to language-based generalization:} Natural language instructions are an important part of how humans are able to generalize to a new task, and prior work on zero-shot performance has often assumed a description of the task as input \citep[e.g.]{Larochelle2008}. For example, a system that has learned to behave in accordance with instructions like ``win at poker,'' ``win at blackjack,'' and ``lose at blackjack,'' should be able to generalize to ``lose at blackjack,'' given sufficiently many training tasks. This, too, does not require data on the novel task. However, transforming the task representation via a meta-mapping may be a more useful inductive bias that allows the system to transform the prior task representation in a targeted way. We thus compare our meta-mapping approach to an approach that simply constructs task representations from language. We show below that meta-mapping results in better performance on the new tasks, especially when the space of tasks is sparsely sampled. That is, in our experiments, meta-mapping generally has better sample-complexity in terms of the number of prior tasks it must have experienced to perform well. This is crucial, because humans have not seen 95\% of the possible task space when they need to generalize to a new setting.
+
+\textbf{Task domains:} The meta-mapping approach is very general. Because the assumptions are simply that the basic tasks are mappings from inputs to outputs, and that meta-mappings transform basic tasks, the approach can be applied to almost any task domain. We demonstrate our method across polynomial regression, card games, visual classification, and reinforcement learning (RL). We are required to make a slight alteration only in how examples are processed in RL, because RL algorithms receive rewards as feedback for a single action they take in each state, rather than receiving a supervisory signal on all outputs. We thus replace the (input, target) examples used to infer a supervised task with (state, (action, reward)) examples, which are the basic currency of RL algorithms. The rest of the approach is identical across tasks, although the network architectures vary depending on the types of input and output (for example, we use CNNs to process the visual input in the visual classification and RL domains). See the suppmental material for full architecture specifications. 
+
+\section{Experiments}
+
+Meta-mapping is an extremely general framework, that can be applied to most paradigms of machine-learning with minor modifications. We demonstrate our results in four settings, ranging from regression to classification to reinforcement learning. We summarize the contributions of the different experiments in Table \ref{table:HoMM_experiment_summary}. 
+
+\begin{table}
+\centering
+\begin{tabular}{|p{2.4cm}|p{2.8cm}ccp{1.8cm}p{1.9cm}|}
+\hline
+\textbf{Experiment} & \textbf{Motivation} & \begin{minipage}[t]{2.7cm}\centering\textbf{Held-out meta-mappings}\end{minipage} & \begin{minipage}[t]{2.2cm}\centering\textbf{Language comparison}\end{minipage} & \textbf{Paradigm} & \textbf{Input}\\[1.3em]
+\hline
+Polynomials & Proof of concept & \checkmark & & Regression & Vector (\(\mathbb{R}^4\))\\[0.5em] 
+Cards & Card games and comparison to humans & & \checkmark & Regression & Several-hot vector\\[0.5em]
+Visual concepts & Cognitive and computer vision relevance & \checkmark & \checkmark & Classification & \(50 \times 50\) RGB image\\[0.5em]
+Reinforcement learning & Cognitive and AI relevance & & \checkmark & RL & \(91 \times 91\) RGB image\\[0.5em]
+
+\hline
+\end{tabular}
+
+\caption{The contributions of our four sets of experiments. Our results span various computational paradigms and various degrees of input complexity, and are motivated by both cognitive and AI relevance.} \label{table:HoMM_experiment_summary}
+\end{table}
+
+\subsection{Polynomial regression}
+\begin{figure}
+\begin{subfigure}[b]{0.5\textwidth}
+\centering
+\begin{tikzpicture}[auto]
+%% Basic
+\node[gray] at (0, 3) {Basic tasks};
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, -0.2);
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, 1.7);
+\node[gray] at (-3.5, 2.45) {Task:};
+\node[align=center] at (-2.2, 2) {\(f(w,x,y,z) = x^2 + 1\)};
+\node[gray] at (-2.4, 1.45) {Input-output pairs:};
+\node[align=center] at (-2.2, 0.5) {%
+    \(\begin{aligned}
+    (0, 0, 0, 0) & \mapsto 1\\[-0.2em] 
+    (1.5, -1, 3.1, 0) & \mapsto 3.25\\[-0.75em] 
+    & \vdots
+    \end{aligned}\)};
+
+\begin{scope}[shift={(4, 0)}]
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, -0.2);
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, 1.7);
+\node[gray] at (-3.5, 2.45) {Task:};
+\node[align=center] at (-2.2, 2) {\(f(w,x,y,z) = 3w + yz\)};
+\node[gray] at (-2.4, 1.45) {Input-output pairs:};
+\node[align=center] at (-2.2, 0.5) {%
+    \(\begin{aligned}
+    (0.5, 0, 1, 2) & \mapsto 3.5\\[-0.2em] 
+    (1, 0.2, -1, 0.5) & \mapsto 2.5\\[-0.75em] 
+    & \vdots
+    \end{aligned}\)};
+\end{scope}
+
+%% meta-mapping
+\node[gray] at (0, -0.5) {Meta-mappings};
+
+\begin{scope}[shift={(0, -3.5)}]
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, -0.2);
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, 1.7);
+\node[gray] at (-2.75, 2.45) {Meta-mapping:};
+\node[align=center] at (-2.8, 2) {Multiply by 3.};
+\node[gray] at (-2.4, 1.45) {Input-output pairs:};
+\node[align=center] at (-2.2, 0.5) {%
+    \(\begin{aligned}
+    x^2 + 1 & \mapsto 3x^2 + 3\\[-0.2em] 
+    3w + yz & \mapsto 9w + 3yz\\[-0.75em] 
+    & \vdots
+    \end{aligned}\)};
+\end{scope}
+
+\begin{scope}[shift={(4, -3.5)}]
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, -0.2);
+\draw[boundingbox, draw=gray, fill=white] (-4, 2.7) rectangle (-0.25, 1.7);
+\node[gray] at (-2.75, 2.45) {Meta-mapping:};
+\node[align=center] at (-2.4, 2) {Permute \((w, z, x, y)\)};
+\node[gray] at (-2.4, 1.45) {Input-output pairs:};
+\node[align=center] at (-2.2, 0.5) {%
+    \(\begin{aligned}
+    x^2 + 1 & \mapsto z^2 + 1\\[-0.2em] 
+    3w + yz & \mapsto 3w + xy\\[-0.75em] 
+    & \vdots
+    \end{aligned}\)};
+\end{scope}
+\end{tikzpicture}
+\caption{Polynomial tasks and meta-mappings}\label{fig:HoMM_polynomials:tasks}
+\end{subfigure}%
+\begin{subfigure}[b]{0.5\textwidth}
+\includegraphics[width=\textwidth]{2-HoMM/figures/polynomials_adaptation.png}
+\caption{Meta-mapping results.}\label{fig:HoMM_polynomials:results}
+\end{subfigure}
+\caption{The polynomial task domain and results. (\subref{fig:HoMM_polynomials:tasks}) A basic polynomial task consists of regressing a single polynomial, i.e. the inputs are points in \(\mathbb{R}^4\) and the outputs are the value of the polynomial at that point. These basic regression tasks can be transformed by various meta-mappings, such as multiplying by a constant, or permuting their variables. (\subref{fig:HoMM_polynomials:results}) Results of applying our HoMM architecture in this setting. We plot zero-shot performance (normalized, see text) on new tasks via meta-mappings. The system not only-generalizes trained meta-mappings to examples it has never seen before (purple), but also generalizes to held-out meta-mappings from examples (orange), and does both substantially better than a baseline model which does not adapt (dotted lines). Thus our approach is able to flexibly adapt to a new polynomial without any data from that polynomial, based on that polynomial's relationship to polynomials it has experienced.}\label{fig:HoMM_polynomials}
+\end{figure}
+As a proof of concept, we first demonstrate the success of our approach in polynomial regression (see Fig. \ref{fig:HoMM_polynomials:tasks}). Specifically, we construct basic tasks that consist of regressing polynomial functions (of degree \(\leq 2\)) in four variables (i.e. from \(\mathbb{R}^4 \rightarrow \mathbb{R}\)). We sampled these polynomials by first uniformly sampling a subset of variables to be included, and then sampling coefficients from \(\mathcal{N}(0, 2.5)\) for the possible monomials. These basic tasks can be inferred from (input, output) tuples, where the input is a point in \(\mathbb{R}^4\) and the output is the evaluation of that polynomial at that point. (We actually restrict the input range to \([-1, 1]\) to avoid testing extreme outlier points.) This is a simple meta-learning regression problem. 
+
+These tasks/polynomials can then be transformed by various meta-mappings --- we considered squaring a polynomial, permuting its variables, or adding or multiplying by a constant. We trained the model on 100 basic polynomials, and we train mapped versions of 60 of these for each meta-mapping. We can evaluate the performance of that meta-mapping on the remaining 40 target tasks (corresponding to the 40 other basic polynomials) that the model has never experienced before. We also held out some of these meta-mappings to evaluate the ability of our method to generalize at the meta-mapping level (see above). For example, we can train the model to adapt to a subset of the input variable permutations, and then evaluate its ability to adapt to a held-out permutation based on examples of that permutation. In total, we trained on 20 meta-mappings, and held-out 16, corresponding to 1300 trained basic tasks, and 800 held-out for evaluation. 
+
+We trained the system in epochs, during which it received one training step on each trained basic task and one training step on each trained meta-mapping, interleaved in a random order. For one step of training on a basic task, we used 1024 evaluations of the polynomial --- we present the model with 50 example evaluations from which to generate a task representation, and make one gradient update that improves the predictions on the remaining evaluations (as well as the example ones). This encourages the model to generate an accurate representation of the polynomial from seeing a (relatively) small set of evaluations. 
+
+For one step of meta-mapping training, we take task representations for each of the 60 basic tasks (and corresponding target tasks) on which the meta-mapping is trained, where each basic task representation is computed from 50 examples as above. We randomly chose half of these (input task, output task) pairs to provide as examples of the meta-mapping from which to generate a representation, and train the system to match the output embeddings from the meta-mapping to the targets for all 60 examples. This encourages the model to generate a representation of the meta-mapping from half the available examples that will generalize to the other half.
+
+To evaluate the system on a trained meta-mapping, we use the 60 trained examples to parameterize the mapping, and evaluate the performance resulting from applying that mapping to the 40 held-out basic tasks. The system never experienced those 40 target tasks during training. Similarly, to evaluate on a held-out meta-mapping, we use 60 (input task, output task) pairs where both the input and target basic tasks were trained, and evaluate on 40 trained input tasks for which the corresponding 40 targets have not been trained. However, in the case of a held-out meta-mapping, the meta-mapping itself is never encountered during training. This ensures that the system is able to infer a new meta-mapping based on examples it has experienced. See the Supplemental Information for futher details on training and evaluation.
+
+In Fig. \ref{fig:HoMM_polynomials:results}, we show the success of our meta-mapping approach in this setting. We plot a normalized performance measure, which is 0\% if the system outputs all zeros for every polynomial, and 100\% if the system performs perfectly. Specifically, we measure performance as \(1 - \text{loss}/c\), where \(c\) is the loss for a baseline model that always outputs zero.\footnote{This measure is closely related to the variance explained, except that the square meta-mapping skews the mean of the output polynomials slightly away from zero.} We also show performance of a model which does not adapt to the new tasks. Our HoMM approach is able to achieve 89.0\% performance (bootstrap 95\%-CI across runs [88.3, 89.8]) on a polynomial it has never experienced during training, based on a trained meta-mapping, and 85.5\% performance (bootstrap 95\% CI [85.1, 85.9]) based on a held-out meta-mapping. By comparison, not adapting would yield only 4.3\% and 19.3\% performance, respectively. That is, our system is able to achieve good performance on a new task without any data, based only on its relationship to prior tasks. It is able to do so much better than a baseline model which does not adapt to the new tasks. 
+
+\subsection{Aside: HoMM \& cogntive control}
 \begin{figure}
 \centering
-\includegraphics[width=0.66\textwidth]{2-HoMM/figures/why_meta_mapping.png}
-\caption{Comparison of a variety of methods for performing one of the 10\% held-out tasks in the more difficult hold-out set in the cards domain. There are a number of ways the system could adapt to a new task: from seeing example of the new task, from hearing the new task described from language alone, or from leveraging its knowledge about prior tasks via meta-mappings (in this case, from the non-losers variations of the same games). The meta-mappings offer a happy medium between the other two alternatives -- they only require cached knowledge of prior tasks, rather than needing to collect experience on the task before a policy can be derived, but they outperform a system that simply tries to construct the task embedding from a description alone. Language alone is not nearly as rich a cue as knowledge of how a new task relates to prior tasks.}
-\label{fig_why_meta_mapping}
+\includegraphics[width=0.5\textwidth]{2-HoMM/figures/stroop_results.png}
+\caption[Measuring the default behavior of the HoMM architecture on a Stroop-like task.]{Measuring the default behavior of the HoMM architecture on a Stroop-like task. We plot the bias of the model towards word or color responses, when given an all-zeros task representation, at different proportions of training on words or colors, and different stages of training. When the model has just mastered the less frequent task, it exhibits a default bias towards the more frequent task. However, later in training, when it has mastered both tasks, it exhibits a paradoxical bias towards the \emph{less} frequent task.} \label{supp_fig:HoMM_cognitive_control}
 \end{figure}
 
-%\vspace{-0.5em}
-\section{Discussion} \label{sec_discussion}
-%\vspace{-0.5em} % section
-\paragraph{Related work:} There has been a variety of past work on zero-shot learning, mostly based on natural-language descriptions of tasks. For example, \citet{Larochelle2008} considered the general problem of behaving in accordance with language instructions as simply asking a model to adapt its response when conditioned on different ``instruction'' inputs. Later work explored zero-shot classification based on only a natural language description of the target class \citep{Socher2013,Romera-Paredes2015,Xian2018}, or of a novel task in a language-conditioned RL system \citep{Hermann2017}. Some of this work has even exploited relationships between tasks as a learning signal \citep{Oh2017a}. Other work has considered how similarity between tasks can be useful for generating representations for a new task \citep{Pal2019}, but without transforming task representations to do so. (Furthermore, similarity is less specific than an input-output mapping, since it does not specify \emph{along which dimensions} two tasks are similar.) To our knowledge none of the prior work has proposed using meta-mapping approaches to adapt to new tasks by transforming task representations, nor has the prior work proposed a parsimonious homoiconic model which can perform these mappings. \par
-Our work is an extrapolation from the rapidly-growing literature on meta-learning \citep[e.g.][]{Vinyals2016, Santoro2016, Finn2017a, Finn2018, Stadie2018, Botvinick2019}. It is also related to the literature on continual learning, or more generally tools for avoiding catastrophic interference based on changes to the architecture \citep[e.g.][]{Fernando2017, Rusu2016}, loss \citep[e.g.][]{Kirkpatrick2016, Zenke2017, Aljundi2019}, or external memory \citep[e.g.][]{Sprechmann2018}. We also connect to a different perspective on continual learning in Appendix \ref{app_continual}. Recent work has also begun to blur the separation between these approaches, for example by meta-learning in an online setting \citep{Finn2019}. Our work is specifically inspired by the algorithms that attempt to have the system learn to adapt to a new task via activations rather than weight updates, either from examples \citep[e.g.][]{Wang2016a, Duan2016}, or a task input \citep[e.g.][]{Borsa2019}. \par
-Our architecture builds directly off of prior work on HyperNetworks \citep{Ha2016} -- networks which parameterize other networks -- and other recent applications thereof, such as guessing parameters for a model to accelerate model search \citep[e.g.][]{Brock2018a, Zhang2019}, and meta-learning \citep[e.g.]{Li2019a, Rusu2019}. In particular, recent work in natural language processing has shown that having contextually generated parameters can allow for zero-shot task performance, assuming that a good representation for the novel task is given \citep{Platanios2017} -- in their work this representation was evident from the factorial structure of translating between many pairs of languages. Our work is also related to the longer history of work on different time-scales of weight adaptation \citep{Hinton1982, Kumaran2016} that has more recently been applied to meta-learning contexts \citep[e.g.][]{Ba2016, Munkhdalai2017, Garnelo2018} and continual learning \citep[e.g.]{Hu2019}. It is more abstractly related to work on learning to propose architectures \citep[e.g.][]{Zoph2016, Cao2019}, and to models that learn to select and compose skills to apply to new tasks \citep[e.g.][]{Andreas, Andreas2016, Tessler2016, Reed2015, Chang2019a}. In particular, some of the work in domains like visual question answering has explicitly explored the idea of building a classifier conditioned on a question \citep{Andreas, Andreasa}, which is related to one of the possible computational paths through our architecture. Work in model-based reinforcement learning has also partly addressed how to transfer knowledge between different reward functions \citep[e.g.][]{Laroche2017}; our approach is more general. Indeed, our insights could be combined with model-based approaches, for example our approach could be used to adapt a task embedding, which would then be used by a learned planning model.\par
-There has also been other recent interest in task (or function) embeddings. Achille et al. \citep{Achille2019} recently proposed computing embeddings for visual tasks from the Fisher information of the parameters in a model partly tuned on the task. They show that this captures some interesting properties of the tasks, including some types of semantic relationships, and can help identify models that can perform well on a task. Rusu and colleagues recently suggested a similar meta-learning framework where latent codes are computed for a task which can be decoded to a distribution over parameters \citep{Rusu2019}. Other recent work has tried to learn representations for skills \citep[e.g.][]{Eysenbach2019} or tasks \citep[e.g.]{Hsu2019} for exploration and representation learning. Our perspective can be seen as a generalization of these that allows for remapping of behavior via meta-tasks. While there have been other approaches to zero-shot task performance, to the best of our knowledge none of the prior work has explored zero-shot performance of a task via meta-mappings. \par
-%\vspace{-1em}
-\paragraph{Future Directions:} We think that the general perspective of considering meta-mappings will yield many fruitful future directions. We hope that our work will inspire more exploration of behavioral adaptation, in areas beyond the simple domains we considered here. To this end, we suggest the creation of meta-learning datasets which include information not only about tasks, but about the relationships between them. For example, reinforcement learning tasks which involve executing instructions \citep[e.g.][]{Hermann2017, Co-Reyes2019} can be usefully interpreted from this perspective. Furthermore, we think our work provides a novel perspective on the types of flexibility that human intelligence exhibits, and thus hope that it may have implications for cognitive science. \par
-We do not necessarily believe that the particular architecture we have suggested is the best architecture for addressing these problems, although it has a number of desirable characteristics. However, the modularization of the architecture makes it easy to modify. (We compare some variations in Appendix \ref{app_lesion_results}.) For example, although we only considered task networks $F$ that are feed-forward and of a fixed depth, this could be replaced with a recurrent architecture to allow more adaptive computation, or even a more complex architecture \citep[e.g.][]{Reed2015, Graves2016}. Our work also opens the possibility of doing unsupervised learning over function representations for further learning, which relates to long-standing ideas in cognitive science about how humans represent knowledge \citep{Clark1993}. \par
-%\vspace{-1em}
-%\paragraph{Conclusions:}
-%\vspace{-0.5em}
-\section{Conclusions}
-%\vspace{-0.5em} % section
-%\looseness=-1
-We've highlighted a new type of flexibility in the form of meta-mapping between tasks. Meta-mapping can produce zero-shot performance on novel tasks, based on their relationship to old tasks. This is a key aspect of human flexibility. The meta-mapping perspective suggests that this flexibility requires representing tasks in a transformable way. To address this, our Homoiconic Meta-Mapping (HoMM) approach explicitly represents tasks by function embeddings, and derives the computation from these embeddings via a HyperNetwork. This allows for our key insight: by embedding tasks and individual data points in a shared latent space, the same meta-learning architecture can be used both to transform data for basic tasks, and to transform task embeddings to adapt to task variations. This approach is parsiomious, because it uses the same networks for basic- and meta-mappings. Perhaps because of this, the requisite meta-task sample complexity is small; we showed generalization to unseen meta-mappings after training on only 20 meta-mappings. That is, we are able to achieve zero-shot performance on a novel task based on a held-out relationship between tasks. Furthermore, the meta-mapping approach yields better task performance than a zero-shot approach based on performing the task based on just a natural language description. This is a step closer to human-level flexibility. \par
-We see our proposal as a logical progression from the fundamental idea of meta-learning -- that there is a continuum between data and tasks. This naturally leads to the idea of manipulating task representations just like we manipulate data. We've shown that this approach yields considerable flexibility, most importantly the meta-mapping ability to adapt zero-shot to a new task. We hope that these results will lead to the development of more powerful and flexible deep-learning models. \par
-\subsubsection*{Acknowledgements}
-We would like to acknowledge Noah Goodman, Surya Ganguli, Katherine Hermann, Erin Bennett, and Arianna Yuan for stimulating questions and suggestions on this project.
+Although it is not the primary focus of this project, the HoMM architecture could be of interest to researchers in cognitive control, even beyond the idea of meta-mapping as adaptation. For example, the task network in our architecture has a default set of bias weights that are modulated by the HyperNetwork. These can be thought of as the ``automatic'' or ``default'' processing habits of the system, whereas the weight alterations the HyperNetwork imposes can be thought of as the exertion of cognitive control to modulate behavior. 
+
+To explore this, we trained our architecture on a very simple stroop task taken from \citet{Cohen1990}. The model receives two sets of two inputs, that can be thought of as corresponding to ``word'' and ``color'' domains. One input in each domain is turned on, representing a color word written in a color. The model's task is to report either the color or the word, depending on context.
+
+The context we give the model is in the form of examples of the task as (input, output) pairs as usual. These are used to construct a task representation, which is then used to modulate the parameters in the task network, via a HyperNetwork. We trained the model repeatedly with different proportions of training on the word task vs. the color task, in order to investigate the default vs. controlled behavior in different training regimes. Specifically, we compared training the model to the point that it barely mastered the less frequent task (when it first achieves 100\% performance and cross-entropy loss \(< 0.3\) on both tasks) to the point that it had mastered both tasks (100\% performance and cross-entropy loss \(<0.01\) on both). We then tested the model's default behavior by giving it an all-zeros task representation, and seeing whether its performance was more aligned with the ``word'' or ``color'' task.
+
+In Fig. \ref{supp_fig:HoMM_cognitive_control}, we show the results. We plot the bias as \(2 \times (\text{word accuracy} - \text{color accuracy})\), which is \(-1\) if the model is responding only to color, 1 if the model is responding perfectly to word, and 0 if it is responding equally to each (or otherwise responding randomly). When the model has just barely mastered the less-frequent task, it exhibits a default bias towards the more frequent task. However, once we train it to full master of both tasks, it exhibits a surprising paradoxical bias towards the task that was mastered more recently. This may relate to observations that switching from a less-practiced task back to a more practiced one is difficult \citep{Monsell2003}, possibly because performing the less-practiced task requires strong suppression of the default behavior. It's possible that in the course of achieving full mastery on the less-practiced task, the more practiced task must be so suppressed that it fades away from being the default. These phenomena provide possible inspiration for future investigations in cognitive control.
+
+For this experiment, we used similar hyperparameters to the polynomials experiments, except we used a much smaller model --- a single-layer task network, a $Z$-dimensionality of 8, and $\mathcal{H}, \mathcal{M}$ had 64 hidden units per layer. We optimized the model via stochastic gradient descent with a learning rate of \(0.01\) to follow more closely the approach taken by Cohen et al., although results are similar with other optimizers.
+
+
+\section{Discussion}\label{sec:HoMM:discussion}
+
+We have proposed meta-mappings as a computational account of the human ability to perform a novel task zero-shot (without any data), based on the relationship between the novel task and prior tasks. We have shown that our Homoiconic Meta-Mapping (HoMM) architecture performs well in a proof-of-concept polynomial regression setting. Here, we will briefly discuss some of the work in machine learning and cognitive science that inspired this project. We will discuss the broader implications of our work and future directions in more detail in Chapter \ref{chapter:conclusions}. 
+
+\subsection{Related work in machine learning}
+As mentioned above, most prior work on zero-shot learning is based on natural-language descriptions of tasks. \citet{Larochelle2008} considered the general problem of behaving in accordance with language instructions as simply asking a model to adapt its response when conditioned on different ``instruction'' inputs. Later work explored zero-shot classification based on only a natural language description of the target class \citep{Socher2013,Romera-Paredes2015,Xian2018}, or of a novel task in a language-conditioned RL system \citep{Hermann2017, Hill2019a}. Some of this work has even exploited relationships between tasks as a learning signal \citep{Oh2017a}. Other work has considered how similarity between tasks can be useful for generating representations for a new task \citep{Pal2019}, but without transforming task representations to do so. Furthermore, similarity is less specific than an input-output mapping, since it does not specify \emph{along which dimensions} two tasks are similar. To my knowledge none of the prior work has proposed using meta-mapping approaches to adapt to new tasks by transforming task representations, nor has the prior work proposed a parsimonious homoiconic model which can perform these mappings.
+
+This work is also related to the rapidly-growing literature on meta-learning \citep[e.g.][]{Vinyals2016, Santoro2016, Finn2017a, Finn2018, Stadie2018, Botvinick2019, Ravichandran2019}. Our architecture builds directly off of prior work on HyperNetworks \citep{Ha2016} and other recent applications thereof  \citep[e.g.][]{Brock2018a, Zhang2019, Li2019a, Rusu2019}. In particular, recent work in natural language processing has shown that having contextually generated parameters can allow for zero-shot task performance, assuming that a good representation for the novel task is given \citep{Platanios2017} -- in their work this representation was evident from the factorial structure of translating between many pairs of languages. Our work is also related to the longer history of work on different time-scales of weight adaptation \citep{Hinton1982, Kumaran2016} that has more recently been applied to meta-learning contexts \citep[e.g.][]{Ba2016, Munkhdalai2017, Garnelo2018} and continual learning \citep[e.g.]{Hu2019}. It is more abstractly related to work on learning to propose architectures \citep[e.g.][]{Zoph2016, Cao2019}, and to models that learn to select and compose skills to apply to new tasks \citep[e.g.][]{Andreas, Andreas2016, Tessler2016, Reed2015, Chang2019a}. In particular, some of the work in domains like visual question answering has explicitly explored the idea of building a classifier conditioned on a question \citep{Andreas, Andreasa}, which is related to our approach in the visual categorization tasks.
+
+Work in model-based reinforcement learning has also partly addressed how to transfer knowledge between different reward functions \citep[e.g.][]{Laroche2017}; the HoMM approach is more general. For example, rather than needing a new reward function to be given, meta-mapping provides a principled way to infer a new reward estimator by transforming a prior one. Meta-mapping could also be used to transform a transition function used in the planning model in response to environmental changes. Our insights could therefore complement model-based approaches, which provides an exciting direction for future work.
+
+There has also been other recent interest in task (or function) embeddings. Achille et al. \citep{Achille2019} recently proposed computing embeddings for visual tasks from the Fisher information of the parameters in a model partly tuned on the task. They show that this captures some interesting properties of the tasks, including some types of semantic relationships, and can help identify models that can perform well on a task. Rusu and colleagues recently suggested a similar meta-learning framework where latent codes are computed for a task which can be decoded to a distribution over parameters \citep{Rusu2019}. Other recent work has tried to learn representations for skills \citep[e.g.][]{Eysenbach2019} or tasks \citep[e.g.]{Hsu2019} for exploration and representation learning.
+
+In summary, our perspective builds on several lines of prior work in machine learning. While there has been substantial prior work on meta-learning, task representation, and there have even been other approaches to zero-shot task performance, to the best of our knowledge none of the prior work has explored zero-shot performance of a task via meta-mappings. We showed experimentally that this approach yields better performance than alternative approaches across a variety of domains, and suggest that it may complement other tools, such as model-based RL.
+
+\subsection{Related work in cognitive science}
+Our model is inspired by several streams of research in cognitive science as well. We will briefly review some of these here, in order to provide some grounding for the rest of the dissertation. However, we will discuss most of these issues in greater detail in Chapter \ref{chapter:conclusions}, when we reflect on the dissertation as a whole.   
+
+A first inspiration is a long line of research has suggested that analogical transfer between structurally isomorphic domains may be a key component of ``what makes us smart'' \citep{Gentner2003}. Analogical transfer has been demonstrated across various cognitive domains \citep[e.g.][]{Bourne1970, Day2011}. Yet there has been relatively little exploration of adaptation without any data on the new task at all. 
+
+This dissertation also touches on the issues of compositionality and systematicity. Some researchers have advocated that cognition must rely on strictly compositional representations in order to exhibit systematic and productive generalization \citep[e.g.][]{Fodor2001,Lake2017}.  We avoided explicitly enforcing compositional task representations in our model, instead allowing those representations to emerge. This has several advantages. First, it requires much less hand-engineering for each application domain (e.g. our model did not need the notion of variables or permutation built into it to generalize to held-out permutation meta-mappings), and second, it may allow for novel decompositions at test time. (See Chapter \ref{chapter:conclusions} for further discussion.) 
+
+Some aspects of the HoMM architecture may also seem reminiscent of the modularity of mind for which Fodor advocated \citep{Fodor1983modularity}, particular the fact that we divided the model into feed-forward input and output systems, with the flexible, task-specific computations in the middle shared across many domains. In fact, we believe that perception and task-processing are mutually constraining and reinforcing, but for simplicity our model does not incorporate all aspects of this. Cognitive modeling always requires some simplification in order to provide a useful description of the system. (Again, see Chapter \ref{chapter:conclusions} for further discussion.)   
+
+Finally, as we showed above, the HoMM architecture and approach may related to areas like cognitive control. Similarly, our shared workspace for data points, tasks, and meta-mappings relates to ideas like the Global Workspace Theory of consciousness. Exploring these connections would be an exciting direction for future work. 
+
+In summary, meta-mapping and the HoMM architecture draw inspiration from many areas of research in cognitive science. I hope that this work will reciprocally provide inspiration to many researchers in this field. In support of this, the subsequent chapters explore our model on a variety of tasks more relevant to human cognition, and make direct comparisons to the adaptation abiilites of humans and language-conditioned models. 
 
