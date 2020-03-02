@@ -2,7 +2,7 @@
 \begin{table}
 \scriptsize
 \centering
-\begin{tabular}{|p{4cm}||c|c|c|c|}
+\begin{tabular}{|p{3cm}||c|c|c|c|}
 \hline
 & Polynomials & Cards & Visual & RL \\\hline
 \hline
@@ -22,7 +22,7 @@ $F$ num. hidden units & \multicolumn{3}{c|}{64} & 128 \\\hline
 $F$ weight normalization \citep{Salimans2016} & \multicolumn{3}{c|}{No} & Yes \\\hline
 $\mathcal{A}$ num. layers & \multicolumn{2}{c|}{1} & 2 & 1 \\\hline
 $\mathcal{A}$ num. hidden units & \multicolumn{2}{c|}{-} & 128 & -  \\\hline
-Nonlinearities & \multicolumn{4}{p{11cm}|}{Leaky ReLU in most places, except no non-linearity at final layer of networks outputting to the latent space $Z$, and (where applicable) sigmoid for classification outputs, and softmax over actions.} \\\hline
+Nonlinearities & \multicolumn{4}{p{11cm}|}{Leaky ReLU most places, except no non-linearity at final layer of networks outputting to $Z$, sigmoid for classification outputs, and softmax over actions.} \\\hline
 Base task loss & $\ell_2$ & $\ell_2$ (masked) & Cross-entropy & $\ell_2$ (masked)\\\hline
 Meta-mapping loss & \multicolumn{4}{c|}{$\ell_2$}\\\hline
 Partially-persistent task embeddings & \multicolumn{3}{c|}{No} & Yes \\\hline
@@ -40,22 +40,22 @@ Num. training epochs & 5000 & \multicolumn{1}{p{2.3cm}|}{100000 (optimally stopp
 Num. runs & 5 & 5 & 10 & 5 \\ \hline
 \hline
 Num. base tasks (training) & \multicolumn{1}{p{2.3cm}|}{1300 ( $= 60 + 60 \times  20 + 40$)} & 36 & Varies & 18 \\\hline
-Num. base tasks (held out for meta-mapping eval) & 800 ($= 40 \times 20$)  & 4 & Varies & 2 \\\hline
+Num. base tasks (held out for MM eval) & 800 ($= 40 \times 20$)  & 4 & Varies & 2 \\\hline
 Num. meta classifications & 6 & 8 & 8 & - \\\hline
-Num. train meta-mappings & 20 & 3 & Varies & 1 \\\hline
-Num. held-out meta-mappings & 16 & 0 & 2 & 0  \\\hline
+Num. train MMs & 20 & 3 & Varies & 1 \\\hline
+Num. held-out MMs & 16 & 0 & 2 & 0  \\\hline
 Base dataset size & 1024 & 1024 & 336 & 64 \\\hline
 Base examples size & 50 & 768 & - & 32 \\\hline
 Meta dataset size (train) & 60 & 36 & Varies & 18 \\\hline
-Meta examples size (train) & \multicolumn{2}{c|}{Half of train dataset} & - & Half of train dataset \\\hline
-Meta examples size (eval) & \multicolumn{2}{c|}{All of train dataset} & - & All of train dataset \\\hline
+Meta examples (train) & \multicolumn{2}{c|}{Half of train dataset} & - & Half of train dataset \\\hline
+Meta examples (eval) & \multicolumn{2}{c|}{All of train dataset} & - & All of train dataset \\\hline
 Base datasets refreshed & \multicolumn{2}{c|}{Every 50 epochs} & Every 20 & Every 1500  \\\hline
 Target network updated & \multicolumn{3}{c|}{-} & Every 10000 epochs  \\\hline
 RL discount & \multicolumn{3}{c|}{-} & 0.85 \\\hline
-RL exploration probability (\(\epsilon\)) & \multicolumn{3}{c|}{-} & \multicolumn{1}{p{2.3cm}|}{Initial: 1., decay: -0.03 when LR decays.}\\\hline
+RL explore prob. (\(\epsilon\)) & \multicolumn{3}{c|}{-} & \multicolumn{1}{p{2.3cm}|}{Initial: 1., decay: -0.03.}\\\hline
 Action softmax inv. temp. (\(\beta\)) & - & 8 & - & 8\\\hline
 \end{tabular}
-\caption{Detailed hyperparameter specification for different experiments. A ``-'' indicates a parameter that does not apply to that experiment. Where only one value is given, it applied to all the experiments discussed. As a reminder: the shared representational space is denoted by $Z$. Input encoder: $\mathcal{I}: \text{input} \rightarrow Z$. Action decoder $\mathcal{A}: Z \rightarrow \text{output}$. Target encoder $\mathcal{T}: \text{targets} \rightarrow Z$. Meta-network $\mathcal{M}: \{(Z, Z), ...\} \rightarrow Z $ -- takes a set of (input embedding, target embedding) pairs and produces a function embedding. Hyper-network $\mathcal{h}: Z \rightarrow \text{parameters}$ -- takes a function embedding and produces a set of parameters. Task network $F: Z \rightarrow Z$ -- the transformation that executes the task mapping, implemented by a deep network with parameters specified by $\mathcal{H}$. Where language was used to cue meta-mappings, it was processed by language encoder: $\mathcal{L}: \text{natural language} \rightarrow Z$. } \label{supp_hyperparameter_table}
+\caption[Detailed hyperparameter specification.]{Detailed hyperparameter specification for different experiments. A ``-'' indicates a parameter that does not apply to that experiment. Where only one value is given, it applied to all the experiments discussed. As a reminder: the shared representational space is denoted by $Z$. Input encoder: $\mathcal{I}: \text{input} \rightarrow Z$. Action decoder $\mathcal{A}: Z \rightarrow \text{output}$. Target encoder $\mathcal{T}: \text{targets} \rightarrow Z$. Meta-network $\mathcal{M}: \{(Z, Z), ...\} \rightarrow Z $ maps examples to a task representation. Hyper-network $\mathcal{h}: Z \rightarrow \text{parameters}$. Task network $F: Z \rightarrow Z$ is parameterized by $\mathcal{H}$. Language encoder: $\mathcal{L}: \text{natural language} \rightarrow Z$. } \label{supp_hyperparameter_table}
 \end{table}
 See table \ref{supp_hyperparameter_table} for detailed architectural description and hyperparameters for each experiment. Hyperparameters were generally found by a heuristic search, where mostly only the optimizer, learning rate annealing schedule, and number of training epochs were varied. Some of the parameters take the values they do for fairly arbitrary reasons, e.g. the polynomial experiments were run earlier, before 1-layer task networks were found to be useful in some settings. While it would be ideal to fully search the space of parameters for all models, unfortunately our computational resource limitations prohibited it. Thus the results in the paper should be interpreted as a lower bound on what would be possible. \par
 Each epoch consisted of a separate learning step on each task (both base and meta), in a random order. In each task, the meta-learner would receive only a subset (the ``batch size`` above) of the examples to generate a function embedding, and would have to generalize to the remainder of the examples in the dataset. The embeddings of the basic tasks used for meta-mappings were computed and cached once per epoch, so as the network learned over the course of the epoch, these task-embeddings would get ``stale,'' but this did not seem to be too detrimental. In the case of the RL tasks, where there were persistent task embeddings, they were used insteadd.\par
@@ -92,14 +92,14 @@ Instead of having a shared $Z$ where data and tasks are embedded, why not have a
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_results_unshared_vs_shared.png}
-\caption{Having a separate embedding space for tasks results in worse performance on meta-mappings. (Results are from only 1 run.)}
+\caption[Having a separate embedding space for tasks results in worse performance on meta-mappings.]{Having a separate embedding space for tasks results in worse performance on meta-mappings. (Results are from only 1 run.)}
 \label{supp_lesion_shared_z_fig}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_learning_curves_with_separate.png}
-\caption{Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings. (Results are from only 1 run.)}
+\caption[Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings.]{Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings. (Results are from only 1 run.)}
 \label{supp_lesion_shared_z_learn_fig}
 \end{figure}
 
@@ -109,7 +109,7 @@ Instead of having the task network $F$ parameterized by the hyper network $\math
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{2-HoMM/figures/conditioned_vs_hyper_polynomials.png}
-\caption{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than an architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, compare to Fig. \ref{fig:HoMM_polynomials:results}.}\label{supp_fig:HoMM_arch_cond_vs_hyper}
+\caption[The HyperNetwork-based architecture we propose outperforms a simpler architecture.]{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than a simpler architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, c.f. Fig. \ref{fig:HoMM_polynomials:results}.}\label{supp_fig:HoMM_arch_cond_vs_hyper}
 \end{figure}
 
 \section{Details of polynomial task domain} \label{app:HoMM:polynomials_methods}

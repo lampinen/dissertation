@@ -40,7 +40,7 @@ Participants also performed above chance, but far from optimally after being ask
 \includegraphics[width=\textwidth]{3-human-adaptation/figures/testing_basic_subject_response_fits.png}
 \caption{Probability of non-zero bet by expected value. The red dashed line is the optimal threshold, the grey curves are the individual subject fits.}
 \end{subfigure}%
-\caption{Card game behavior, basic game evaluation block. While participants are performing well above chance, they are far from optimal. They make intermediate value bets, and do not switch optimally between betting and not betting. There is also substantial inter-subject variability.} \label{fig:human_cards_basic_results}
+\caption[Human performance on the card game task, basic game evaluation block.]{Human performance on the card game task, basic game evaluation block. While participants are performing well above chance, they are far from optimal. They make intermediate value bets, and do not switch optimally between betting and not betting. There is also substantial inter-subject variability.} \label{fig:human_cards_basic_results}
 \end{figure}
 \begin{figure}
 \centering
@@ -52,7 +52,7 @@ Participants also performed above chance, but far from optimally after being ask
 \includegraphics[width=\textwidth]{3-human-adaptation/figures/testing_losing_subject_response_fits.png}
 \caption{Probability of non-zero bet by expected value. The red dashed line is the optimal threshold, the grey curves are the individual subject fits.}
 \end{subfigure}%
-\caption{Card game behavior, losing block. There is again substantial inter-subject variability.} \label{fig:human_cards_losing_results}
+\caption[Human performance on the card game task, losing evaluation block.]{Human performance on the card game task, losing evaluation block. There is again substantial inter-subject variability.} \label{fig:human_cards_losing_results}
 \end{figure}
 
 
@@ -61,7 +61,7 @@ Human adaptation was quite good, in the sense that on average performance was al
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{3-human-adaptation/figures/human_adaptation.png}
-\caption{Human adaptation in the cards experiment: the change in performance from the winning evaluation block to the losing evaluation block. Larger lines are the average, smaller are individual subjects. While there is substantial individual variability, average performance is preserved.} \label{fig:human_cards_adaptation_results}
+\caption[Human adaptation in the cards experiment.]{Human adaptation in the cards experiment: the change in performance from the winning evaluation block to the losing evaluation block. Larger lines are the average, smaller are individual subjects. While there is substantial individual variability, average performance is preserved.} \label{fig:human_cards_adaptation_results}
 \end{figure}
 
 \begin{figure}
@@ -73,10 +73,10 @@ Human adaptation was quite good, in the sense that on average performance was al
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{3-human-adaptation/figures/change_scores.png}
-\caption{Comparing adaptation (as \% of score on prior task) between humans and the models. While the HoMM model is slightly sub-optimal, it is not significantly different than humans. By contrast, the language-based model is near chance on the held-out tasks.} \label{fig:human_cards_homm_change_scores}
+\caption[Comparing adaptation change scores between the humans and models.]{Comparing adaptation change scores (as \% of score on prior task) between humans and the models. While the HoMM model is slightly sub-optimal, it is not significantly different than humans. By contrast, the language-based model is near chance on the held-out tasks.} \label{fig:human_cards_homm_change_scores}
 \end{figure}
 In order to perform the task with the HoMM model, we had to make one minor alteration. Because in this task the model (or participant) only receives feedback on the action taken, this is not a simple regression problem with inputs and targets. It is more similar to a reinforcement learning setting, where the model takes actions and may or may not receive rewards in response (although there is no temporal component in our simplified tasks). We thus altered the way a task representation is constructed from examples in the model. Instead of using a dataset of (input, target) tuples, we used a dataset of (input, (action, reward)) tuples, where the action and reward were processed together to form a single embedding. The model was then trained with a masked loss, such that it only updated its predictions for actions it actually took, rather than other possibilities. \par
-The language-based model was altered similarly, in that it received a masked loss on only the action it took. The task instructions were sequences of the form:\\\verb|[``game'', <game_type>, ``losers'', <losers-value>, [other attributes]| encoded by a 2-layer LSTM network. See Appendix \ref{app:human:model_details} for further details of the tasks and training for both models.\par
+The language-based model was altered similarly, in that it received a masked loss on only the action it took. The task instructions were sequences of the form:\\\verb|[``game'', <game_type>, ``losers'', <losers-value>, [other attributes]]| encoded by a 2-layer LSTM network. See Appendix \ref{app:human:model_details} for further details of the tasks and training for both models.\par
 In Fig. \ref{fig:human_cards_homm_results} we plot the adaptation of the models against the human results. Both models are performing near-optimally on the training tasks, but of course they have much more experience with these tasks than the humans do. However, the adaptation of the models is substantially different. Both models are worse at the losing versions of the tasks, but the HoMM model is only slightly worse, while the language-based model is degrading to near chance performance. \par
 In order to make a more fair comparison between humans and the models, in Fig. \ref{fig:human_cards_homm_change_scores} we plot performance on the losing task, as a percentage of performance on the winning tasks. Note, however, that this metric is biased against the models, because of the ceiling effect -- their scores on the adapted tasks cannot be higher than their optimal scores on the original tasks, whereas the humans are only optimal on average because many of them are performing substantially better on the adapted tasks, for unclear reasons. While HoMM is adapting slightly sub-optimally, the difference between it and the human subjects is not statistically significant, either by a \(t\)-test (\(t(18.54) = -1.80\), \(p = 0.09\)), or a permutation test (\(p > 0.05\)). However, HoMM is significantly better than the language-based approach, either by a   \(t\)-test (\(t(5.37) = 9.33\), \(p < 0.001\)), or a permutation test (\(p < 0.005\)). \par
 

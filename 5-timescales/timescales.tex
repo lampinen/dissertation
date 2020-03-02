@@ -17,7 +17,6 @@ The important observation from our perspective is that a zero-shot guess at a ta
 
 \section{The polynomials domain}
 
-%% TODO: add updated results and baseline in untrained model 
 %% TODO: add significance tests for these, maybe make regret barplot one panel of figure also plotting time to e.g. log loss = -3
 We begin by demonstrating these results in the simple polynomial regression domain that we considered in chapter \ref{chapter:zero_shot_via_homm}. We compare three different initializations. First, a small random initialization, as is often used for parameters of a deep model. Second, initializing each task with the embedding of a random trained task, in case the distributions of these is helpful for later learning. Finally, we compare to the guess embedding produced by meta-mapping from a prior task. \par 
 As noted above, we make this comparison by optimizing the task embeddings for the new tasks. We do this without altering any other parameters in the model. It is not clear that this would be sufficient to produce good performance on a novel task, indeed we show below that in an untrained model it is not. However, if the model has sufficient experience of related tasks, it does suffice. \par 
@@ -28,13 +27,13 @@ Thus we conclude that, at least in this simple setting, the zero-shot initializa
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{5-timescales/figures/polynomial_optimization_curves.png}
-\caption{Learning curves when optimizing the task embedding for held-out polynomials from various starting points. The meta-mapping initialization provides a much better starting-point, and reaches near-optimal performance much faster. (Note that the y-axis is log-scale.)} \label{fig:timescales_polynomial_optimization_curves}
+\caption[Learning curves when optimizing the task embedding for new polynomials from various starting points.]{Learning curves when optimizing the task embedding for new polynomials from various starting points. The meta-mapping initialization provides a much better starting-point, and reaches near-optimal performance much faster. (Note that the y-axis is log-scale.)} \label{fig:timescales_polynomial_optimization_curves}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{5-timescales/figures/polynomial_optimization_cumulative_regret.png}
-\caption{Cumulative loss when optimizing the task embedding for held-out polynomials from various starting points. The meta-mapping initialization results in an order of magnitude less cumulative error over the course of learning.} \label{fig:timescales_polynomial_optimization_regret}
+\caption[Cumulative loss when optimizing the task embedding for held-out polynomials from various starting points.]{Cumulative loss when optimizing the task embedding for held-out polynomials from various starting points. The meta-mapping initialization results in an order of magnitude less cumulative error over the course of learning.} \label{fig:timescales_polynomial_optimization_regret}
 \end{figure}
 
 \section{Discussion}
