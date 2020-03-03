@@ -90,8 +90,8 @@
 %   redefined \@endpart so that blank page after part has page number
 %   as per thesis office requirements
 
-% Modified 6/24/2019 by Andrew Lampinen 
-%  Noting my stealing it.
+% Modified 03/02/2020 by Andrew Lampinen 
+%   Adding option to remove signature page.
 
 %%%%%
 %%%%%   PRELIMS
@@ -205,6 +205,8 @@ The following switches allow for special title pages (not all are current)
                 - year LaTeX'd (or next year, in December) if omitted
         \copyrighttrue or \copyrightfalse
                 - produce or don't produce a copyright page (true by default)
+        \signaturetrue or \signaturefalse
+                - produce or don't produce a signature page (true by default)
         \thesiscopyrighttrue or \thesiscopyrightfalse
                 - produces the style of copyright page listed by the
                 Thesis Office or the style that everyone else uses
@@ -324,6 +326,7 @@ smaller print.
 \fi
 \newif\ifcopyright \newif\iffigurespage \newif\iftablespage
 \newif\ifthesiscopyright
+\newif\ifsignature
 \copyrighttrue \figurespagetrue \tablespagetrue
 \thesiscopyrighttrue
 
@@ -476,7 +479,7 @@ of Doctor of Philosophy.
         \pagestyle{plain}
         \titlep
         \ifcopyright\ifthesiscopyright\thesiscopyrightpage\else\tradcopyrightpage\fi\fi
-        \signaturepage
+        \ifsignature\signaturepage\fi
         \cleardoublepage}
         
 
