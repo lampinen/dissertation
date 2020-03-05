@@ -109,7 +109,7 @@ Instead of having the task network $F$ parameterized by the hyper network $\math
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{2-HoMM/figures/conditioned_vs_hyper_polynomials.png}
-\caption[The HyperNetwork-based architecture we propose outperforms a simpler architecture.]{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than a simpler architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, c.f. Fig. \ref{fig:HoMM_polynomials:results}.}\label{supp_fig:HoMM_arch_cond_vs_hyper}
+\caption[The HyperNetwork-based architecture we propose outperforms a simpler architecture.]{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than a simpler architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, c.f. Fig. \ref{fig:HoMM_polynomials:results}. Note that the task-concatenated architecture performs just as well at the trained basic tasks (not shown), it is adapting via meta-mappings that proves challenging for it. See Supp. Fig. \ref{supp_fig:extending:RL:arch_cond_vs_hyper} for a more dramatic comparison in the RL domain. }\label{supp_fig:HoMM_arch_cond_vs_hyper}
 \end{figure}
 
 \section{Details of polynomial task domain} \label{app:HoMM:polynomials_methods}
