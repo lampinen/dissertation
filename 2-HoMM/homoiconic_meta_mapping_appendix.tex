@@ -9,6 +9,7 @@
 $Z$-dimension & 512 & 512 & 512 & 512 \\\hline
 $\mathcal{I}$ num. layers & \multicolumn{4}{c|}{2} \\\hline
 $\mathcal{I}$ num. hidden units & \multicolumn{4}{c|}{128} \\\hline
+$\mathcal{I}$ conv. layers. (num filters, size, all strides are 2) & \multicolumn{2}{c|}{-} & \multicolumn{1}{p{2.3cm}|}{(64, 5), (128, 4), (256, 4), (512, 2), max pool} & \multicolumn{1}{p{2.3cm}|}{(64, 7), (64, 4), (64, 3)}\\\hline
 $\mathcal{L}$ architecture & -  & \multicolumn{3}{c|}{2-layer LSTM + 2 fully-connected} \\\hline
 $\mathcal{L}$ num. hidden units & -  & \multicolumn{3}{c|}{512} \\\hline
 $\mathcal{T}$ num. layers & 1 & 3 & 1 & 3 \\\hline
@@ -19,7 +20,7 @@ $\mathcal{M}$ num. hidden units & \multicolumn{3}{c|}{512} & 1024 \\\hline
 $\mathcal{H}$ num. hidden units & \multicolumn{4}{c|}{512} \\\hline
 $\mathcal{F}$ num. layers & 3 & 1 & 1 & 3 \\\hline
 $F$ num. hidden units & \multicolumn{3}{c|}{64} & 128 \\\hline
-$F$ weight normalization \citep{Salimans2016} & \multicolumn{3}{c|}{No} & Yes \\\hline
+$F$ weight norm. \citep{Salimans2016} & \multicolumn{3}{c|}{No} & Yes \\\hline
 $\mathcal{A}$ num. layers & \multicolumn{2}{c|}{1} & 2 & 1 \\\hline
 $\mathcal{A}$ num. hidden units & \multicolumn{2}{c|}{-} & 128 & -  \\\hline
 Nonlinearities & \multicolumn{4}{p{11cm}|}{Leaky ReLU most places, except no non-linearity at final layer of networks outputting to $Z$, sigmoid for classification outputs, and softmax over actions.} \\\hline
@@ -52,10 +53,10 @@ Meta examples (eval) & \multicolumn{2}{c|}{All of train dataset} & - & All of tr
 Base datasets refreshed & \multicolumn{2}{c|}{Every 50 epochs} & Every 20 & Every 1500  \\\hline
 Target network updated & \multicolumn{3}{c|}{-} & Every 10000 epochs  \\\hline
 RL discount & \multicolumn{3}{c|}{-} & 0.85 \\\hline
-RL explore prob. (\(\epsilon\)) & \multicolumn{3}{c|}{-} & \multicolumn{1}{p{2.3cm}|}{Initial: 1., decay: -0.03.}\\\hline
-Action softmax inv. temp. (\(\beta\)) & - & 8 & - & 8\\\hline
+RL explore prob. (\(\epsilon\)) & \multicolumn{3}{c|}{-} & \multicolumn{1}{p{2.5cm}|}{Init: 1, decay: -0.03}\\\hline
+Action softmax \(\beta\) & - & 8 & - & 8\\\hline
 \end{tabular}
-\caption[Detailed hyperparameter specification.]{Detailed hyperparameter specification for different experiments. A ``-'' indicates a parameter that does not apply to that experiment. Where only one value is given, it applied to all the experiments discussed. As a reminder: the shared representational space is denoted by $Z$. Input encoder: $\mathcal{I}: \text{input} \rightarrow Z$. Action decoder $\mathcal{A}: Z \rightarrow \text{output}$. Target encoder $\mathcal{T}: \text{targets} \rightarrow Z$. Meta-network $\mathcal{M}: \{(Z, Z), ...\} \rightarrow Z $ maps examples to a task representation. Hyper-network $\mathcal{h}: Z \rightarrow \text{parameters}$. Task network $F: Z \rightarrow Z$ is parameterized by $\mathcal{H}$. Language encoder: $\mathcal{L}: \text{natural language} \rightarrow Z$. } \label{supp_hyperparameter_table}
+\caption[Detailed hyperparameter specification.]{Detailed hyperparameter specification for different experiments. A ``-'' indicates a parameter that does not apply to that experiment. Where only one value is given, it applied to all the experiments discussed. As a reminder: the shared representational space is denoted by $Z$. Input encoder: $\mathcal{I}: \text{input} \rightarrow Z$. Action decoder $\mathcal{A}: Z \rightarrow \text{output}$. Target encoder $\mathcal{T}: \text{targets} \rightarrow Z$. Meta-network $\mathcal{M}: \{(Z, Z), ...\} \rightarrow Z $ maps examples to a task representation. Hyper-network $\mathcal{H}: Z \rightarrow \text{parameters}$. Task network $F: Z \rightarrow Z$ is parameterized by $\mathcal{H}$. Language encoder: $\mathcal{L}: \text{natural language} \rightarrow Z$. } \label{supp_hyperparameter_table}
 \end{table}
 See table \ref{supp_hyperparameter_table} for detailed architectural description and hyperparameters for each experiment. Hyperparameters were generally found by a heuristic search, where mostly only the optimizer, learning rate annealing schedule, and number of training epochs were varied. Some of the parameters take the values they do for fairly arbitrary reasons, e.g. the polynomial experiments were run earlier, before 1-layer task networks were found to be useful in some settings. While it would be ideal to fully search the space of parameters for all models, unfortunately our computational resource limitations prohibited it. Thus the results in the paper should be interpreted as a lower bound on what would be possible. \par
 Each epoch consisted of a separate learning step on each task (both base and meta), in a random order. In each task, the meta-learner would receive only a subset (the ``batch size`` above) of the examples to generate a function embedding, and would have to generalize to the remainder of the examples in the dataset. The embeddings of the basic tasks used for meta-mappings were computed and cached once per epoch, so as the network learned over the course of the epoch, these task-embeddings would get ``stale,'' but this did not seem to be too detrimental. In the case of the RL tasks, where there were persistent task embeddings, they were used insteadd.\par
