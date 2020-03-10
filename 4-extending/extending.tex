@@ -42,24 +42,22 @@ Second, we found that incorporating weight normalization \citep{Salimans2016} in
 
 \subsection{Results}
 
-\begin{figure}
+\begin{figure}[htb]
 \centering
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=\textwidth]{4-extending/figures/grids_adaptation_results.png}
-\caption{Adaptation performance at best-validation epochs.}\label{fig:HoMM_RL_results:accuracy}
-\end{subfigure}%
-\begin{subfigure}{0.5\textwidth}
-\includegraphics[width=\textwidth]{4-extending/figures/grids_adaptation_correlation_loose.png}
-\caption{Correlation of performance on the two tasks.}\label{fig:HoMM_RL_results:correlation}
-\end{subfigure}%
-
-\caption[Results on the RL tasks.]{Results on the RL tasks. (\subref{fig:HoMM_RL_results:accuracy}) Performance on the held-out tasks via a meta-mapping and via language generalization. Despite the challenging nature of the adaptation (as evidenced by the language-generalization performance), HoMM is performing quite well. (\subref{fig:HoMM_RL_results:correlation}) Correlation of performance on the two hold-out tasks, across runs and time points where performance on the training tasks is high. The correlation is much stronger in the HoMM model than in the language-generalization model, that is, the HoMM model is behaving more systematically in the sense that it is generalizing similarly on both tasks. (Results from 5 runs, error-bars in panel \subref{fig:HoMM_RL_results:accuracy} are bootstrap 95\%-CIs across runs.)} \label{fig:HoMM_RL_results}
+\includegraphics[width=0.8\textwidth]{4-extending/figures/grids_adaptation_results.png}
+\caption[Performance on the held-out RL tasks.]{Performance on the held-out RL tasks via a meta-mapping and via language generalization. Despite the challenging nature of the adaptation (as evidenced by the language-generalization performance), HoMM is performing quite well. (Results from 5 runs, error-bars are bootstrap 95\%-CIs across runs.)} \label{fig:HoMM_RL_results}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htb]
 \centering
-\includegraphics[width=0.5\textwidth]{4-extending/figures/grids_language_learning_curves.png}
-\caption[Language generalization model learning curves on the RL tasks.]{Average performance of the language generalization model over training on the RL tasks. The model exhibits intriguing but transient generalization early in learning, before it has understood the full structure of the tasks (especially the more difficult and sequential push-off task). However, this quickly decays to below-chance generalization as the model masters the training tasks. This early generalization is not included in the main results since the train accuracy at this time is below the threshold of having adequately learned the tasks.} \label{fig:HoMM_RL_language_learning_curves}
+\includegraphics[width=0.8\textwidth]{4-extending/figures/grids_adaptation_correlation_loose.png}
+\caption[Correlation of performance on the held-out RL tasks.]{Correlation of performance on the held-out RL tasks, across runs and time points where performance on the training tasks is high. The correlation is much stronger in the HoMM model than in the language-generalization model, that is, the HoMM model is behaving more systematically in the sense that it is generalizing similarly on both tasks. (Results from 5 runs, lines are linear model fits within model type.)} \label{fig:HoMM_RL_results:correlation}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{4-extending/figures/grids_language_learning_curves.png}
+\caption[Language generalization model learning curves on the RL tasks.]{Average performance of the language generalization model over training on the RL tasks. The model exhibits intriguing, but transient, generalization early in learning, before it has understood the full structure of the tasks (especially the more difficult and sequential push-off task). However, this quickly decays to below-chance generalization as the model masters the training tasks. This early generalization is not included in the main results since the train accuracy at this time is below the threshold of having adequately learned the tasks.} \label{fig:HoMM_RL_language_learning_curves}
 \end{figure}
 
 \begin{figure}[htb]
