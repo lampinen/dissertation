@@ -296,6 +296,29 @@ In Fig. \ref{fig:HoMM_polynomials:results}, we show the success of our meta-mapp
 
 To further explore this performance, in Fig. \ref{fig:HoMM_polynomials:results_by_mapping} we plot the results for each of the different meta-mappings we considered: adding a constant, multiplying by a constant, permuting the variables, and squaring the polynomial. Some of these mappings are more challenging than others, as can be seen from the performance of a baseline model that does not adapt (dotted lines). For example, adding a constant to a polynomial does not alter it too drastically, so the non-adapting baseline performs well there. By contrast, multiplying by a constant sometimes changes the sign of the polynomial, so the non-adapting baseline performs extremely poorly there. The HoMM approach results in good performance across all the types of meta-mappings we considered, although unsurpsingly performance is slightly better on the easier tasks, and generalization to the held-out permutation meta-mappings is more challenging than generalization to e.g. the held-out addition ones. 
 
+\textbf{Representation analysis:} In order to explore the performance of the model further, we performed principal components analysis on the task and meta-mapping representations in the HoMM model after training (Fig. \ref{fig:HoMM_polynomials:reps_overall_PCA}). This analysis reveals strikingly similar organization of the representation space across different training runs, with constant polynomials pushed to the outside in a semi-circle, and more complex polynomials stretching toward the center, where meta-mappings and meta-classifications are located. This may be due to the learning dynamics --- the distance of the task representations from the center appears to be roughly inversely proportional to the complexity of the task, which might imply that the constant polynomials have the largest-magnitude representations because they are easiest to learn. 
+
+To analyze this further, in Fig. \ref{fig:HoMM_polynomials:constant_poly_PCA} we plot the representations for only the constant polynomials, colored by their value (square-root compressed for clarity). This shows that the constant polynomials are consistently arrayed angularly from lowest to highest value.
+
+Finally, we examined the meta-mapping representations more closely (Fig. \ref{fig:HoMM_polynomials:reps_meta_mapping_PCA}). This analysis shows that the mappings have a consistent organization across runs, with permutations and addition grouping tightly, but multiplication and squaring, which more drastically alter the polynomials, more dispersed. In particular, multiplying by negative numbers and squaring, which can change polynomials signs and therefore cause a more drastic adaptation, are more separated from the remaining meta-mappings. It is also interesting to note that the addition meta-mappings appear to be organized more by absolute value than sign in at least some runs. 
+
+\begin{figure}[ptbh]
+\centering
+\includegraphics[width=\textwidth]{2-HoMM/figures/polynomial_reps/overall_PCA.png}
+\caption[Principal components of task and meta-mapping representations of HoMM after training on the polynomials domain.]{Principal components of task and meta-mapping representations of HoMM after training on the polynomials domain. The representation space is organized relatively consistently across runs, with constant polynomials pushed to the outside, and meta-mappings and meta-classifications more centrally located.} \label{fig:HoMM_polynomials:reps_overall_PCA}
+\end{figure}
+
+\begin{figure}[ptbh]
+\centering
+\includegraphics[width=\textwidth]{2-HoMM/figures/polynomial_reps/constant_poly_PCA.png}
+\caption[Principal components of constant polynomial representations, showing systematic organization by value.]{Principal components of constant polynomial representations, showing systematic organization by value. Intriguingingly, this relationship appears to be systematically non-linear across runs. (PCs computed across all task representations, color scale of values is compressed with a square-root transformation.)} \label{fig:HoMM_polynomials:reps_const_poly_PCA}
+\end{figure}
+
+\begin{figure}[ptbh]
+\centering
+\includegraphics[width=\textwidth]{2-HoMM/figures/polynomial_reps/meta_mapping_PCA.png}
+\caption[Principal components of meta-mapping representations in the polynomial domain, showing systematic organization by type.]{Principal components of meta-mapping representations in the polynomial domain, showing systematic organization by type. Permutation mappings cluster tightly, as do addition, while multiplication and squaring are more dispersed. The addition and multiplication mappings are partially organized by absolute value.} \label{fig:HoMM_polynomials:reps_meta_mapping_PCA}
+\end{figure}
 
 \subsubsection{Inadequacy of vector analogies for meta-mapping} \label{sec:HoMM:vector_analogies_inadequate}
 
