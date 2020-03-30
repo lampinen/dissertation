@@ -135,23 +135,6 @@ The experiment was implemented online, and run on Amazon Mechanical Turk. The co
 We asked participants about their age, education, gender, and race/ethnicity. However, we did not analyze these data.
 
 
-\section{Results of the human experiment}
-\subsection{Suboptimality}\label{appendix:human:suboptimality}
-As \citet{Jarvstad2013} note, how ``optimal'' human performance seems to be depends on how you measure performance. In particular, performance seems better when measured in terms of expected earnings than when measured in terms of how accurately participants decided whether or not to bet (fig. \ref{fig:appx_human_calibration}). This is because the participants were more accurate on trials with higher (absolute) expected value, and less accurate on trials where they had less to gain or lose. We chose the more optimistic performance measure as the basis for our comparison to the HoMM model.
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{0.5\textwidth}
-\includegraphics[width=\textwidth]{3-human-adaptation/figures/human_adaptation_supp_earnings.png}
-\caption{Performance measured in terms of earnings.}
-\end{subfigure}%
-\begin{subfigure}[t]{0.5\textwidth}
-\includegraphics[width=\textwidth]{3-human-adaptation/figures/human_adaptation_supp_accuracy.png}
-\caption{Performance measured in terms of accuracy, i.e. the percent of hands where an optimal decision was made}
-\end{subfigure}%
-\caption{How optimal human performance appears depends on the metric used to evaluate it.} \label{fig:appx_human_calibration}
-\end{figure}
-
-
 \section{Details of model tasks \& training}\label{app:human:model_details}
 \subsection{Tasks}
 
@@ -179,3 +162,38 @@ Any combination of these options can be applied to any of the 5 games, yielding 
 \verb|``switch suit'', <switch-suit-value>]|.
 
 
+
+\section{Supplementary analyses}
+\subsection{Human suboptimality}\label{appendix:human:suboptimality}
+As \citet{Jarvstad2013} note, how ``optimal'' human performance seems to be depends on how you measure performance. In particular, performance seems better when measured in terms of expected earnings than when measured in terms of how accurately participants decided whether or not to bet (fig. \ref{fig:appx_human_calibration}). This is because the participants were more accurate on trials with higher (absolute) expected value, and less accurate on trials where they had less to gain or lose. We chose the more optimistic performance measure as the basis for our comparison to the HoMM model.
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/human_adaptation_supp_earnings.png}
+\caption{Performance measured in terms of earnings.}
+\end{subfigure}%
+\begin{subfigure}[t]{0.5\textwidth}
+\includegraphics[width=\textwidth]{3-human-adaptation/figures/human_adaptation_supp_accuracy.png}
+\caption{Performance measured in terms of accuracy, i.e. the percent of hands where an optimal decision was made}
+\end{subfigure}%
+\caption{How optimal human performance appears depends on the metric used to evaluate it.} \label{fig:appx_human_calibration}
+\end{figure}
+
+\subsection{Comparing to a simpler architecture for language generalization}\label{appendix:human:lang_tcnh}
+In Fig. \ref{supp_fig:human:lang_tcnh} we show that language generalization is comparable in the HyperNetwork-based architecture we used for HoMM and a simpler architecture which simply concatenates the task representation to the input representation before passing them through a fixed feed-forward task network. Specifically, the HyperNetwork architecture achieves a mean expected reward of 1.79\% (bootstrap 95\%-CI [-12.31, 15.88]), while the simpler architecture achieves a mean expected reward of -8.59\% (bootstrap 95\%-CI [-20.42, -0.99]). See Supp. Figs. \ref{supp_fig:HoMM_arch_cond_vs_hyper} and \ref{supp_fig:extending:RL:arch_cond_vs_hyper} for the same architecture comparison for HoMM itself.  
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.66\textwidth]{3-human-adaptation/figures/cards_lang_hyper_vs_tcnh.png}
+\caption[Language generalization is similar in the cards domain with either the HyperNetwork architecture used by HoMM, or a simpler task-concatenated architecture.]{Language generalization is similar in the cards domain with either the HyperNetwork architecture used by HoMM, or a simpler task-concatenated architecture. Compare to Fig. \ref{fig:human_cards_homm_results} for the human and HoMM results.} \label{supp_fig:human:lang_tcnh}
+\end{figure}
+
+\subsection{HoMM without meta-classification}
+
+In Fig. \ref{supp_fig:human:homm_metaclass_lesion} we show that the HoMM model may be performing slightly better with meta-classification training than without it, although the difference is only marginally significant (paired \(t\)-test, \(t(4) = 2.23, p = 0.09\)). Specifically, the HoMM model is achieving an average expected reward of 85.38\% (bootstrap 95\%-CI [79.49, 90.32]), while without meta-classification it is achieving an average expected reward of 78.68\% (bootstrap 95\%-CI [71.01, 85.97]). See Fig. \ref{supp_fig:HoMM:metaclass_lesion} for a similar comparison in the polynomials domain, and meta-classification may be deleterious (possibly because there are many more training tasks, so it is not needed). 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.66\textwidth]{3-human-adaptation/figures/cards_metaclass_lesion.png}
+\caption[The HoMM model performs marginally worse without meta-classification training.]{The HoMM model performs marginally worse without meta-classification training. Thus this training may allow the model to adapt more robustly to new tasks.} \label{supp_fig:human:homm_metaclass_lesion}
+\end{figure}

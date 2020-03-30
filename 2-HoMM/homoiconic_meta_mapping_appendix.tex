@@ -63,56 +63,13 @@ See table \ref{supp_hyperparameter_table} for detailed architectural description
 Each epoch consisted of a separate learning step on each task (both base and meta), in a random order. In each task, the meta-learner would receive only a subset (the ``batch size`` above) of the examples to generate a function embedding, and would have to generalize to the remainder of the examples in the dataset. The embeddings of the basic tasks used for meta-mappings were computed and cached once per epoch, so as the network learned over the course of the epoch, these task-embeddings would get ``stale,'' but this did not seem to be too detrimental. In the case of the RL tasks, where there were persistent task embeddings, they were used insteadd.\par
 The results reported in the figures in this paper are averages across multiple runs, with different trained and held-out tasks (in the polynomial and visual concepts cases) and different network initializations and training orders each epoch (in all cases), to ensure the robustness of the findings. \par
 
-
-
-\chapter{Supplemental material for Chapter \getrefnumber{chapter:zero_shot_via_homm}} \label{appendix:zero_shot_via_homm}
-
 \section{Clarifying meta-mapping} \label{app_clarifying_meta_mapping}
 \subsection{A definitional note}
 When we discussed meta-mappings in the main task, we equivocated between tasks and behaviors for the sake of brevity. For a perfect model, this is somewhat justifiable, because each task will have a corresponding optimal behavior, and the sytem's embedding of the task will be precisely the embedding which produces this optimal behavior. However, behavior-irrelevant details of the task, like the color of the board, may not be embedded, so this should not really be thought of as a task-to-task mapping. This problem is exacerbated when the system is imperfect, e.g. during learning. It is thus more precise to distinguish between a ground-truth meta-mapping, which maps tasks to tasks, and the computational approach to achieving that meta-mapping, which really maps between representations which combine both task and behavior. \par
 
-%\section{Card game $t$-SNE} \label{app_cards_tsne}
-%We performed $t$-SNE \citep{LaurensvanderMaaten2008} on the task embeddings of the system at the end of learning the card game tasks, to evaluate the organization of knowledge in the network. In fig. \ref{fig_cards_tsne_basic} we show these embeddings for just the basic tasks. The embeddings show systematic grouping by game attributes. In fig. \ref{fig_cards_tsne_full} we show the embeddings of the meta and basic tasks, showing the organization of the meta-tasks by type. (Note: this analysis was performed in an older version of the model than the main results.)\par 
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.8\textwidth]{2-HoMM/figures/basic_tsne_basic_final.png}
-%\caption{$t$-SNE embedding of the function embeddings the system learned for the basic card game tasks. (Note that the pairs of nearby embeddings differ in the ``suits rule`` attribute, discussed in appendix \ref{meth_data_cards}.)} 
-%\label{fig_cards_tsne_basic}
-%\end{figure}%
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.9\textwidth]{2-HoMM/figures/basic_tsne_full_final.png}
-%\caption{$t$-SNE embedding of the function embeddings the system learned for the meta tasks (basic tasks are included in the background).} 
-%\label{fig_cards_tsne_full}
-%\end{figure}
 
-\section{Architecture experiments} \label{app_lesion_results}
-In this section we consider a few variations of the architecture, to justify the choices made in the paper. \par
 
-\subsection{Shared $Z$ vs. separate task-embedding and data-embedding space} \label{app_lesion_results_shared_z}
-Instead of having a shared $Z$ where data and tasks are embedded, why not have a separate embedding space for data, tasks, and so on? There are a few conceptual reason why we chose to have a shared $Z$, including its greater parameter efficiency, the fact that humans seem to represent our conscious knowledge of different kinds in a shared space \citep[][]{Baars2005}, and the fact that this representation could allow for zero-shot adaptation to new computational pathways through the latent space, analogously to the zero-shot language translation results reported by Johnson and colleagues \citep{Johnson2016a}. In this section, we further show that training with a separate task encoding space worsens performance, see fig. \ref{supp_lesion_shared_z_fig}. This seems to primarily be due to the fact that learning in the shared $Z$ accelerates and de-noises the learning process, see fig. \ref{supp_lesion_shared_z_learn_fig}. (It's therefore worth noting that running this model for longer could result in convergence to the same asymptotic generalization performance.) Note: this analysis was performed in an older implementation of the model. \par
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_results_unshared_vs_shared.png}
-\caption[Having a separate embedding space for tasks results in worse performance on meta-mappings.]{Having a separate embedding space for tasks results in worse performance on meta-mappings. (Results are from only 1 run.)}
-\label{supp_lesion_shared_z_fig}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_learning_curves_with_separate.png}
-\caption[Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings.]{Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings. (Results are from only 1 run.)}
-\label{supp_lesion_shared_z_learn_fig}
-\end{figure}
-
-\subsection{Hyper network vs. conditioned task network} \label{app_lesion_results_hyper}
-Instead of having the task network $F$ parameterized by the hyper network $\mathcal{H}$, we could simply have a task network with learned weights which takes a task embedding as another input. In Fig. \ref{supp_fig:HoMM_arch_cond_vs_hyper}, we show that this architecture fails to learn the meta-mapping tasks, although it can successfully perform the basic tasks. We suggest that this is because it is harder for this architecture to prevent interference between the comparatively larger number of basic tasks and the smaller number of meta-tasks. While it might be possible to succeed with this architecture, it was more difficult in the hyper-parameter space we searched.\par 
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{2-HoMM/figures/conditioned_vs_hyper_polynomials.png}
-\caption[The HyperNetwork-based architecture we propose outperforms a simpler architecture.]{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than a simpler architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, c.f. Fig. \ref{fig:HoMM_polynomials:results}. Note that the task-concatenated architecture performs just as well at the trained basic tasks (not shown), it is adapting via meta-mappings that proves challenging for it. See Supp. Fig. \ref{supp_fig:extending:RL:arch_cond_vs_hyper} for a more dramatic comparison in the RL domain. }\label{supp_fig:HoMM_arch_cond_vs_hyper}
-\end{figure}
+\chapter{Supplemental material for Chapter \getrefnumber{chapter:zero_shot_via_homm}} \label{appendix:zero_shot_via_homm}
 
 \section{Details of polynomial task domain} \label{app:HoMM:polynomials_methods}
 We randomly sampled the train and test polynomials as follows:
@@ -135,4 +92,58 @@ We trained on 20 meta-mapping tasks, and held out 16 related meta-mappings.
 \item Multiplying by a constant (trained: -3, -1, 3, held-out: 2, -2).
 \item Permuting inputs (trained: 1320, 1302, 3201, 2103, 3102, 0132, 2031, 3210, 2301, 1203, 1023, 2310, held-out: 0312, 0213, 0321, 3012, 1230, 1032, 3021, 0231, 0123, 3120, 2130, 2013).
 \end{itemize}
+
+
+%\section{Card game $t$-SNE} \label{app_cards_tsne}
+%We performed $t$-SNE \citep{LaurensvanderMaaten2008} on the task embeddings of the system at the end of learning the card game tasks, to evaluate the organization of knowledge in the network. In fig. \ref{fig_cards_tsne_basic} we show these embeddings for just the basic tasks. The embeddings show systematic grouping by game attributes. In fig. \ref{fig_cards_tsne_full} we show the embeddings of the meta and basic tasks, showing the organization of the meta-tasks by type. (Note: this analysis was performed in an older version of the model than the main results.)\par 
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{2-HoMM/figures/basic_tsne_basic_final.png}
+%\caption{$t$-SNE embedding of the function embeddings the system learned for the basic card game tasks. (Note that the pairs of nearby embeddings differ in the ``suits rule`` attribute, discussed in appendix \ref{meth_data_cards}.)} 
+%\label{fig_cards_tsne_basic}
+%\end{figure}%
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.9\textwidth]{2-HoMM/figures/basic_tsne_full_final.png}
+%\caption{$t$-SNE embedding of the function embeddings the system learned for the meta tasks (basic tasks are included in the background).} 
+%\label{fig_cards_tsne_full}
+%\end{figure}
+
+\section{Architecture \& training experiments} \label{app_lesion_results}
+In this section we consider a few variations of the architecture and training, to justify the choices made in the paper. \par
+
+\subsection{Shared $Z$ vs. separate task-embedding and data-embedding space} \label{app_lesion_results_shared_z}
+Instead of having a shared $Z$ where data and tasks are embedded, why not have a separate embedding space for data, tasks, and so on? There are a few conceptual reason why we chose to have a shared $Z$, including its greater parameter efficiency, the fact that humans seem to represent our conscious knowledge of different kinds in a shared space \citep[][]{Baars2005}, and the fact that this representation could allow for zero-shot adaptation to new computational pathways through the latent space, analogously to the zero-shot language translation results reported by Johnson and colleagues \citep{Johnson2016a}. In this section, we further show that training with a separate task encoding space worsens performance, see fig. \ref{supp_lesion_shared_z_fig}. This seems to primarily be due to the fact that learning in the shared $Z$ accelerates and de-noises the learning process, see fig. \ref{supp_lesion_shared_z_learn_fig}. (It's therefore worth noting that running this model for longer could result in convergence to the same asymptotic generalization performance.) Note: this analysis was performed in an older implementation of the model. \par
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_results_unshared_vs_shared.png}
+\caption[Having a separate embedding space for tasks results in worse performance on meta-mappings.]{Having a separate embedding space for tasks results in worse performance on meta-mappings. (Results are from only 1 run.)}
+\label{supp_lesion_shared_z_fig}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_learning_curves_with_separate.png}
+\caption[Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings.]{Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings. (Results are from only 1 run.)}
+\label{supp_lesion_shared_z_learn_fig}
+\end{figure}
+
+\subsection{Hyper network vs. conditioned task network} \label{app_lesion_results_hyper}
+Instead of having the task network $F$ parameterized by the hyper network $\mathcal{H}$, we could simply have a task network with learned weights which takes a task embedding as another input. In Fig. \ref{supp_fig:HoMM_arch_cond_vs_hyper}, we show that this architecture fails to learn the meta-mapping tasks, although it can successfully perform the basic tasks. We suggest that this is because it is harder for this architecture to prevent interference between the comparatively larger number of basic tasks and the smaller number of meta-tasks. While it might be possible to succeed with this architecture, it was more difficult in the hyper-parameter space we searched. See also Fig. \ref{supp_fig:human:lang_tcnh}, where we show that both architectures perform similarly for language generalization. \par 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{2-HoMM/figures/conditioned_vs_hyper_polynomials.png}
+\caption[The HyperNetwork-based architecture we propose outperforms a simpler architecture.]{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than a simpler architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, c.f. Fig. \ref{fig:HoMM_polynomials:results}. Note that the task-concatenated architecture performs just as well at the trained basic tasks (not shown), it is adapting via meta-mappings that proves challenging for it. See Supp. Fig. \ref{supp_fig:extending:RL:arch_cond_vs_hyper} for a more dramatic comparison in the RL domain. }\label{supp_fig:HoMM_arch_cond_vs_hyper}
+\end{figure}
+
+\subsection{Meta-classification lesion} \label{app:homm:metaclass_lesion}
+
+In Fig. \ref{supp_fig:HoMM:metaclass_lesion}, we show that meta-classification training is not beneficial in the polynomials domain. Specifically, on trained meta-mappings the HoMM model is achieving a normalized performance of 88.99\% (bootstrap 95\%-CI [88.20, 89.98]), while without meta-classification it is achieving a normalized performance of 89.7\% (bootstrap 95\%-CI [88.87, 90.61]). On new meta-mappings the HoMM model is achieving a normalized performance of 85.54\% (bootstrap 95\%-CI [85.14, 85.94]), while without meta-classification it is achieving a normalized performance of 86.29\% (bootstrap 95\%-CI [85.54, 86.79]). While these differences are significant (paired \(t\)-tests, respectively \(t(4) = 6.95, p = 0.002\) and \(t(4) = 3.06, p = 0.038\)), the effect is small. See also Fig. \ref{supp_fig:human:homm_metaclass_lesion} for marginal evidence that meta-classification may be helpful in the cards domain, where there are fewer training tasks. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{2-HoMM/figures/metaclass_lesion_polynomials.png}
+\caption[In the polynomials domain, the HoMM model performs slightly better without meta-classification training.]{In the polynomials domain, the HoMM model performs slightly better without meta-classification training. This effect appears for both trained and held-out meta-mappings. However, the effect is small.}\label{supp_fig:HoMM:metaclass_lesion}
+\end{figure}
 
