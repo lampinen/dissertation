@@ -274,13 +274,13 @@ Meta-mapping is an extremely general framework. Because the assumptions are simp
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.5\textwidth]{2-HoMM/figures/polynomials_adaptation.png}
+\includegraphics[width=0.625\textwidth]{2-HoMM/figures/polynomials_adaptation.png}
 \caption[Meta-mapping results in the polynomials domain.]{Meta-mapping results in the polynomials domain. We plot zero-shot performance (normalized, see text) on new tasks via meta-mappings. The system not only-generalizes trained meta-mappings to examples it has never seen before (purple), but also generalizes to held-out meta-mappings from examples (orange), and does both substantially better than a baseline model which does not adapt (dotted lines). Thus our approach is able to flexibly adapt to a new polynomial without any data from that polynomial, based on that polynomial's relationship to polynomials it has experienced.}\label{fig:HoMM_polynomials:results}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.625\textwidth]{2-HoMM/figures/polynomials_adaptation_by_mapping.png}
+\includegraphics[width=0.75\textwidth]{2-HoMM/figures/polynomials_adaptation_by_mapping.png}
 \caption[Meta-mapping results in the polynomial domain, broken down by meta-mapping type.]{Meta-mapping results in the polynomials domain, broken down by meta-mapping type. We plot a normalized performance measure, as in Fig. \ref{fig:HoMM_polynomials:results}. The system is performing well across all meta-mapping types, although there is some variability. Triangles show performance of a baseline model that does not adapt --- note that this baseline performs decently on some meta-mappings, while in other cases such a model results in worse performance than outputting all zeros.} \label{fig:HoMM_polynomials:results_by_mapping}
 \end{figure}
 
