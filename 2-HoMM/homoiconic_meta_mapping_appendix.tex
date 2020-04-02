@@ -20,8 +20,9 @@ $\mathcal{M}$ num. hidden units & \multicolumn{3}{c|}{512} & 1024 \\\hline
 $\mathcal{H}$ num. hidden units & \multicolumn{4}{c|}{512} \\\hline
 Task, MM representations from & \multicolumn{2}{c|}{Examples} & Language & Examples \\\hline
 $\mathcal{F}$ num. layers & 3 & 1 & HoMM: 1, Lang: 3 & 3 \\\hline
-$F$ num. hidden units & \multicolumn{3}{c|}{64} & 128 \\\hline
-$F$ weight norm. \citep{Salimans2016} & \multicolumn{3}{c|}{No} & Yes \\\hline
+$\mathcal{F}$ num. hidden units & \multicolumn{3}{c|}{64} & 128 \\\hline
+$\mathcal{F}$ init scale & 1 & 1 & 30 & 10 \\\hline
+$\mathcal{F}$ weight norm. \citep{Salimans2016} & \multicolumn{3}{c|}{No} & Yes \\\hline
 $\mathcal{A}$ num. layers & \multicolumn{2}{c|}{1} & 2 & 1 \\\hline
 $\mathcal{A}$ num. hidden units & \multicolumn{2}{c|}{-} & 128 & -  \\\hline
 Nonlinearities & \multicolumn{4}{p{11cm}|}{Leaky ReLU most places, except no non-linearity at final layer of networks outputting to $Z$, sigmoid for classification outputs, and softmax over actions.} \\\hline
@@ -65,7 +66,7 @@ The results reported in the figures in this paper are averages across multiple r
 
 \section{Clarifying meta-mapping} \label{app_clarifying_meta_mapping}
 \subsection{A definitional note}
-When we discussed meta-mappings in the main task, we equivocated between tasks and behaviors for the sake of brevity. For a perfect model, this is somewhat justifiable, because each task will have a corresponding optimal behavior, and the sytem's embedding of the task will be precisely the embedding which produces this optimal behavior. However, behavior-irrelevant details of the task, like the color of the board, may not be embedded, so this should not really be thought of as a task-to-task mapping. This problem is exacerbated when the system is imperfect, e.g. during learning. It is thus more precise to distinguish between a ground-truth meta-mapping, which maps tasks to tasks, and the computational approach to achieving that meta-mapping, which really maps between representations which combine both task and behavior. \par
+When we discussed meta-mappings in the main text, we equivocated between tasks and behaviors for the sake of brevity. For a perfect model, this is somewhat justifiable, because each task will have a corresponding optimal behavior, and the sytem's embedding of the task will be precisely the embedding which produces this optimal behavior. However, behavior-irrelevant details of the task, like the color of the board, may not be embedded, so this should not really be thought of as a task-to-task mapping. This problem is exacerbated when the system is imperfect, e.g. during learning. It is thus more precise to distinguish between a ground-truth meta-mapping, which maps tasks to tasks, and the computational approach to achieving that meta-mapping, which really maps between representations which combine both task and behavior. \par
 
 
 
