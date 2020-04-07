@@ -64,6 +64,22 @@ See table \ref{supp_hyperparameter_table} for detailed architectural description
 Each epoch consisted of a separate learning step on each task (both base and meta), in a random order. In each task, the meta-learner would receive only a subset (the ``batch size`` above) of the examples to generate a function embedding, and would have to generalize to the remainder of the examples in the dataset. The embeddings of the basic tasks used for meta-mappings were computed and cached once per epoch, so as the network learned over the course of the epoch, these task-embeddings would get ``stale,'' but this did not seem to be too detrimental. In the case of the RL tasks, where there were persistent task embeddings, they were used insteadd.\par
 The results reported in the figures in this paper are averages across multiple runs, with different trained and held-out tasks (in the polynomial and visual concepts cases) and different network initializations and training orders each epoch (in all cases), to ensure the robustness of the findings. \par
 
+\subsubsection{Source repositories}
+%The full code for all experiments and analyses will be made available via github in the de-anonymized verison.
+The full code for the experiments and analyses can be found on github:
+\begin{itemize}
+\item HoMM library: \url{https://github.com/lampinen/HoMM}
+%\item This paper's source: \url{https://github.com/lampinen/metamapping_paper}
+\item Polynomials: \url{https://github.com/lampinen/HoMM_polynomial_analysis}
+\item Cards (models): \url{https://github.com/lampinen/HoMM_cards}
+\item Cards (human experiment): \url{https://github.com/lampinen/cards_for_humans}
+\item Concepts: \url{https://github.com/lampinen/categorization_HoMM}
+\item RL: \url{https://github.com/lampinen/HoMM_grids}
+\item Stroop results (below): \url{https://github.com/lampinen/stroop}
+\end{itemize}
+
+
+
 \section{Clarifying meta-mapping} \label{app_clarifying_meta_mapping}
 \subsection{A definitional note}
 When we discussed meta-mappings in the main text, we equivocated between tasks and behaviors for the sake of brevity. For a perfect model, this is somewhat justifiable, because each task will have a corresponding optimal behavior, and the sytem's embedding of the task will be precisely the embedding which produces this optimal behavior. However, behavior-irrelevant details of the task, like the color of the board, may not be embedded, so this should not really be thought of as a task-to-task mapping. This problem is exacerbated when the system is imperfect, e.g. during learning. It is thus more precise to distinguish between a ground-truth meta-mapping, which maps tasks to tasks, and the computational approach to achieving that meta-mapping, which really maps between representations which combine both task and behavior. \par
