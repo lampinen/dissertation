@@ -1,4 +1,146 @@
 \chapter{Model details \& hyperparameters for all experiments} \label{appendix:model_hyperparameters}
+\begin{figure}[h]
+\begin{subfigure}{\textwidth}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[auto]
+%% from examples
+\node[text width=0.5cm] at (-6.8, -0.5) (inputs0) {\includegraphics[width=0.5cm]{2-HoMM/figures/7_of_clubs.png}\\\includegraphics[width=0.5cm]{2-HoMM/figures/2_of_spades.png}};
+
+\node[gray, text width=2cm, align=center] at (-5.6, 0.35) {Perception network};
+\node[block] at (-5.6, -0.5) (perceptionnet0) {\(\mathcal{P}\)};
+\path[arrow] (inputs0.east) -- ([xshift=-3]perceptionnet0.west);
+
+
+\node[text width=0.5cm] at (-6.8, -2) (targets0) {\bf \color{red}\(-\)\$\$};
+
+\node[gray, text width=2cm, align=center] at (-5.6, -2.85) {Target network};
+\node[block] at (-5.6, -2) (targetnet0) {\(\mathcal{P}\)};
+\path[arrow] ([xshift=3]targets0.east) -- ([xshift=-3]targetnet0.west);
+
+\node[gray, text width=2.5cm, align=center] at (-3.25, 2.3) {Task examples (encoded)};
+\node at (-3.25, 1.25) (examples) {
+\(\left\{
+\begin{matrix}
+({\color{bgreen}z_{hand_{1}}}, {\color{bgreen}z_{bet_{1}}})\\
+$\vdots$
+\end{matrix}\right\}\)};
+
+\path[arrow, out=0, in=-90] (perceptionnet0.east) to ([xshift=-11, yshift=20]examples.south);
+\path[arrow, out=0, in=-90] (targetnet0.east) to ([xshift=15, yshift=20]examples.south);
+
+\node[gray, text width=2cm, align=center] at (-0.5, 2.1) {Example network};
+\node[block] at (-0.5, 1.25) (examplenet) {\(\mathcal{E}\)};
+\path[arrow] (examples.east) -- ([xshift=-3]examplenet.west);
+
+%% performing 
+\node[bpurp] at (1.25, 1.25) (taskrep) {\(z_{task}\)};
+\path[arrow] ([xshift=3]examplenet.east) -- (taskrep.west);
+
+\node[gray, text width=2cm, align=center] at (3, 2.1) {Hyper network};
+\node[block] at (3, 1.25) (hypernet) {\(\mathcal{H}\)};
+\path[arrow] (taskrep.east) -- ([xshift=-3]hypernet.west);
+
+\node[text width=0.5cm] at (0.7, -1.25) (inputs) {\includegraphics[width=0.5cm]{2-HoMM/figures/2_of_spades.png}\\\includegraphics[width=0.5cm]{2-HoMM/figures/4_of_hearts.png}};
+
+\node[gray, text width=2cm, align=center] at (1.9, -0.4) {Perception network};
+\node[block] at (1.9, -1.25) (perceptionnet) {\(\mathcal{P}\)};
+\path[arrow] (inputs.east) -- ([xshift=-3]perceptionnet.west);
+
+\node[bgreen] at (3.2, -1.25) (handrep) {\(z_{hand}\)};
+\path[arrow] ([xshift=3]perceptionnet.east) -- (handrep.west);
+
+\node[bblue, block, dashed] at (4.5, -1.25) (tasknet) {\(\mathcal{T}\)};
+\node[bblue, text width=2cm, align=center] at (4.5, -2) {Task network};
+\path[arrow] (handrep.east) -- ([xshift=-3]tasknet.west);
+\path[arrow, out=0, in=90] ([xshift=3]hypernet.east) to ([yshift=3]tasknet.north);
+
+
+\node[bgreen] at (5.65, -1.25) (betrep) {\(z_{bet}\)};
+\path[arrow] ([xshift=3]tasknet.east) -- (betrep.west);
+
+\node[gray, text width=2cm, align=center] at (6.8, -0.4) {Action network};
+\node[block] at (6.8, -1.25) (actionnet) {\(\mathcal{A}\)};
+\path[arrow] (betrep.east) -- ([xshift=-3]actionnet.west);
+
+\node at (7.7, -1.25) (output) {\bf \$};
+\path[arrow] ([xshift=3]actionnet.east) -- (output.west);
+
+\node at (8.7, -1.25) (loss) {Loss};
+\path[arrow] (output.east) -- (loss.west);
+
+% gradients
+
+\path[arrow, bred, ultra thick] ([yshift=-12, xshift=20]loss.west) to ([yshift=-12, xshift=3]inputs.east);
+
+\path[draw, bred, ultra thick, out=90, in=0] ([yshift=-12, xshift=-10]tasknet.west) to ([yshift=-12, xshift=-10]hypernet.east);
+
+\path[draw, bred, ultra thick] ([yshift=-12, xshift=-10]hypernet.east) to ([yshift=-12, xshift=-40]examples.east);
+
+\path[draw, bred, ultra thick, out=-90, in=0] ([yshift=-12, xshift=-40]examples.east) to ([yshift=-12, xshift=-10]perceptionnet0.east);
+\path[arrow, bred, ultra thick] ([yshift=-12, xshift=-10]perceptionnet0.east) to ([yshift=-12]inputs0.east);
+
+\path[draw, bred, ultra thick, out=-90, in=0] ([yshift=-12, xshift=-12]examples.east) to ([yshift=-12, xshift=-10]targetnet0.east);
+\path[arrow, bred, ultra thick] ([yshift=-12, xshift=-10]targetnet0.east) to ([yshift=-12]targets0.east);
+
+\end{tikzpicture}
+}
+\caption{Basic task inference/training (from examples).} \label{supp_fig:HoMM:gradient_flow:basic_tasks}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[auto]
+%% from examples
+\node at (-6.9, 0) {};
+
+\node[gray, text width=3.5cm, align=center] at (-3.25, 2.3) {Mapping examples (input/output tasks)};
+\node at (-3.25, 1.25) (examples){
+\(\left\{
+\begin{matrix}
+({\color{bpurp}z_{chess}}, {\color{bpurp}z_{lose chess}})\\
+$\vdots$
+\end{matrix}\right\}\)};
+
+\node[gray, text width=2cm, align=center] at (-0.5, 2.1) {Example network};
+\node[block] at (-0.5, 1.25) (examplenet) {\(\mathcal{E}\)};
+\path[arrow] (examples.east) -- ([xshift=-3]examplenet.west);
+
+%% performing 
+\node[borange] at (1.25, 1.25) (taskrep) {\(z_{meta}\)};
+\path[arrow] ([xshift=3]examplenet.east) -- (taskrep.west);
+
+\node[gray, text width=2cm, align=center] at (3, 2.1) {Hyper network};
+\node[block] at (3, 1.25) (hypernet) {\(\mathcal{H}\)};
+\path[arrow] (taskrep.east) -- ([xshift=-3]hypernet.west);
+
+\node[bpurp] at (2.66, -1.25) (handrep) {\(z_{poker}\)};
+
+\node[bblue, block, dashed] at (4.5, -1.25) (tasknet) {\(\mathcal{T}\)};
+\node[bblue, text width=2cm, align=center] at (4.5, -2) {Task network};
+\path[arrow] (handrep.east) -- ([xshift=-3]tasknet.west);
+\path[arrow, out=0, in=90] ([xshift=3]hypernet.east) to ([yshift=3]tasknet.north);
+
+\node[bpurp] at (6.5, -1.25) (output) {\(\hat{z}_{lose poker}\)};
+\path[arrow] ([xshift=3]tasknet.east) -- (output.west);
+
+\node at (8.7, -1.25) (loss) {Loss};
+\path[arrow] (output.east) -- (loss.west);
+
+% gradients
+
+\path[arrow, bred, ultra thick] ([yshift=-12, xshift=20]loss.west) to ([yshift=-12, xshift=5]handrep.east);
+
+\path[draw, bred, ultra thick, out=90, in=0] ([yshift=-12, xshift=-10]tasknet.west) to ([yshift=-12, xshift=-10]hypernet.east);
+
+\path[arrow, bred, ultra thick] ([yshift=-12, xshift=-10]hypernet.east) to ([yshift=-12, xshift=10]examples.east);
+\end{tikzpicture}
+}
+\caption{Meta-mapping inference/training (from examples).}\label{supp_fig:HoMM:gradient_flow:meta_mappings}
+\end{subfigure}
+\caption[Schematic of architecture, showing inference and gradient flow through the model on a training step.]{Schematic of architecture, showing inference and gradient flow through the model on a training step. Thin lines moving rightward represent inference, thick red lines moving leftward represent gradients. (\subref{supp_fig:HoMM:gradient_flow:basic_tasks}) Inference and gradients for the basic tasks. (\subref{supp_fig:HoMM:gradient_flow:basic_tasks}) Inference and gradients for meta-mappings. The gradients end at the examples of the meta-mapping, rather than propagating through to alter how those representations are constructed, due to GPU memory constraints. In the future, it might be useful to explore whether allowing further propagation would improve results for both basic tasks and meta-mappings. (These figures depict the inference/gradient flow when performing tasks and meta-mappings from examples, performing from language is similar, except that the example inputs and example network are replaced with language inputs and the language processing network.)} \label{supp_fig:HoMM:gradient_flow}
+\end{figure}
+
+In Fig. \ref{supp_fig:HoMM:gradient_flow}, we show the flow of inference (forward) and gradients (backward) through the HoMM architecture on basic task and meta-mapping training steps.
+
 \begin{table}
 \scriptsize
 \centering
