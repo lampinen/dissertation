@@ -1,5 +1,5 @@
 \chapter{Model details \& hyperparameters for all experiments} \label{appendix:model_hyperparameters}
-\begin{figure}[h]
+\begin{figure}[!h]
 \begin{subfigure}{\textwidth}
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[auto]
@@ -50,7 +50,7 @@ $\vdots$
 \path[arrow] ([xshift=3]perceptionnet.east) -- (handrep.west);
 
 \node[bblue, block, dashed] at (4.5, -1.25) (tasknet) {\(\mathcal{T}\)};
-\node[bblue, text width=2cm, align=center] at (4.5, -2) {Task network};
+\node[bblue, text width=3cm, align=center] at (4.5, -2) {Task network};
 \path[arrow] (handrep.east) -- ([xshift=-3]tasknet.west);
 \path[arrow, out=0, in=90] ([xshift=3]hypernet.east) to ([yshift=3]tasknet.north);
 
@@ -115,7 +115,7 @@ $\vdots$
 \node[bpurp] at (2.66, -1.25) (handrep) {\(z_{poker}\)};
 
 \node[bblue, block, dashed] at (4.5, -1.25) (tasknet) {\(\mathcal{T}\)};
-\node[bblue, text width=2cm, align=center] at (4.5, -2) {Task network};
+\node[bblue, text width=3cm, align=center] at (4.5, -2) {Task network};
 \path[arrow] (handrep.east) -- ([xshift=-3]tasknet.west);
 \path[arrow, out=0, in=90] ([xshift=3]hypernet.east) to ([yshift=3]tasknet.north);
 
@@ -136,7 +136,7 @@ $\vdots$
 }
 \caption{Meta-mapping inference/training (from examples).}\label{supp_fig:HoMM:gradient_flow:meta_mappings}
 \end{subfigure}
-\caption[Schematic of architecture, showing inference and gradient flow through the model on a training step.]{Schematic of architecture, showing inference and gradient flow through the model on a training step. Thin lines moving rightward represent inference, thick red lines moving leftward represent gradients. (\subref{supp_fig:HoMM:gradient_flow:basic_tasks}) Inference and gradients for the basic tasks. (\subref{supp_fig:HoMM:gradient_flow:basic_tasks}) Inference and gradients for meta-mappings. The gradients end at the examples of the meta-mapping, rather than propagating through to alter how those representations are constructed, due to GPU memory constraints. In the future, it might be useful to explore whether allowing further propagation would improve results for both basic tasks and meta-mappings. (These figures depict the inference/gradient flow when performing tasks and meta-mappings from examples, performing from language is similar, except that the example inputs and example network are replaced with language inputs and the language processing network.)} \label{supp_fig:HoMM:gradient_flow}
+\caption[Schematic of architecture, showing inference and gradient flow through the model on a training step.]{Schematic of architecture, showing inference and gradient flow through the model on a training step. Thin black lines moving rightward represent inference, thick red lines moving leftward represent gradients. (\subref{supp_fig:HoMM:gradient_flow:basic_tasks}) Inference and gradients for the basic tasks. (\subref{supp_fig:HoMM:gradient_flow:basic_tasks}) Inference and gradients for meta-mappings. The gradients end at the examples of the meta-mapping, rather than propagating through to alter how those representations are constructed, due to GPU memory constraints. In the future, it might be useful to explore whether allowing further propagation would improve results for both basic tasks and meta-mappings. (These figures depict the inference/gradient flow when performing tasks and meta-mappings from examples, performing from language is similar, except that the example inputs and example network are replaced with language inputs and the language processing network.)} \label{supp_fig:HoMM:gradient_flow}
 \end{figure}
 
 In Fig. \ref{supp_fig:HoMM:gradient_flow}, we show the flow of inference (forward) and gradients (backward) through the HoMM architecture on basic task and meta-mapping training steps.
