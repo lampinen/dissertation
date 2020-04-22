@@ -271,6 +271,16 @@ We trained on 20 meta-mapping tasks, and held out 16 related meta-mappings.
 \section{Architecture \& training experiments} \label{app_lesion_results}
 In this section we consider a few variations of the architecture and training, to justify the choices made in the paper. \par
 
+\subsection{Basic meta-learning in the polynomials domain}
+
+In Fig. \ref{supp_fig:HoMM:polynomials_basic_meta_learning}, we show that the basic meta-learning is working well in the cards domain. That is, we show that after the example network is presented with a set of example input, output pairs, the system is generalizing well to other points from that polynomial. At the end of training, the mean loss on trained polynomials is 0.025 (bootstrap 95\%-CI [0.02, 0.03]), and for held-out polynomials it is 0.58 (bootstrap 95\%-CI [0.45, 0.70]). Since chance loss is 11.76 for the trained polynomials, and 11.10 for the eval, this corresponds to about 99.8\% of optimal on the trained polynomials, and 94.8\% on the held-out.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.625\textwidth]{2-HoMM/figures/basic_meta_learning_polynomials.png}
+\caption[Basic meta-learning performance in the polynomials domain over learning.]{Basic meta-learning performance in the polynomials domain over learning. The system is generalizing at the meta-learning level. That is, this graph shows that, after the example network receives a set of (input, output) example tuples, it is generating a sufficiently good representation to regress held-out points from that polynomial. This is true both for polynomials it was trained with, and for polynomials that are held-out and never encountered during training.} \label{supp_fig:HoMM:polynomials_basic_meta_learning}
+\end{figure}
+
 \subsection{Shared $Z$ vs. separate task-embedding and data-embedding space} \label{app_lesion_results_shared_z}
 Instead of having a shared $Z$ where data and tasks are embedded, why not have a separate embedding space for data, tasks, and so on? There are a few conceptual reason why we chose to have a shared $Z$, including its greater parameter efficiency, the fact that humans seem to represent our conscious knowledge of different kinds in a shared space \citep[][]{Baars2005}, and the fact that this representation could allow for zero-shot adaptation to new computational pathways through the latent space, analogously to the zero-shot language translation results reported by Johnson and colleagues \citep{Johnson2016a}. In this section, we further show that training with a separate task encoding space worsens performance, see fig. \ref{supp_lesion_shared_z_fig}. This seems to primarily be due to the fact that learning in the shared $Z$ accelerates and de-noises the learning process, see fig. \ref{supp_lesion_shared_z_learn_fig}. (It's therefore worth noting that running this model for longer could result in convergence to the same asymptotic generalization performance.) Note: this analysis was performed in an older implementation of the model. \par
 \begin{figure}[H]
