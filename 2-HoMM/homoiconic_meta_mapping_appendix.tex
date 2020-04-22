@@ -277,8 +277,8 @@ In Fig. \ref{supp_fig:HoMM:polynomials_basic_meta_learning}, we show that the ba
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.625\textwidth]{2-HoMM/figures/basic_meta_learning_polynomials.png}
-\caption[Basic meta-learning performance in the polynomials domain over learning.]{Basic meta-learning performance in the polynomials domain over learning. The system is generalizing at the meta-learning level. That is, this graph shows that, after the example network receives a set of (input, output) example tuples, it is generating a sufficiently good representation to regress held-out points from that polynomial. This is true both for polynomials it was trained with, and for polynomials that are held-out and never encountered during training.} \label{supp_fig:HoMM:polynomials_basic_meta_learning}
+\includegraphics[width=0.66\textwidth]{2-HoMM/figures/basic_meta_learning_polynomials.png}
+\caption[Basic meta-learning performance in the polynomials domain over learning.]{Basic meta-learning performance in the polynomials domain over learning. The system is generalizing at the meta-learning level. That is, this graph shows that, after the example network receives a set of (input, output) example tuples, it is generating a sufficiently good representation to regress held-out points from that polynomial. This is true both for polynomials it was trained with (green), and for polynomials that are held-out and never encountered during training (pink). (Thick lines are averages over 5 runs, shown as thin light curves.)} \label{supp_fig:HoMM:polynomials_basic_meta_learning}
 \end{figure}
 
 \subsection{Shared $Z$ vs. separate task-embedding and data-embedding space} \label{app_lesion_results_shared_z}
@@ -302,7 +302,7 @@ Instead of having the task network $F$ parameterized by the hyper network $\math
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{2-HoMM/figures/conditioned_vs_hyper_polynomials.png}
+\includegraphics[width=0.66\textwidth]{2-HoMM/figures/conditioned_vs_hyper_polynomials.png}
 \caption[The HyperNetwork-based architecture we propose outperforms a simpler architecture.]{The HyperNetwork-based architecture we propose in the main text performs better and more consistently on meta-mappings than a simpler architecture that simply concatenates a task representation to the input before passing it through a fixed MLP. Results are in the polynomial domain, c.f. Fig. \ref{fig:HoMM_polynomials:results}. Note that the task-concatenated architecture performs just as well at the trained basic tasks (not shown), it is adapting via meta-mappings that proves challenging for it. See Supp. Fig. \ref{supp_fig:extending:RL:arch_cond_vs_hyper} for a more dramatic comparison in the RL domain. }\label{supp_fig:HoMM_arch_cond_vs_hyper}
 \end{figure}
 
@@ -312,7 +312,7 @@ In Fig. \ref{supp_fig:HoMM:metaclass_lesion}, we show that meta-classification t
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{2-HoMM/figures/metaclass_lesion_polynomials.png}
+\includegraphics[width=0.66\textwidth]{2-HoMM/figures/metaclass_lesion_polynomials.png}
 \caption[In the polynomials domain, the HoMM model performs slightly better without meta-classification training.]{In the polynomials domain, the HoMM model performs slightly better without meta-classification training. This effect appears for both trained and held-out meta-mappings. However, the effect is small.}\label{supp_fig:HoMM:metaclass_lesion}
 \end{figure}
 

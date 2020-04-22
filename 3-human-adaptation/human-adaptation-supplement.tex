@@ -181,6 +181,16 @@ As \citet{Jarvstad2013} note, how ``optimal'' human performance seems to be depe
 \caption{How optimal human performance appears depends on the metric used to evaluate it.} \label{fig:appx_human_calibration}
 \end{figure}
 
+
+\subsection{Basic meta-learning in the cards domain}
+
+In Fig. \ref{supp_fig:human:cards_basic_meta_learning}, we show that the basic meta-learning is working well in the cards domain. That is, we show that after the example network is presented with a set of example (hand, bet, reward) tuples, the system is generalizing well to other hands of that game. At the end of training, the mean reward on trained games is 99.20\% of optimal (bootstrap 95\%-CI [98.90, 99.40]), and for held-out games it is 83.82\% (bootstrap 95\%-CI [80.50, 86.00]).
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.66\textwidth]{3-human-adaptation/figures/basic_meta_learning_cards.png}
+\caption[Basic meta-learning performance in the cards domain over learning.]{Basic meta-learning performance in the cards domain over learning. The system is generalizing at the meta-learning level. That is, this graph shows that, after the example network receives a set of (hand, bet, reward) example tuples from a game, it is generating a sufficiently good representation of that game to play held-out hands. This is true both for gamess it was trained with (green), and for games that are held-out and never encountered during training (pink). (Thick dark curves are averages over 5 runs, shown as light curves.)} \label{supp_fig:human:cards_basic_meta_learning}
+\end{figure}
+
 \subsection{Comparing to a simpler architecture for language generalization}\label{appendix:human:lang_tcnh}
 In Fig. \ref{supp_fig:human:lang_tcnh} we show that language generalization is comparable in the HyperNetwork-based architecture we used for HoMM and a simpler architecture which simply concatenates the task representation to the input representation before passing them through a fixed feed-forward task network. Specifically, the HyperNetwork architecture achieves a mean expected reward of 1.79\% (bootstrap 95\%-CI [-12.31, 15.88]), while the simpler architecture achieves a mean expected reward of -8.59\% (bootstrap 95\%-CI [-20.42, -0.99]). See Supp. Figs. \ref{supp_fig:HoMM_arch_cond_vs_hyper} and \ref{supp_fig:extending:RL:arch_cond_vs_hyper} for the same architecture comparison for HoMM itself.  
 
@@ -189,6 +199,8 @@ In Fig. \ref{supp_fig:human:lang_tcnh} we show that language generalization is c
 \includegraphics[width=0.66\textwidth]{3-human-adaptation/figures/cards_lang_hyper_vs_tcnh.png}
 \caption[Language generalization is similar in the cards domain with either the HyperNetwork architecture used by HoMM, or a simpler task-concatenated architecture.]{Language generalization is similar in the cards domain with either the HyperNetwork architecture used by HoMM, or a simpler task-concatenated architecture. Compare to Fig. \ref{fig:human_cards_homm_results} for the human and HoMM results.} \label{supp_fig:human:lang_tcnh}
 \end{figure}
+
+
 
 \subsection{HoMM without meta-classification}
 
@@ -199,3 +211,4 @@ In Fig. \ref{supp_fig:human:homm_metaclass_lesion} we show that the HoMM model m
 \includegraphics[width=0.66\textwidth]{3-human-adaptation/figures/cards_metaclass_lesion.png}
 \caption[The HoMM model performs marginally worse without meta-classification training.]{The HoMM model performs marginally worse without meta-classification training. Thus this training may allow the model to adapt more robustly to new tasks.} \label{supp_fig:human:homm_metaclass_lesion}
 \end{figure}
+
