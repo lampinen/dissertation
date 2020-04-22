@@ -29,13 +29,32 @@
 %%\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
 
 
+%% Tikz stuff
 \usetikzlibrary{shapes,arrows}
+\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, snakes, calligraphy}
 
 \tikzstyle{block} = [rectangle, draw, thick, align=center, rounded corners]
-\tikzstyle{boundingbox} = [very thick, dotted, gray]
+\tikzstyle{boundingbox} = [very thick, gray]
 \tikzstyle{dashblock} = [rectangle, draw, thick, align=center, dashed]
 \tikzstyle{conc} = [ellipse, draw, thick, dashed, align=center]
 \tikzstyle{netnode} = [circle, draw, very thick, inner sep=0pt, minimum size=0.5cm]
 \tikzstyle{relunode} = [rectangle, draw, very thick, inner sep=0pt, minimum size=0.5cm]
 \tikzstyle{line} = [draw, very thick, -latex']
+\tikzstyle{arrow} = [draw, ->, thick]
+\tikzstyle{mapsto} = [draw, |->, thick]
+
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+
+%% Some colors stolen from ColorBrewer
+\definecolor{bpurp}{HTML}{984ea3}
+\definecolor{bblue}{HTML}{377eb8}
+\definecolor{bgreen}{HTML}{4daf4a}
+\definecolor{borange}{HTML}{ff7f00}
+\definecolor{bred}{HTML}{a50f15}
+
+% footnote without a marker
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
 
