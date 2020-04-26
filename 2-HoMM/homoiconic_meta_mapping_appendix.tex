@@ -156,9 +156,9 @@ $\mathcal{L}$ architecture & -  & \multicolumn{3}{c|}{2-layer LSTM + 2 fully-con
 $\mathcal{L}$ num. hidden units & -  & \multicolumn{3}{c|}{512} \\\hline
 $\mathcal{T}$ num. layers & 1 & 3 & 1 & 3 \\\hline
 $\mathcal{T}$ num. hidden units & - & 128 & - & 128 \\\hline
-$\mathcal{M}$ architecture & \multicolumn{4}{c|}{2 layers per-datum, max pool across, 2 layers} \\\hline
+$\mathcal{E}$ architecture & \multicolumn{4}{c|}{2 layers per-datum, max pool across, 2 layers} \\\hline
 $\mathcal{H}$ architecture & \multicolumn{4}{c|}{4 layers} \\\hline
-$\mathcal{M}$ num. hidden units & \multicolumn{3}{c|}{512} & 1024 \\\hline
+$\mathcal{E}$ num. hidden units & \multicolumn{3}{c|}{512} & 1024 \\\hline
 $\mathcal{H}$ num. hidden units & \multicolumn{4}{c|}{512} \\\hline
 Task, MM representations from & \multicolumn{2}{c|}{Examples} & Language & Examples \\\hline
 $\mathcal{F}$ num. layers & 3 & 1 & HoMM: 1, Lang: 3 & 3 \\\hline
@@ -200,7 +200,7 @@ RL discount & \multicolumn{3}{c|}{-} & 0.85 \\\hline
 RL explore prob. (\(\epsilon\)) & \multicolumn{3}{c|}{-} & \multicolumn{1}{p{2.5cm}|}{Init: 1, decay: -0.03}\\\hline
 Action softmax \(\beta\) & - & 8 & - & 8\\\hline
 \end{tabular}
-\caption[Detailed hyperparameter specification.]{Detailed hyperparameter specification for different experiments. A ``-'' indicates a parameter that does not apply to that experiment. As a reminder: the shared representational space is denoted by $Z$. Input encoder: $\mathcal{I}: \text{input} \rightarrow Z$. Action decoder $\mathcal{A}: Z \rightarrow \text{output}$. Target encoder $\mathcal{T}: \text{targets} \rightarrow Z$. Meta-network $\mathcal{M}: \{(Z, Z), ...\} \rightarrow Z $ maps examples to a task representation. Hyper-network $\mathcal{H}: Z \rightarrow \text{parameters}$. Task network $F: Z \rightarrow Z$ is parameterized by $\mathcal{H}$. Language encoder: $\mathcal{L}: \text{language} \rightarrow Z$. } \label{supp_hyperparameter_table}
+\caption[Detailed hyperparameter specification.]{Detailed hyperparameter specification for different experiments. A ``-'' indicates a parameter that does not apply to that experiment. As a reminder: the shared representational space is denoted by $Z$. Input encoder: $\mathcal{I}: \text{input} \rightarrow Z$. Action decoder $\mathcal{A}: Z \rightarrow \text{output}$. Target encoder $\mathcal{T}: \text{targets} \rightarrow Z$. Meta-network $\mathcal{E}: \{(Z, Z), ...\} \rightarrow Z $ maps examples to a task representation. Hyper-network $\mathcal{H}: Z \rightarrow \text{parameters}$. Task network $F: Z \rightarrow Z$ is parameterized by $\mathcal{H}$. Language encoder: $\mathcal{L}: \text{language} \rightarrow Z$. } \label{supp_hyperparameter_table}
 \end{table}
 See table \ref{supp_hyperparameter_table} for detailed architectural description and hyperparameters for each experiment. Hyperparameters were generally found by a heuristic search, where mostly only the optimizer, learning rate annealing schedule, and number of training epochs were varied. Some of the parameters take the values they do for fairly arbitrary reasons, e.g. the polynomial experiments were run earlier, before 1-layer task networks were found to be useful in some settings. While it would be ideal to fully search the space of parameters for all models, unfortunately our computational resource limitations prohibited it. Thus the results in the paper should be interpreted as a lower bound on what would be possible. \par
 Each epoch consisted of a separate learning step on each task (both base and meta), in a random order. In each task, the meta-learner would receive only a subset (the ``batch size`` above) of the examples to generate a function embedding, and would have to generalize to the remainder of the examples in the dataset. The embeddings of the basic tasks used for meta-mappings were computed and cached once per epoch, so as the network learned over the course of the epoch, these task-embeddings would get ``stale,'' but this did not seem to be too detrimental. In the case of the RL tasks, where there were persistent task embeddings, they were used insteadd.\par
@@ -270,6 +270,23 @@ We trained on 20 meta-mapping tasks, and held out 16 related meta-mappings.
 
 \section{Architecture \& training experiments} \label{app_lesion_results}
 In this section we consider a few variations of the architecture and training, to justify the choices made in the paper. \par
+
+\subsection{Inadequacy of vector analogies for meta-mapping} \label{supp_sec:HoMM:vector_analogies_inadequate}
+
+One possible implementation of meta-mapping would be to just construct an analogy vector and use that for the mapping. This idea is motivated by work showing that word vector representations often support vector analogical reasoning; for example if we denote the vector for the word king as \(\vec{v}_{king}\), relationships like \(\vec{v}_{queen} \approx \vec{v}_{king} + \left(\vec{v}_{man} - \vec{v}_{woman} \right)\) often hold \citep{Mikolov2013}. Thus, adopting a similar strategy for meta-mapping would be superficially plausible. For example, in the polynomials domain, the meta-mapping ``Permute \((w, z, x, y)\)'' could be estimated by taking the vector differences between the representations of inputs and targets, computing an average difference vector, and adding that to the held-out examples to produce an output for each one.
+
+However, in this section, we prove that such an approach cannot accurately represent all the meta-mappings in the polynomials domain. Furthermore, we sketch a proof by construction that a linear task network (i.e. an affine transformation, matrix multiplication plus a bias vector) parameterized independently for each meta-mapping suffices.
+
+\textbf{Proof that vector analogies are inadequate:} In essence, the proof is simply that many of our meta-mappings are non-commutative, while vector addition is commutative. Consider the mappings for adding 1 to a polynomial, and multiplying by 2. Assume there were vector representations for these mappings, respectively \(\vec{m}_{+1}\) and \(\vec{m}_{\times 2}\). Let \(\vec{f}_{x}\) be the vector representation for the polynomial \(f(w,x,y,z) = x\). Then \(\vec{f}_{x} + \vec{m}_{+1} = \vec{f}_{x+1}\), \(\vec{f}_{x} + \vec{m}_{\times 2} = \vec{f}_{2x}\). But then:
+\[ \vec{f}_{2(x + 1)} = \left(\vec{f}_{x} + \vec{m}_{+1}\right) + \vec{m}_{\times 2} = \vec{f}_{x} + \vec{m}_{+1} + \vec{m}_{\times 2} = \left(\vec{f}_{x} + \vec{m}_{\times 2}\right) + \vec{m}_{+1} = \vec{f}_{2x + 1}\]
+Thus such a representation would result in contradictions, such as \(2x + 1 = 2x + 2\). Similar issues occur for permutation and other non-commutative mappings.
+
+\textbf{Proof sketch that affine transformations in an appropriate vector space suffice:} Suppose that we have a vector representation for the polynomials, where there is a basis dimension corresponding to each monomial, so that the polynomial can be represented as a vector of its coefficients. (This is the standard vector-space representation for polynomials.) Then permutation corresponds to permuting these monomials, i.e. a permutation of the basis dimensions, which is a linear transformation. Adding a constant corresponds to adding to one dimension, which requires only the vector addition part of the affine transformation. Multiplying by a constant requires multiplying each dimension, i.e. a block-diagonal linear transformation.
+
+Squaring polynomials is slightly more complex, and requires augmenting the vector space with components whose values are the product of the coefficients of each pair of monomials. In this case, squaring corresponds to a simple linear transformation. However, this augmentation makes the other meta-mappings more complex. The most difficult case is adding a constant, which requires shifting each pair term containing a constant by the product of the constant and the coefficient of the other monomial, but this again reduces to simply an appropriately parameterized affine transformation --- each pair term containing a constant term simply needs the added constant as a weight times the component for the other monomial. Thus affine transformations suffice in this setting.
+
+Of course, with a sufficiently complex, deep, recurrent, and non-linear task network, any meta-mapping could be computed in principle, since a sufficiently complex network is Turing-complete \citep{Siegelman1992}. Thus, our approach to meta-mapping is fully general, conditioned on a sufficiently complex task network, while simpler approaches may not be.
+
 
 \subsection{Basic meta-learning in the polynomials domain}
 
