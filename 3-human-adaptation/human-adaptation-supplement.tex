@@ -212,3 +212,13 @@ In Fig. \ref{supp_fig:human:homm_metaclass_lesion} we show that the HoMM model m
 \caption[The HoMM model performs marginally worse without meta-classification training.]{The HoMM model performs marginally worse without meta-classification training. Thus this training may allow the model to adapt more robustly to new tasks.} \label{supp_fig:human:homm_metaclass_lesion}
 \end{figure}
 
+\subsection{Non-homoiconic meta-mapping}
+
+In Fig. \ref{supp_fig:HoMM:nonhomoiconic_baseline:cards} we compare HoMM to a non-homoiconic meta-mapping approach, as in Fig. \ref{fig:HoMM:nonhomoiconic_baseline} in the polynomials domain. In the cards domain, the non-homoiconic approach may perform slightly worse, but the difference is not significant. Specifically, the HoMM model is achieving an average expected reward of 85.38\% (bootstrap 95\%-CI [79.49, 90.32]), while non-homoiconic meta-mapping is achieving an average expected reward of 79.49\% (bootstrap 95\%-CI [69.50, 87.34]). 
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.66\textwidth]{3-human/figures/cards_nonhomoiconic_lesion.png}
+\caption[HoMM performs comparably to a non-homoiconic lesion in the cards domain.]{HoMM performs comparably to a non-homoiconic lesion in the cards domain. This figure compares the meta-mapping performance of HoMM with a nonhomoiconic model that instantiates separate copies of the example network (\(\mathcal{E}_{base},\mathcal{E}_{meta}\)) and hyper network (\(\mathcal{H}_{base},\mathcal{H}_{meta}\)) for the basic tasks and the meta-mappings.} \label{supp_fig:HoMM:nonhomoiconic_baseline:cards}
+\end{figure}
+

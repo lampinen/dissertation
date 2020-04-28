@@ -298,22 +298,6 @@ In Fig. \ref{supp_fig:HoMM:polynomials_basic_meta_learning}, we show that the ba
 \caption[Basic meta-learning performance in the polynomials domain over learning.]{Basic meta-learning performance in the polynomials domain over learning. The system is generalizing at the meta-learning level. That is, this graph shows that, after the example network receives a set of (input, output) example tuples, it is generating a sufficiently good representation to regress held-out points from that polynomial. This is true both for polynomials it was trained with (green), and for polynomials that are held-out and never encountered during training (pink). (Thick lines are averages over 5 runs, shown as thin light curves.)} \label{supp_fig:HoMM:polynomials_basic_meta_learning}
 \end{figure}
 
-\subsection{Shared $Z$ vs. separate task-embedding and data-embedding space} \label{app_lesion_results_shared_z}
-Instead of having a shared $Z$ where data and tasks are embedded, why not have a separate embedding space for data, tasks, and so on? There are a few conceptual reason why we chose to have a shared $Z$, including its greater parameter efficiency, the fact that humans seem to represent our conscious knowledge of different kinds in a shared space \citep[][]{Baars2005}, and the fact that this representation could allow for zero-shot adaptation to new computational pathways through the latent space, analogously to the zero-shot language translation results reported by Johnson and colleagues \citep{Johnson2016a}. In this section, we further show that training with a separate task encoding space worsens performance, see fig. \ref{supp_lesion_shared_z_fig}. This seems to primarily be due to the fact that learning in the shared $Z$ accelerates and de-noises the learning process, see fig. \ref{supp_lesion_shared_z_learn_fig}. (It's therefore worth noting that running this model for longer could result in convergence to the same asymptotic generalization performance.) Note: this analysis was performed in an older implementation of the model. \par
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_results_unshared_vs_shared.png}
-\caption[Having a separate embedding space for tasks results in worse performance on meta-mappings.]{Having a separate embedding space for tasks results in worse performance on meta-mappings. (Results are from only 1 run.)}
-\label{supp_lesion_shared_z_fig}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{2-HoMM/figures/poly/meta_learning_curves_with_separate.png}
-\caption[Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings.]{Having a separate embedding space for tasks results in noisier, slower learning of meta-mappings. (Results are from only 1 run.)}
-\label{supp_lesion_shared_z_learn_fig}
-\end{figure}
-
 \subsection{Hyper network vs. conditioned task network} \label{app_lesion_results_hyper}
 Instead of having the task network $F$ parameterized by the hyper network $\mathcal{H}$, we could simply have a task network with learned weights which takes a task embedding as another input. In Fig. \ref{supp_fig:HoMM_arch_cond_vs_hyper}, we show that this architecture fails to learn the meta-mapping tasks, although it can successfully perform the basic tasks. We suggest that this is because it is harder for this architecture to prevent interference between the comparatively larger number of basic tasks and the smaller number of meta-tasks. While it might be possible to succeed with this architecture, it was more difficult in the hyper-parameter space we searched. See also Fig. \ref{supp_fig:human:lang_tcnh}, where we show that both architectures perform similarly for language generalization. \par 
 

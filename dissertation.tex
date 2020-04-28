@@ -28,7 +28,7 @@
 \dept{Psychology}
 
 \begin{document}
-\title{Toward understanding human adaptibility with deep learning models}
+\title{Toward a computational model that can adapt to task transformations}
 \author{Andrew Kyle Lampinen}
 \principaladviser{Jay McClelland}
 \firstreader{Noah Goodman}
@@ -40,13 +40,13 @@
 \setcounter{page}{4}  % Stanford formatting requirements
 \prefacesection{Abstract}
 
-Human cognition is fundamentally flexible --- we can adapt to novel tasks rapidly. We can sometimes adapt to a novel task without any direct experience on that task, based on its relationship to previous tasks. By contrast, while deep-learning models can achieve superhuman performance on many tasks, they are often unable to adapt to even slight task alterations. I begin this dissertation by reviewing the literature on cognitive flexibility, and recent advances in building more flexible artificial intelligence. I provide a synthesis of these literatures, and outline the challenges that I believe remain. In particular, I focus on the ability to adapt to new tasks zero-shot, that is, without any data, based on their relationship to prior tasks.\par
+Human cognition is fundamentally flexible --- we can adapt to novel tasks rapidly. We can sometimes adapt to a novel task without any direct experience on that task, based on its relationship to previous tasks. By contrast, while deep-learning models can achieve superhuman performance on many tasks, they are often unable to adapt to even slight task alterations. This ostensible inflexibility has led to criticism of deep learning models by cognitive scientists. I begin this dissertation by reviewing the literature on cognitive flexibility, and recent advances in building more flexible artificial intelligence systems. I provide a synthesis of these literatures, and outline the challenges that I believe remain. In particular, I focus on the ability to adapt to new tasks zero-shot, that is, without any data, based on their relationship to prior tasks.\par
 To address this challenge, I propose a general computational framework for modeling adaptation to novel tasks based on their relationship to prior tasks. The framework is based on \emph{meta-mappings}, higher-order tasks that transform basic tasks. I propose a parsimonious implementation of this framework in the form of \emph{homoiconic meta-mapping} architectures. I demonstrate this framework across a wide variety of tasks and computational paradigms, ranging from regression to image classification and reinforcement learning. I compare to both human adaptibility, and language-based approaches to zero-shot task performance. I demonstrate that meta-mapping is quite succesful, often achieveing 80-90\% performance on a novel task, even when the new task directly contradicts prior experience. I further show that using this adaptation as a starting point can dramatically accelerate later learning on a task, and reduce the errors made on the way to mastery by nearly an order of magnitude. \par
-Thus, I suggest that meta-mapping provides a plausible computational basis for human adaptability, and a basis for efficient learning. This dissertation therefore provides a framework for building better cognitive models and more flexible artificial intelligence systems. In the final chapter, I review the broader contributions of this work to an ongoing discussion about the computational principles necessary for intelligence, and highlight possible future directions ranging from understanding mathematical cognition to neuroscience. 
+Thus, I suggest that meta-mapping provides a plausible computational basis for modeling human adaptability, and a starting point for efficient learning. This dissertation therefore provides a framework for building better cognitive models and more flexible artificial intelligence systems. In the final chapter, I review the broader contributions of this work to an ongoing discussion about the computational principles necessary for intelligence, and highlight possible future directions ranging from understanding mathematical cognition to neuroscience. 
 
 \prefacesection{Acknowledgements}
 
-I have been very fortunate both while writing this dissertation, and along the longer road to the PhD. Many people played a role in guiding me on this journey.
+I have been very fortunate both while writing this dissertation, and along the longer road to the PhD. I am grateful to many people who played many roles in this journey.
 
 First, I'd like to thank the other graduate students and researchers in my lab, who have helped shape my thinking and clarify my ideas, and collaborated on several fascinating projects. That includes Kevin Mickey, Steven Hansen, Arianna Yuan, Katherine Hermann, Andrew Nam, and Effie Li, as well as Ir\'an Rom\'an, Amarjot Singh, and Rav Suri. I'd also like to thank the students in the cognitive area more broadly, especially Erin Bennett, MH Tessler and Robert Hawkins, who have really shaped my thinking as a cognitive scientist. 
 
