@@ -1,10 +1,11 @@
 \documentclass[12pt]{article}
+\usepackage{setspace}
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage[scaled]{helvet}
 \usepackage[T1]{fontenc}
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage[fleqn]{amsmath}
 \usepackage{amssymb}
 \usepackage{bm}
@@ -12,9 +13,21 @@
 \usepackage{listings}
 \usepackage{float}
 \usepackage{tikz}
+\usepackage{fancyhdr}
 \include{header/header}
 
+%\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+%\lfoot{Andrew Lampinen}
+\rhead{Andrew Lampinen}
+\rfoot{\thepage}
+
 \def\bigcheckmark{\tikz\fill[scale=0.66](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+\doublespacing
 
 \renewcommand\familydefault{\sfdefault}
 \title{A computational framework for learning and transforming task representations}
@@ -22,10 +35,11 @@
 \date{}
 \begin{document}
 \maketitle
+\thispagestyle{fancy}
 
 Humans exhibit substantial cognitive flexibility. We can use our knowledge of a task to adapt to novel variations on our first try. For example, imagine you are playing poker with your friends, and one of them says ``next round, let's try to lose.'' You will be able to perform well, despite the new goal directly contradicting your prior goal. Alternatively, suppose your friend says ``next round, threes will be jokers.'' You will be able to play this variation, even if you have never played it before. For an example from another domain, imagine your friend shows you a blue car, and then tells you that their car looks similar, except that it is red. You will be able to combine these pieces of knowledge to recognize their car, despite never having seen it before. Humans can adapt our knowledge to a new situation on our first try. 
 
-By contrast, while deep learning models can achieve human (or super-human) accuracy at games \citep{Silver2017,Vinyals2019} and object recognition \citep{Szegedy2016}, they are unable to flexibly adapt their knowledge of these tasks \citep{Lake2016}. How could a deep learning model trained to win at poker reuse that knowledge to try to lose? How could a model trained to recognize one car adapt to recognize that car in a different color? Many deep learning models cannot, even in principle.  
+By contrast, while deep learning models can achieve human (or super-human) performance at games \citep{Silver2017,Vinyals2019} and object recognition \citep{Szegedy2016}, they are unable to flexibly adapt their knowledge of these tasks \citep{Lake2016}. How could a deep learning model trained to win at poker reuse that knowledge to try to lose? How could a model trained to recognize one car adapt to recognize that car in a different color? Many deep learning models cannot, even in principle.  
 
 Observations like these have formed a key piece of contemporary critiques of deep learning models as cognitive models \citep{Lake2016,Marcus2018}. These critiques echo criticisms of the generalization capabilities of neural networks from the earlier days of connectionism \citep{Fodor1988}. Can deep learning serve as a foundation for plausible cognitive models, or is the approach fundamentally limited, as these critiques suggest? 
 
@@ -45,34 +59,9 @@ The key insight of my dissertation is that the task representations that the mod
 
 There is an analogy between the basic tasks and meta-mappings --- both are simply functions from inputs to outputs, just of different types. The implementation I propose, called the HoMM architecture, therefore parsimoniously reuses the same architectural components for both basic tasks and transformations of basic tasks. This parallel is reflected in the parallels between the top and bottom rows of Fig. \ref{fig:HoMM_architecture}. This approach is parsimonious, in that it does not multiply networks unnecessarily. It also reflects ideas from the theory of programming languages, and aspects of the Global Workspace Theory of consciousness \citep{Baars2005}. 
 
-\section{Selected experimental results}
-\textbf{Card games:} I demonstrate my approach in a domain of simple card games. I show that my architecture is able to learn to play card games nearly optimally, and from seeing examples on other games, it is able to transform its representation of simplified poker to play a novel losing variation of that game on its first try, and achieve 85\% of optimal performance on this difficult adaptation. This is achieved without giving the system prior knowledge of winning, losing, or any of the concepts relevant to the games, based only on performing tasks and seeing the relationship between winning and losing at other games.
 
-I compare this result to the adaptation of human participants on the same card game. The human participants are not able to learn the game very optimally within the limited experiment, so it is difficult to make a perfectly fair comparison, but my method does not seem to be performing substantially worse. I also show that my method substantially outperforms an alternative approach based on a language description of the new task.
-
-\textbf{Visual concepts:} I also demonstrate my approach in a visual concepts setting (Fig. \ref{fig:HoMM_visual_results:domain}). I show that the system is able to adapt compound concepts, for example adapting from recognizing red triangles to blue triangles, or from recognizing yellow circles to yellow squares. After training on a few hundred visual concepts, the system is able to achieve perfect adaptation to novel concepts based on their relationship to prior concepts.
-
-I instantiated the visual concepts as mappings from raw input images to classifications, as is the standard in computer vision. Thus, the results of these experiments suggest a method for building vision models a step closer to human-like adaptibility. This could be important both because computer vision is a growing field, and because deep learning vision models are increasingly used as models of human and animal perception \citep{Yamins2014,Kriegeskorte2015},   
-
-\textbf{Video games:} I also demonstrated my approach in a set of simple video game (reinforcement learning) tasks (Fig. \ref{fig:extending_grid_task_views}). These games required the system to complete a sequence of actions, such as moving around to pick up all the objects of one color in a room, or to push them out of the room, while avoiding negatively rewarding objects of another color. In these games, the system had to learn to adapt to switches of which objects were good or bad, by transforming task representations. The model is able to achieve 80\% of optimal performance on average at a novel transformed task, based on examples of the transformation applied to less than twenty tasks. Furthermore, it is even able to generalize from switching colors to switching shapes, even if it has never experienced a transformation of switching shapes. 
-
-The deep reinforcement learning paradigm has driven some of the recent artificial intelligence successes at challenging games \citep{Silver2017,Vinyals2019}. Furthermore, reinforcement learning computations appear to explain some aspects of neural activity \citep{Dabney2020}. Finally, reinforcement learning requires adaptation of not just an instantaneous decision, but of longer-term actions. Thus, the results of these experiments suggest that my task transformation approach may be broadly useful.
-
-\textbf{Task transformation as a starting point:} One key reason why task transformation is useful is that it offers a starting point for later learning. I show that learning from a transformation of a prior tasks allows the system to master a new task while making an order of magnitude fewer mistakes than the next best approach I considered. This may explain some of the efficiency of human learning, and could be useful for domains like robotics, where mistakes during learning can be dangerous \citep{Turchetta2016}.  
-
-\textbf{The analogy between basic tasks and task transformations:} I also show that the parsimonious implementation I noted above, which shares architectural components between the basic tasks and transformations of basic tasks, significantly improves performance. This raises interesting questions about the benefits of a shared workspace that may provide interesting ideas for future research.
-
-\section{Conclusions \& implications}
-
-In my dissertation, I have proposed a computational approach by which a deep learning system can successfully perform a novel task on its first try. The approach is based on learning task representations, and learning to transform those task representations based on relationships between tasks. This approach does not require building in prior domain knowledge, and so is broadly applicable. I demonstrated my approach across a variety of domains, including card games, video games, visual concepts, and a mathematical domain that I did not discuss in this summary. Across all these settings, my approach was able to achieve 80-90\% performance on a novel task on its first try. This adaptation also serves as a useful starting point for later learning, allowing the system to master the new tasks much more efficiently. 
-
-This work therefore addresses some of the key critiques raised by cognitive scientists and philosophers about using deep learning approaches as models of human intelligence. My work shows that deep learning models can achieve rapid and flexible reuse of knowledge, and offers a way to build cognitive models that can adapt more flexibly to novel tasks. It could potentially provide new perspective on prior ideas about the role of recursion in cognition \citep{Fodor2008lot2}, and the rerepresentation of knowledge in cognitive development \citep{Karmiloff-Smith1986}. It could potentially connect to many other fields of research, such as cognitive control, executive function, and consciousness. Finally, it offers a route toward constructing artificial intelligence systems that have cognitive flexibility a step closer to that exhibited by humans 
-
-\newpage
-\bibliographystyle{apalike}
-\bibliography{arrr}
-
-\begin{figure}[H]
+\begin{figure}[h]
+\singlespacing
 \centering
 \begin{subfigure}{0.4\textwidth}
 \centering
@@ -144,8 +133,9 @@ This work therefore addresses some of the key critiques raised by cognitive scie
 \caption[Basic tasks and meta-mappings.]{Basic tasks and task transformations. (\subref{fig:HoMM:tasks_as_mappings:basic}) Basic tasks can be seen as mappings from inputs to outputs, for example, from poker hands to bets. Tasks can be generalized from examples. (\subref{fig:HoMM:tasks_as_mappings:meta}) Task transformations are higher-order tasks, which take a basic task as input, and output a transformed version of that task, for example, switching from winning to losing a game. Task transformations can be generalized from examples.} \label{fig:HoMM:tasks_as_mappings}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
+\singlespacing
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[auto]
 
@@ -242,11 +232,15 @@ $\vdots$
 \path[draw, gray, thick] (3.75, -0.95) to (8.5, 0);
 \end{tikzpicture}
 }
-\begin{subfigure}{0.39\textwidth}%%Haaaaaacky
+\begin{subfigure}[t]{0.39\textwidth}%%Haaaaaacky
+\vspace{-1em}
 \caption{Constructing a basic-task representation.}\label{fig:HoMM_architecture:constructing_basic}
+\vspace{0.5em}
 \end{subfigure}%
-\begin{subfigure}{0.61\textwidth}
+\begin{subfigure}[t]{0.61\textwidth}
+\vspace{-1em}
 \caption{Performing a basic task from its representation.}\label{fig:HoMM_architecture:performing_basic}
+\vspace{0.5em}
 \end{subfigure}
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[auto]
@@ -351,7 +345,7 @@ $\vdots$
 }
 \begin{subfigure}[t]{0.4\textwidth}
 \vspace{-1em}
-\caption{Constructing a task-transformation\phantom{blahblah} representation.}\label{fig:HoMM_architecture:constructing_meta}
+\caption{Constructing a task-\phantom{blahblahblahblah}  transformation representation.}\label{fig:HoMM_architecture:constructing_meta}
 \end{subfigure}%
 \begin{subfigure}[t]{0.6\textwidth}
 \vspace{-1em}
@@ -361,9 +355,20 @@ $\vdots$
 \end{figure}
 
 
-\begin{figure}[H]
+
+\section{Selected experimental results}
+\textbf{Card games:} I demonstrate my approach in a domain of simple card games. I show that my architecture is able to learn to play card games nearly optimally, and from seeing examples on other games, it is able to transform its representation of simplified poker to play a novel losing variation of that game on its first try, and achieve 85\% of optimal performance on this difficult adaptation. This is achieved without giving the system prior knowledge of winning, losing, or any of the concepts relevant to the games, based only on performing tasks and seeing the relationship between winning and losing at other games.
+
+I compare this result to the adaptation of human participants on the same card game. The human participants are not able to learn the game very optimally within the limited experiment, so it is difficult to make a perfectly fair comparison, but my method does not seem to be performing substantially worse. I also show that my method substantially outperforms an alternative approach based on a language description of the new task.
+
+\textbf{Visual concepts:} I also demonstrate my approach in a visual concepts setting (Fig. \ref{fig:HoMM_visual_results:domain}). I show that the system is able to adapt compound concepts, for example adapting from recognizing red triangles to blue triangles, or from recognizing yellow circles to yellow squares. After training on a few hundred visual concepts, the system is able to achieve perfect adaptation to novel concepts based on their relationship to prior concepts.
+
+I instantiated the visual concepts as mappings from raw input images to classifications, as is the standard in computer vision. Thus, the results of these experiments suggest a method for building vision models a step closer to human-like adaptibility. This could be important both because computer vision is a growing field, and because deep learning vision models are increasingly used as models of human and animal perception \citep{Yamins2014,Kriegeskorte2015},   
+
+\begin{figure}[h]
 \centering
-\begin{tikzpicture}[auto, scale=0.9, every node/.style={scale=0.8}]
+\singlespacing
+\begin{tikzpicture}[auto, scale=0.73, every node/.style={scale=0.73}]
 \draw[boundingbox, draw=gray, fill=white] (-9.4, 2.8) rectangle (-0.1, 0);
 \node[gray, align=center] at (-4.7, 2.45) {\large Visual concept (basic task)};
 \node at (-9, 1.23) {\Huge \color{bgreen} \bigcheckmark};
@@ -396,9 +401,14 @@ $\vdots$
 \caption{The visual concepts domain. Visual concepts can be thought of as tasks of classifying images as positive or negative examples of the concept. For example, a concept might be red triangles, as shown on the left. These concepts can be transformed by a task transformation that alters some of their attributes, for example switching red to blue, to recognize the concept of blue triangles.} \label{fig:HoMM_visual_results:domain}
 \end{figure}
 
-\begin{figure}[H]
+\textbf{Video games:} I also demonstrated my approach in a set of simple video game (reinforcement learning) tasks (Fig. \ref{fig:extending_grid_task_views}). These games required the system to complete a sequence of actions, such as moving around to pick up all the objects of one color in a room, or to push them out of the room, while avoiding negatively rewarding objects of another color. In these games, the system had to learn to adapt to switches of which objects were good or bad, by transforming task representations. The model is able to achieve 80\% of optimal performance on average at a novel transformed task, based on examples of the transformation applied to less than twenty tasks. Furthermore, it is even able to generalize from switching colors to switching shapes, even if it has never experienced a transformation of switching shapes. 
+
+The deep reinforcement learning paradigm has driven some of the recent artificial intelligence successes at challenging games \citep{Silver2017,Vinyals2019}. Furthermore, reinforcement learning computations appear to explain some aspects of neural activity \citep{Dabney2020}. Finally, reinforcement learning requires adaptation of not just an instantaneous decision, but of longer-term actions. Thus, the results of these experiments suggest that my task transformation approach may be broadly useful.
+
+\begin{figure}[h]
+\singlespacing
 \centering
-\begin{tikzpicture}[auto]%, scale=0.8, every node/.style={scale=0.8}]
+\begin{tikzpicture}[auto, scale=0.8, every node/.style={scale=0.8}]
 \draw[boundingbox, draw=gray, fill=white] (-9.3, 2.65) rectangle (0.3, -2.3);
 \node[gray, align=center] at (-4.6, 2.35) {Pick-up task};
 \node at (-7, 0) (pu1) {\includegraphics[width=4cm]{4-extending/figures/grid_tasks/pick_up_3.png}};
@@ -406,7 +416,7 @@ $\vdots$
 \node at (-4.5, 0) {\huge \(\bm \downarrow\)};
 %\draw[arrow, very thick, gray] (pu1) -- node[black] {\huge``\(\bm \downarrow\)''} (pu2);
 
-\begin{scope}[shift={(0, -5.5)}]
+\begin{scope}[shift={(10, 0)}]
 \draw[boundingbox, draw=gray, fill=white] (-9.3, 2.65) rectangle (0.3, -2.3);
 \node[gray, align=center] at (-4.6, 2.35) {Push-off task};
 \node at (-7, 0) (pu1) {\includegraphics[width=4cm]{4-extending/figures/grid_tasks/pusher_9.png}};
@@ -417,6 +427,20 @@ $\vdots$
 \end{tikzpicture}
 \caption[Illustrative state transitions from the RL grid experiments.]{Illustrative state, action, state transitions from the video game experiments. In the pick-up task example (top), the agent moves downward and picks up the green object. In the push-off task example (bottom), the agent moves left and pushes the red object. Views are the visual input the agent would receive. The agent is the white triangle.} \label{fig:extending_grid_task_views}
 \end{figure}
+
+\textbf{Task transformation as a starting point:} One key reason why task transformation is useful is that it offers a starting point for later learning. I show that learning from a transformation of a prior tasks allows the system to master a new task while making an order of magnitude fewer mistakes than the next best approach I considered. This may explain some of the efficiency of human learning, and could be useful for domains like robotics, where mistakes during learning can be dangerous \citep{Turchetta2016}.  
+
+\textbf{The analogy between basic tasks and task transformations:} I also show that the parsimonious implementation I noted above, which shares architectural components between the basic tasks and transformations of basic tasks, significantly improves performance. This raises interesting questions about the benefits of a shared workspace that may provide interesting ideas for future research.
+
+\section{Conclusions \& implications}
+
+In my dissertation, I have proposed a computational approach by which a deep learning system can successfully perform a novel task on its first try. The approach is based on learning task representations, and learning to transform those task representations based on relationships between tasks. This approach does not require building in prior domain knowledge, and so is broadly applicable. I demonstrated my approach across a variety of domains, including card games, video games, visual concepts, and a mathematical domain that I did not discuss in this summary. Across all these settings, my approach was able to achieve 80-90\% performance on a novel task on its first try. This adaptation also serves as a useful starting point for later learning, allowing the system to master the new tasks much more efficiently. 
+
+This work therefore addresses some of the key critiques raised by cognitive scientists and philosophers about using deep learning approaches as models of human intelligence. My work shows that deep learning models can achieve rapid and flexible reuse of knowledge, and offers a way to build cognitive models that can adapt more flexibly to novel tasks. It could potentially provide new perspective on prior ideas about the role of recursion in cognition \citep{Fodor2008lot2}, and the rerepresentation of knowledge in cognitive development \citep{Karmiloff-Smith1986}. It could potentially connect to many other fields of research, such as cognitive control, executive function, and consciousness. Finally, it offers a route toward constructing artificial intelligence systems that have cognitive flexibility a step closer to that exhibited by humans 
+
+\bibliographystyle{apalike}
+\bibliography{arrr}
+
 
 
 \end{document}
