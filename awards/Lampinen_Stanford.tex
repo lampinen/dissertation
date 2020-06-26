@@ -1,0 +1,18 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{pdfpages}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Andrew K. Lampinen}
+\rhead{\thepage}
+
+
+\begin{document}
+
+\includepdf[pages=-,pagecommand={\pagestyle{fancy}}]{CGS_ProQuest_Nomination_Form_2020_completed}
+\includepdf[pages=-,pagecommand={\pagestyle{fancy}}]{summary}
+
+\includepdf[pages=-,pagecommand={\pagestyle{fancy}}]{cv}
+\end{document}
